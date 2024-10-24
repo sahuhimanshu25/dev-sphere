@@ -1,30 +1,45 @@
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-
-const userSchema=new mongoose.Schema({
-    username:{
-        type:String,
-        required:true,
-        unique:true,
-        lowercase:true,
-        trim:true,
-        index:true
+import dotenv from 'dotenv'
+dotenv.config({path:'../.env'})
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: [true, 'Please enter your username'],
+        unique: true,
+        trim: true
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
-        lowercase:true,
-        trim:true,
+    email: {
+        type: String,
+        required: [true, 'Please enter your email'],
+        unique: true,
+        trim: true,
+        lowercase: true
     },
-    
-    password:{
-        type:String,
-        required:[true,"Password is required"]
+    password: {
+        type: String,
+        required: [true, 'Please enter your password'],
+        // minlength: 6,
+        select: false
     },
-    
-},{timestamps:true})
+    followers: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    ],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
 
 userSchema.pre("save",async function(next){
 
@@ -38,9 +53,9 @@ userSchema.pre("save",async function(next){
 
 
 //JWT TOKEN
-
+const JWT_SECRET=process.env.JWT_SECRET
 userSchema.methods.getJWT=function(){
-    return jwt.sign({id:this._id},"MYSECRETKEY",{
+    return jwt.sign({id:this._id},JWT_SECRET,{
         expiresIn:"5d"
     })
 }

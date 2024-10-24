@@ -1,0 +1,7 @@
+1.follow unfollow @
+2.feed @
+3.login register logout @
+4.create post @
+5.like post @
+6.delete post
+....

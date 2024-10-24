@@ -83,6 +83,7 @@ export const getUserDetails=async(req,res,next)=>{
     try {
         
         const user=await User.findById(req.user.id);
+        console.log(user);
         res.status(200).json({
             success:true,
             user,
@@ -92,3 +93,25 @@ export const getUserDetails=async(req,res,next)=>{
         return next(new ErrorHandler(error.message,error.statusCode))
     }
 }
+
+export const searchUser = async (req, res, next) => {
+    try {
+        const keyword = req.query.username
+            ? {
+                username: {
+                    $regex: req.query.username,
+                    $options: "i"
+                }
+            }
+            : {};
+
+        const users = await User.find(keyword);
+
+        res.status(200).json({
+            success: true,
+            users
+        });
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+};
