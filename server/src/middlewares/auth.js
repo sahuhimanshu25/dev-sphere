@@ -1,6 +1,6 @@
 import { User } from "../models/userModel.js";
 
-import ErrorHandler from "../utils/errorHandler.js";
+import {ErrorHandler} from "../utils/errorHandler.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });

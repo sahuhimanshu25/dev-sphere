@@ -35,11 +35,7 @@ const userSchema = new mongoose.Schema({
             ref: 'User'
         }
     ],
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+},{timestamps:true});
 
 userSchema.pre("save",async function(next){
 

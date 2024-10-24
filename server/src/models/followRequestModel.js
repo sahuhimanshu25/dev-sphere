@@ -16,10 +16,6 @@ const followRequestSchema = new mongoose.Schema({
         enum: ['pending', 'accepted', 'declined'],
         default: 'pending'
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+},{timestamps:true});
 
 export const FollowRequest = mongoose.model('FollowRequest', followRequestSchema);
