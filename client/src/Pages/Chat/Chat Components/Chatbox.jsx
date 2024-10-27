@@ -74,6 +74,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage }) => {
     setSendMessage({ ...message, receiverId });
   };
 
+  
   return (
     <div className="ChatBox-container">
       <div className="chat-header">

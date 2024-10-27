@@ -21,6 +21,8 @@ const Conversation = ({ data, currentUserId, onClick }) => {
     fetchUserData();
   }, [data, currentUserId]);
 
+
+  
   return (
     <div className="follower conversation" onClick={() => onClick(userData)}>
       <div>
