@@ -1,3 +1,4 @@
+// Chat.jsx
 import React, { useEffect, useRef, useState } from "react";
 import "./Chat.css";
 import { useSelector } from "react-redux";
@@ -85,6 +86,7 @@ const Chat = () => {
                     <Conversation
                       data={chat}
                       currentUserId={userData._id}
+                      onlineUsers={onlineUsers} // Pass onlineUsers to Conversation
                       onClick={(user) => handleConversationClick(chat, user)}
                     />
                   </div>

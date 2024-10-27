@@ -37,3 +37,19 @@ hr {
   border-top: 1px solid #444;
   margin: 10px 0;
 }
+/* Conversation.css */
+.online-dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: gray; /* Default offline color */
+}
+
+.online-dot.online {
+  background-color: green; /* Online color */
+}
+
+.online-dot.offline {
+  background-color: red; /* Offline color */
+}
