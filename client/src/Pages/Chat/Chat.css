@@ -1,0 +1,36 @@
+.Chat {
+  display: flex;
+  height: 100vh;
+  background-color: hsl(0, 0%, 12%);
+  color: #f0f0f0;
+  width: 100vw;
+}
+
+.Left-side-chat {
+  width: 25%;
+  border-right: 1px solid #333;
+  background-color: #2e2e2e;
+  overflow-y: auto;
+}
+
+.Chat-container {
+  padding: 20px;
+}
+
+.Chat-container h2 {
+  margin-bottom: 20px;
+  color: #f0f0f0;
+}
+
+.Chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Right-side-chat {
+  width: 75%;
+  background-color: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+}

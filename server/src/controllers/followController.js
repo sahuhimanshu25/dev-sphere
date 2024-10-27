@@ -1,6 +1,6 @@
 import { User } from "../models/userModel.js";
 import { FollowRequest } from "../models/followRequestModel.js";
-import { ErrorHandler } from "../utils/errorHandler.js";
+import ErrorHandler from "../utils/errorHandler.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 

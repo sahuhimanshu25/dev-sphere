@@ -15,10 +15,13 @@ const signup = createAsyncThunk("signup", async (userCredentials) => {
   return data;
 });
 
-const login=createAsyncThunk('login',async(userCredentials)=>{
-    const {data}=await axios.post("http://localhost:3000/auth/login",userCredentials);
-    return data;
-})
+const login = createAsyncThunk('login', async (userCredentials) => {
+  const { data } = await axios.post("http://localhost:3000/auth/login", userCredentials, {
+    withCredentials: true,  // Include cookies in requests
+  });
+  return data;
+});
+
 
 const authSlice = createSlice({
   name: "user",

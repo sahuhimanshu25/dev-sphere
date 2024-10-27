@@ -1,4 +1,4 @@
-import ErrorHandler from "../utils/errorHandler.js";
+import  ErrorHandler  from "../utils/errorHandler.js";
 
 export const error=(err,req,res,next)=>{
     err.statusCode=err.statusCode || 500
@@ -10,7 +10,8 @@ export const error=(err,req,res,next)=>{
         err=new ErrorHandler(message,400)
     }
 
-
+    console.log(err,"error.js");
+    
     res.status(err.statusCode).json({
         success:false,
         error:err.message

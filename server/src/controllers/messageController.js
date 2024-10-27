@@ -1,5 +1,5 @@
 import { Message } from '../models/messageModel.js';
-import { ErrorHandler } from "../utils/errorHandler.js";
+import  ErrorHandler  from "../utils/errorHandler.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 // Add a new message to a chat

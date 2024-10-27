@@ -1,5 +1,5 @@
 import { Post } from "../models/postModel.js";
-import {ErrorHandler} from "../utils/errorHandler.js";
+import ErrorHandler from "../utils/errorHandler.js";
 import {AsyncHandler} from "../utils/asyncHandler.js"
 import {ApiResponse} from "../utils/apiResponse.js"
 // Create a post

@@ -1,5 +1,5 @@
 import { Chat } from "../models/chatModel.js";
-import { ErrorHandler } from "../utils/errorHandler.js";
+import ErrorHandler from "../utils/errorHandler.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 
@@ -33,8 +33,11 @@ export const userChats =AsyncHandler( async (req, res) => {
     const chats = await Chat.find({
       members: { $in: [req.user.id] },
     });
+
+    console.log("Chatcontroller.js",chats);
+    
     // Respond with the list of chats
-    res.status(200).json(new ApiResponse(200,chats,"userChats fetched successfully"));
+    res.status(200).json(chats);
   } catch (error) {
     // Send an error response if something goes wrong
     throw new ErrorHandler(500,'Server Error')

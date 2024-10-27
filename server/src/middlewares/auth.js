@@ -1,6 +1,6 @@
 import { User } from "../models/userModel.js";
 
-import {ErrorHandler} from "../utils/errorHandler.js";
+import ErrorHandler from "../utils/errorHandler.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });
@@ -9,7 +9,7 @@ export const isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     
-    console.log(token);
+    console.log("AUTH .JS ",token);
 
     if (!token) {
       return next(

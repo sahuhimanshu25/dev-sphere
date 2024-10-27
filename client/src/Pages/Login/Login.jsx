@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Slices/authSlice.js"; // import the login async thunk
 import './Login.css'
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const LoginPage = () => {
+  const Navigate=useNavigate();
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.user);
 
@@ -13,7 +16,15 @@ const LoginPage = () => {
     e.preventDefault();
     
     // Dispatch the login thunk with user credentials
-    dispatch(login({ email, password }));
+    try {
+      dispatch(login({ email, password }));
+      toast.success("Login DOne")
+      Navigate('/chat')
+    } catch (error) {
+      alert('error')
+      console.log("LOGIN.JSX ERROR ",error);
+      
+    }
   };
 
   return (
