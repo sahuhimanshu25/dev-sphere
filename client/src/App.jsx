@@ -12,6 +12,8 @@ import { GlobalStyle } from "./styles/global.js";
 import ModalProvider from "./context/ModalContext";
 import PlaygroundProvider from "./context/PlaygroundContext";
 import MainHome from "./components/MainHome.jsx";
+import Post from "./Pages/Post/Post.jsx";
+import Feed from "./Pages/Post/Feed.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -45,6 +47,7 @@ function App() {
         <Route path="/" element={<MainHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/post" element={<Feed/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

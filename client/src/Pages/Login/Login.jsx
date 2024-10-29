@@ -19,7 +19,8 @@ const LoginPage = () => {
     try {
       dispatch(login({ email, password }));
       toast.success("Login DOne")
-      Navigate('/chat')
+      // Navigate('/chat')
+      Navigate('/post')
     } catch (error) {
       alert('error')
       console.log("LOGIN.JSX ERROR ",error);

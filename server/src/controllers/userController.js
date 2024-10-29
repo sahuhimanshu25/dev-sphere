@@ -78,25 +78,37 @@ export const getMyDetails = AsyncHandler(async (req, res, next) => {
 });
 
 export const searchUser = AsyncHandler(async (req, res, next) => {
-  const keyword = req.query.username
+  // Only add the regex filter if username query exists and is not an empty string
+  const usernameQuery = req.query.username?.trim();
+  const keyword = usernameQuery
     ? {
         username: {
-          $regex: req.query.username,
-          $options: "i", 
+          $regex: usernameQuery,
+          $options: "i",
         },
       }
-    : {};
+    : null;
 
   try {
+    // If no keyword (empty username), return an error response
+    if (!keyword) {
+      return res.status(400).json(new ApiResponse(400, [], "Please provide a username to search"));
+    }
+
+    console.log("Keyword:", keyword);  // Log the query for debugging
+
+    // Perform the search
     const users = await User.find(keyword);
-    if (users.length === 0) {
+    if (!users.length) {
       return res.status(404).json(new ApiResponse(404, [], "No Users Found"));
     }
     res.status(200).json(new ApiResponse(200, users, "Users Found"));
   } catch (error) {
+    console.error("Error in searchUser:", error);  // Log error for debugging
     return next(error);
   }
 });
+
 
 export const getUserDetails = AsyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);

@@ -1,0 +1,53 @@
+/* Post.css */
+.post {
+    padding: 16px;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.post-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #333;
+}
+
+.post-content {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.post button {
+    display: flex; /* Use flex to align icon and text */
+    align-items: center; /* Center items vertically */
+    padding: 8px 15px;
+    background-color: #64b5f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.post button:hover {
+    background-color: #42a5f5;
+}
+
+.thumbs-up {
+    margin-right: 8px; /* Add spacing between icon and text */
+    font-size: 20px; /* Adjust size of the icon */
+    transition: color 0.2s ease; /* Smooth color transition */
+}
+
+/* Updated styling for the liked state */
+.thumbs-up.liked {
+    color: blue; /* Change color to blue when liked */
+}
+
+.thumbs-up {
+    color: white; /* Default color is white when unliked */
+}

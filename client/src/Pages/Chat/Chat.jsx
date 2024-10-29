@@ -1,4 +1,3 @@
-// Chat.jsx
 import React, { useEffect, useRef, useState } from "react";
 import "./Chat.css";
 import { useSelector } from "react-redux";
@@ -13,45 +12,39 @@ const Chat = () => {
   const [sendMessage, setSendMessage] = useState(null);
   const [receiveMessage, setReceiveMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // State for search input
+  const [searchResults, setSearchResults] = useState([]); // State for search results
 
   const socket = useRef();
-  
-  // Get user data from Redux store
   const { userData } = useSelector((state) => state.user);
 
   // Initialize socket connection and setup listeners
   useEffect(() => {
-    if (userData && userData._id) { // Only connect if userData and userData._id exist
+    if (userData && userData._id) {
       socket.current = io("http://localhost:8800");
-
-      // Emit the new user to the server
       socket.current.emit("new-user-add", userData._id);
 
-      // Listen for the updated list of online users
       socket.current.on("get-users", (users) => {
         setOnlineUsers(users);
       });
 
-      // Listen for incoming messages
       socket.current.on("receive-message", (data) => {
         setReceiveMessage(data);
       });
 
-      // Clean up the socket connection on component unmount
       return () => {
         socket.current.disconnect();
       };
     }
-  }, [userData]); // Ensure this runs only when userData changes
+  }, [userData]);
 
-  // Fetch chats for the current user on component mount
+  // Fetch chats for the current user
   useEffect(() => {
     const getChats = async () => {
-      if (userData && userData._id) { // Check if userData and userData._id exist
+      if (userData && userData._id) {
         try {
           const { data } = await axios.get(`http://localhost:3000/chat/chats`);
           setChats(data);
-          console.log("Chats data:", data);
         } catch (error) {
           console.error("Error fetching chats:", error);
         }
@@ -63,7 +56,6 @@ const Chat = () => {
   // Handle conversation click
   const handleConversationClick = (chat, user) => {
     setCurrentChat(chat);
-    console.log("Selected user:", user);
   };
 
   // Emit message when sendMessage is updated
@@ -73,6 +65,35 @@ const Chat = () => {
     }
   }, [sendMessage]);
 
+  // Handle user search
+  const handleSearch = async () => {
+    if (searchTerm) {
+      try {
+        const { data } = await axios.get(`http://localhost:3000/user/search-user?username=${searchTerm}`);
+
+        setSearchResults(data.data); // Update search results based on the API response structure
+      } catch (error) {
+        console.error("Error searching users:", error);
+      }
+    }
+  };
+
+  // Initiate a new chat with the selected user
+  const handleNewChat = async (user) => {
+    try {
+      const { data: chat } = await axios.post(`http://localhost:3000/chat/new`, { 
+        userId: user._id, 
+        currentUserId: userData._id 
+      });
+      setChats((prevChats) => [...prevChats, chat]); // Add new chat to the chat list
+      setCurrentChat(chat); // Set as the current chat
+      setSearchResults([]); // Clear search results after selection
+      setSearchTerm(""); // Clear search input
+    } catch (error) {
+      console.error("Error creating a new chat:", error);
+    }
+  };
+
   return (
     <div className="Chat">
       {userData ? (
@@ -80,13 +101,40 @@ const Chat = () => {
           <div className="Left-side-chat">
             <div className="Chat-container">
               <h2>Chats</h2>
+
+              {/* User Search Input */}
+              <div className="User-search">
+                <input
+                  type="text"
+                  placeholder="Search users by username"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button onClick={handleSearch}>Search</button>
+              </div>
+
+              {/* Display Search Results */}
+              {searchResults.length > 0 && (
+                <div className="Search-results">
+                  {searchResults.map((user) => (
+                    <div 
+                      key={user._id} 
+                      className="Search-result-item"
+                      onClick={() => handleNewChat(user)}
+                    >
+                      {user.username}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="Chat-list">
                 {chats.map((chat) => (
                   <div key={chat._id} style={{ backgroundColor: "red" }}>
                     <Conversation
                       data={chat}
                       currentUserId={userData._id}
-                      onlineUsers={onlineUsers} // Pass onlineUsers to Conversation
+                      onlineUsers={onlineUsers}
                       onClick={(user) => handleConversationClick(chat, user)}
                     />
                   </div>
@@ -98,7 +146,7 @@ const Chat = () => {
           <div className="Right-side-chat">
             <ChatBox
               chat={currentChat}
-              currentUser={userData?._id} // Conditional access of userData._id
+              currentUser={userData?._id}
               setSendMessage={setSendMessage}
               receiveMessage={receiveMessage}
             />
