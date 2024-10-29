@@ -7,7 +7,7 @@ import logo from '../../assets/logo-small.png'
 import { ModalContext } from '../../context/ModalContext'
 import { PlaygroundContext } from '../../context/PlaygroundContext'
 import { useNavigate } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
 const StyledRightComponent = styled.div`
     position: absolute;
     top: 0;
@@ -134,6 +134,7 @@ const RightComponent = () => {
             cardId: "",
           }
         })}> <span>+</span> New Folder</AddButton>
+        <button> <Link to={"/"}>Home</Link> </button>
       </Header>
 
       {
