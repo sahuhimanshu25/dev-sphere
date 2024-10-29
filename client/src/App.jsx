@@ -14,6 +14,7 @@ import PlaygroundProvider from "./context/PlaygroundContext";
 import MainHome from "./components/MainHome.jsx";
 import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
+import Navbar from "./screens/Playground/Navbar.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {

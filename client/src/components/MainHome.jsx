@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import MainNavbar from './Navbar/MainNavbar';
 const MainHome = () => {
   return (
     <div>
-      <Link to="/compile">Compiler</Link>
-      <br/>
-      <Link to="/login">Login</Link>
+      <MainNavbar />
     </div>
   );
 };
