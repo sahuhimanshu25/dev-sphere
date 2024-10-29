@@ -14,7 +14,7 @@ import PlaygroundProvider from "./context/PlaygroundContext";
 import MainHome from "./components/MainHome.jsx";
 import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
-import Navbar from "./screens/Playground/Navbar.jsx";
+import MainNavbar from "./components/Navbar/MainNavbar.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
 
   return (
     <Router>
+      <MainNavbar />
       <GlobalStyle />
       <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
       <Routes>

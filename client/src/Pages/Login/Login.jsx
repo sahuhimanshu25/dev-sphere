@@ -4,7 +4,6 @@ import { login } from "../../Slices/authSlice.js"; // import the login async thu
 import './Login.css'
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import MainNavbar from '../../components/Navbar/MainNavbar.jsx';
 const LoginPage = () => {
   const Navigate=useNavigate();
   const dispatch = useDispatch();
@@ -31,7 +30,6 @@ const LoginPage = () => {
 
   return (
     <>
-    <MainNavbar />
     <div className="login-container">
       <h2 className="login-title">Login</h2>
       <form onSubmit={handleLogin} className="login-form">
