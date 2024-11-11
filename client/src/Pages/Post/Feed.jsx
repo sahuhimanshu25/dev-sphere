@@ -29,12 +29,20 @@ function Feed() {
             post._id === postId ? { ...post, likes: Array(newLikeCount).fill({}) } : post
         ));
     };
+    // const handlePost=(post)=>{
+    //     const type=post.content.type;
+    //     if(type==="text"){
+    //         return post.content.value
+    //     }else if(type==='image' || type===video){
 
+    //     }
+    // }
     return (
         <div className="feed">
             <CreatePost onPostCreated={handlePostCreated} />
             {posts.map((post) => (
                 <Post key={post._id} postData={post} onLike={handleLike} />
+                // <Post key={post._id} postData={post} onLike={handleLike}/>
             ))}
         </div>
     );
