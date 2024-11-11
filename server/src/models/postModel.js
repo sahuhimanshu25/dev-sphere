@@ -7,8 +7,15 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     content: {
-        type: String,
-        required: [true, 'Post cannot be empty'],
+        type: {
+            type: String,
+            enum: ["text", "image", "video"],
+            required: [true, 'select Post Type cannot be empty'],
+        },
+        value: {
+            type: String,
+            required: [true, 'Post cannot be empty'],
+        }
     },
     likes: [
         {
