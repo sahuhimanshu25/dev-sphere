@@ -1,0 +1,83 @@
+/* Container for user search */
+.User-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Search input box */
+  .User-search input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .User-search input[type="text"]:focus {
+    border-color: #007bff;
+  }
+  
+  /* Search button */
+  .User-search button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .User-search button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Search results container */
+  .Search-results {
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Each search result item */
+  .Search-result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .Search-result-item:hover {
+    background-color: #e9ecef;
+  }
+  
+  /* FaPlus icon styling */
+  .Search-result-item .fa-plus {
+    color: #28a745;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .Search-result-item .fa-plus:hover {
+    color: #218838;
+  }
+  

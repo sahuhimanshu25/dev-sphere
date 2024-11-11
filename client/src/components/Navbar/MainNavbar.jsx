@@ -10,8 +10,8 @@ function MainNavbar() {
         <Link to="/">MyApp</Link>
       </div>
       <ul className="navbar-links">
-        <li className={location.pathname === "/" ? "active" : ""}>
-          <Link to="/">Home</Link>
+        <li className={location.pathname === "/chat" ? "active" : ""}>
+          <Link to="/chat">Chat</Link>
         </li>
         <li className={location.pathname === "/compile" ? "active" : ""}>
           <Link to="/compile">Compile</Link>

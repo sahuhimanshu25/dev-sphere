@@ -15,6 +15,7 @@ import MainHome from "./components/MainHome.jsx";
 import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
 import MainNavbar from "./components/Navbar/MainNavbar.jsx";
+import AddFriend from "./Pages/AddFriend/addFriend.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/post" element={<Feed/>} />
+        <Route path="/addFriend" element={<AddFriend/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

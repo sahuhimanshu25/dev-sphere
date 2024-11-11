@@ -35,7 +35,9 @@ export const likePost =AsyncHandler(async (req, res, next) => {
 });
 
 // Get posts from followed users
-export const getFeedPosts =AsyncHandler(async (req, res, next) => {
+// Get posts from followed users
+export const getFeedPosts = AsyncHandler(async (req, res, next) => {
+    try {
         const posts = await Post.find({ user: { $in: req.user.following } })
             .populate('user', 'username')
             .sort({ createdAt: -1 });
@@ -44,5 +46,8 @@ export const getFeedPosts =AsyncHandler(async (req, res, next) => {
             success: true,
             posts
         });
-        return next(new ErrorHandler(error.message, 500));
+    } catch (error) {
+        next(new ErrorHandler(error.message, 500));  // Only call next on error, not after response
+    }
 });
+
