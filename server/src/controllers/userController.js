@@ -3,27 +3,44 @@ import  ErrorHandler  from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { sendToken } from "../middlewares/jwtToken.js";
-
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
+  
   if (!username || !email || !password) {
-    throw new ErrorHandler("All fields are required",400);
+    throw new ErrorHandler("All fields are required", 400);
   }
-  const existedUser = await User.findOne({
-    $or: [{ username }, { email }],
-  });
+  
+  const existedUser = await User.findOne({ $or: [{ username }, { email }] });
   if (existedUser) {
-    throw new ErrorHandler("UserName or email already exists",409);
+    throw new ErrorHandler("Username or email already exists", 409);
   }
+  
+  // console.log(req.files);
+  
+  const avatarFile = req.files?.avatar?.[0];
+  if (!avatarFile) {
+    throw new ErrorHandler("Avatar file is required", 400);
+  }
+  
+  // Upload avatar to Cloudinary
+  const avatar = await uploadOnCloudinary(avatarFile.path);
+  if (!avatar) {
+    throw new ErrorHandler("Error uploading avatar file", 500);
+  }
+  
   const user = await User.create({
     username,
     email,
     password,
+    avatar: avatar.url,
   });
+  
   if (!user) {
-    throw new ApiError("SomeThing went wrong while registering the user",500);
+    throw new ErrorHandler("Something went wrong while registering the user", 500);
   }
+  
   sendToken(user, 201, res);
 });
 
