@@ -9,6 +9,7 @@ import { userRouter } from './routes/userRoutes.js';
 import { chatRouter } from './routes/chatRoutes.js';
 import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
+import { groupRouter } from './routes/groupRoutes.js';
 app.use(cors({
     origin: 'http://localhost:5173', // allow requests from your frontend
     credentials: true, // if you're using cookies or HTTP authentication
@@ -25,6 +26,7 @@ app.use('/user',userRouter)
 app.use('/chat',chatRouter)
 app.use(followRouter);
 app.use('/message',messageRoute)
+app.use('/group',groupRouter)
 
 
 app.use(error)

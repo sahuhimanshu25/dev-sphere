@@ -6,7 +6,7 @@ import ChatBox from "./Chat Components/Chatbox";
 import Conversation from "./Chat Components/Conversation";
 import { io } from "socket.io-client";
 import { FaPlus } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
 const Chat = () => {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
@@ -15,7 +15,7 @@ const Chat = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+  const navigate=useNavigate()
   const socket = useRef();
   const { userData } = useSelector((state) => state.user);
 
@@ -112,8 +112,9 @@ const Chat = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={handleSearch}>
-                  <FaPlus /> Search
+                  Search
                 </button>
+                <FaPlus onClick={()=>navigate('/addChat')}  /> 
               </div>
 
               {/* Display Search Results */}

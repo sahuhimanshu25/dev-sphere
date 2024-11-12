@@ -51,7 +51,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/post" element={<Feed/>} />
-        <Route path="/addFriend" element={<AddFriend/>} />
+        <Route path="/addChat" element={<AddFriend/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>
