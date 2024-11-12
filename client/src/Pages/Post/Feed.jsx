@@ -1,4 +1,3 @@
-// components/Feed.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CreatePost from './CreatePost';
@@ -21,7 +20,7 @@ function Feed() {
     }, []);
 
     const handlePostCreated = (newPost) => {
-        setPosts([newPost.data, ...posts]); // Use newPost.data to match the response structure
+        setPosts([newPost.data, ...posts]); 
     };
 
     const handleLike = (postId, newLikeCount) => {
@@ -29,14 +28,6 @@ function Feed() {
             post._id === postId ? { ...post, likes: Array(newLikeCount).fill({}) } : post
         ));
     };
-    // const handlePost=(post)=>{
-    //     const type=post.content.type;
-    //     if(type==="text"){
-    //         return post.content.value
-    //     }else if(type==='image' || type===video){
-
-    //     }
-    // }
     return (
         <div className="feed">
             <CreatePost onPostCreated={handlePostCreated} />

@@ -1,30 +1,33 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema(
+  {
     user: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
     },
     content: {
-        type: {
-            type: String,
-            enum: ["text", "image", "video"],
-            required: [true, 'select Post Type cannot be empty'],
-        },
-        value: {
-            type: String,
-            required: [true, 'Post cannot be empty'],
-        }
+      type: {
+        type: String,
+        enum: ["text", "image", "video"],
+        required: [true, "select Post Type cannot be empty"],
+      },
+      value: {
+        type: String,
+        required: [true, "Post cannot be empty"],
+      },
     },
     likes: [
-        {
-            user: {
-                type: mongoose.Schema.ObjectId,
-                ref: 'User'
-            }
-        }
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: "User",
+        },
+      },
     ],
-},{timestamps:true});
+  },
+  { timestamps: true }
+);
 
-export const Post = new mongoose.model('Post', postSchema);
+export const Post = new mongoose.model("Post", postSchema);

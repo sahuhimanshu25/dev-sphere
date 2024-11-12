@@ -1,120 +1,106 @@
-
 .post {
-    background-color: #1c1c1c;
-    border-radius: 8px;
-    padding: 16px;
-    margin: 12px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
+  background-color: #222;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  color: #fff;
 }
-
-
-.post:hover {
-    transform: translateY(-5px);
-}
-
 
 .post-header {
-    font-size: 1.1rem;
-    color: #ffffff;
-    font-weight: bold;
-    margin-bottom: 12px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
-
 
 .post-content {
-    margin: 12px 0;
-    font-size: 1rem;
-    color: #dcdcdc;
+  margin-bottom: 15px;
 }
 
-
-.post-content p {
-    word-wrap: break-word;
-    margin: 0;
+.post-image {
+  width: 100%;
+  border-radius: 8px;
+  max-height: 300px;
+  object-fit: cover;
 }
 
-
-.post-content img {
-    width: 100%;
-    height: auto;
-    max-width: 600px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.post-content video {
-    width: 100%;
-    height: auto;
-    max-width: 600px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.post-video {
+  width: 100%;
+  border-radius: 8px;
 }
 
 button {
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-button:hover {
-    color: #37b2e9;
-}
-
-.thumbs-up {
-    margin-right: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #aaa;
 }
 
 .liked {
-    color: #ff0000;
+  color: #1e90ff;
 }
 
-button.liked:hover {
-    color: #ff4d4d;
+.show-comments-btn {
+  color: #1e90ff;
+  font-size: 0.9em;
+  margin-top: 10px;
 }
 
-@media (max-width: 768px) {
-    .post {
-        padding: 12px;
-    }
-    .post-header {
-        font-size: 1rem;
-    }
-    .post-content {
-        font-size: 0.9rem;
-    }
+.comments-modal {
+  background-color: #333;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  max-width: 500px;
 }
 
-
-
-
-
-.post-video {
-    width: 100%;
-    max-width: 600px; 
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: #000;
-    object-fit: cover;
+.comments-section {
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-
-.post-video:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02);
-    transition: all 0.3s ease-in-out;
+.comment {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #444;
 }
 
-.post-video::-webkit-media-controls-timeline {
-   display: none;
+.comment-owner {
+  font-weight: bold;
+  color: #ddd;
+}
+
+.delete-comment-btn {
+  color: #ff4d4d;
+  cursor: pointer;
+  font-size: 0.8em;
+  background: none;
+  border: none;
+}
+
+.comment-input {
+  width: calc(100% - 60px);
+  padding: 8px;
+  margin-top: 10px;
+  background-color: #444;
+  border: none;
+  border-radius: 4px;
+  color: #ddd;
+}
+
+.add-comment-btn {
+  background-color: #1e90ff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.show-comments-btn {
+  color: #1e90ff;
+  font-size: 0.9em;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

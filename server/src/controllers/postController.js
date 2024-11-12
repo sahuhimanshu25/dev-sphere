@@ -35,7 +35,7 @@ export const createPost = AsyncHandler(async (req, res, next) => {
     res.status(201).json(new ApiResponse(201, post, "Posted Successfully"));
 });
 
-// Like/Unlike a post
+
 export const likePost =AsyncHandler(async (req, res, next) => {
         const post = await Post.findById(req.params.id);
 
@@ -46,18 +46,16 @@ export const likePost =AsyncHandler(async (req, res, next) => {
         const likedIndex = post.likes.findIndex(like => like.user.toString() === req.user.id);
 
         if (likedIndex === -1) {
-            // Like the post
+
             post.likes.push({ user: req.user.id });
         } else {
-            // Unlike the post
+
             post.likes.splice(likedIndex, 1);
         }
         await post.save();
         res.status(200).json(new ApiResponse(200,{likes:post.likes.length},"likes Fetched Successfully"))
 });
 
-// Get posts from followed users
-// Get posts from followed users
 export const getFeedPosts = AsyncHandler(async (req, res, next) => {
     try {
         const posts = await Post.find({ user: { $in: req.user.following } })
@@ -69,7 +67,7 @@ export const getFeedPosts = AsyncHandler(async (req, res, next) => {
             posts
         });
     } catch (error) {
-        next(new ErrorHandler(error.message, 500));  // Only call next on error, not after response
+        next(new ErrorHandler(error.message, 500)); 
     }
 });
 

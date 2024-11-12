@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaThumbsUp } from "react-icons/fa"; // Import thumbs-up icon
+import { FaThumbsUp, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import "./Post.css";
 
 function Post({ postData, onLike }) {
   const [liked, setLiked] = useState(
     postData.likes.some((like) => like.user === postData.user._id)
   );
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState("");
+
+  useEffect(() => {
+    if (showComments) {
+      fetchComments();
+    }
+  }, [showComments]);
+
+  const fetchComments = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:3000/post/post/${postData._id}/comments`);
+      setComments(data.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
 
   const handleLike = async () => {
     try {
@@ -17,6 +35,28 @@ function Post({ postData, onLike }) {
       onLike(postData._id, data.data.likes);
     } catch (error) {
       console.error("Error liking post:", error);
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (!newComment) return;
+    try {
+      const { data } = await axios.post(`http://localhost:3000/post/post/${postData._id}/comment`, {
+        content: newComment,
+      });
+      setComments([...comments, data.data]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:3000/post/post/${postData._id}/comment/${commentId}`);
+      setComments(comments.filter((comment) => comment._id !== commentId));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
     }
   };
 
@@ -33,7 +73,7 @@ function Post({ postData, onLike }) {
           controls
           className="post-video"
           autoPlay={true}
-          muted={false} // Ensure autoplay works with sound adjustment
+          muted={false}
         >
           <source src={value} type="video/mp4" />
         </video>
@@ -45,13 +85,34 @@ function Post({ postData, onLike }) {
   return (
     <div className="post">
       <div className="post-header">{postData.user.username}</div>
-      <div className="post-content">
-        {handlePostData()} {}
-      </div>
+      <div className="post-content">{handlePostData()}</div>
       <button onClick={handleLike} className={liked ? "liked" : ""}>
-        <FaThumbsUp className={liked ? "thumbs-up" : "thumbs-up liked"} />(
-        {postData.likes.length})
+        <FaThumbsUp className={liked ? "thumbs-up" : "thumbs-up liked"} />({postData.likes.length})
       </button>
+      <button onClick={() => setShowComments(!showComments)} className="show-comments-btn">
+        {showComments ? <FaChevronUp /> : <FaChevronDown />} Comments
+      </button>
+
+      {showComments && (
+        <div className="comments-modal">
+          <div className="comments-section">
+            {comments.map((comment) => (
+              <div key={comment._id} className="comment">
+                <span className="comment-owner">{comment.owner.username}:</span> {comment.content}
+                <button onClick={() => handleDeleteComment(comment._id)} className="delete-comment-btn">Delete</button>
+              </div>
+            ))}
+            <input
+              type="text"
+              placeholder="Add a comment..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="comment-input"
+            />
+            <button onClick={handleAddComment} className="add-comment-btn">Post</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

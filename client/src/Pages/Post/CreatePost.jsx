@@ -1,38 +1,86 @@
-// components/CreatePost.js
-import React, { useState } from 'react';
-import axios from 'axios';
-import './CreatePost.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "./CreatePost.css";
 
 function CreatePost({ onPostCreated }) {
-    const [content, setContent] = useState('');
+  const [text, setText] = useState("");
+  const [image, setImage] = useState(null);
+  const [video, setVideo] = useState(null);
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const { data } = await axios.post('http://localhost:3000/post/post', { content });
-            onPostCreated(data); // Pass the full response to the Feed component
-            setContent('');
-        } catch (error) {
-            console.error("Error creating post:", error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!text && !image && !video) {
+      setError("Please provide either text, an image, or a video.");
+      return;
+    }
+
+    const formData = new FormData();
+    if (text) formData.append("text", text);
+    if (image) formData.append("image", image);
+    if (video) formData.append("video", video);
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:3000/post/post",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
         }
-    };
+      );
+      onPostCreated(data);
+      setText("");
+      setImage(null);
+      setVideo(null);
+      setFile(null);
+      setError(null);
+    } catch (error) {
+      console.error("Error creating post:", error);
+      setError("Failed to create post.");
+    }
+  };
 
-    return (
-        <div className="create-post">
-            <textarea
-                placeholder="What's on your mind?"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="post-textarea"
-            />
-            <button 
-                onClick={handleSubmit}
-                className="post-button"
-            >
-                Post
-            </button>
-        </div>
-    );
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile.type.startsWith("image/")) {
+        setImage(selectedFile);
+        setVideo(null);
+      } else if (selectedFile.type.startsWith("video/")) {
+        setVideo(selectedFile);
+        setImage(null);
+      }
+      setFile(selectedFile);
+    }
+  };
+
+  return (
+    <div className="create-post">
+      {error && <p className="error-message">{error}</p>}
+      <textarea
+        placeholder="What's on your mind?"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="post-textarea"
+      />
+      <div>
+        <label htmlFor="file-upload" className="file-label">
+          {file ? file.name : "Choose image or video"}
+        </label>
+        <input
+          id="file-upload"
+          type="file"
+          accept="image/*, video/*"
+          onChange={handleFileChange}
+          className="file-input"
+        />
+      </div>
+      <button onClick={handleSubmit} className="post-button">
+        Post
+      </button>
+    </div>
+  );
 }
 
 export default CreatePost;
