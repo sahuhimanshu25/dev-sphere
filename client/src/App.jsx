@@ -16,6 +16,7 @@ import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
 import MainNavbar from "./components/Navbar/MainNavbar.jsx";
 import AddFriend from "./Pages/AddFriend/addFriend.jsx";
+import GroupChat from "./Pages/GroupChat/GroupChat.jsx";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/post" element={<Feed/>} />
         <Route path="/addChat" element={<AddFriend/>} />
+        <Route path="/community" element={<GroupChat/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

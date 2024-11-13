@@ -1,0 +1,27 @@
+/* GroupChatConversation.css */
+
+.group-conversation {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+  }
+  
+  .group-conversation:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .group-name {
+    margin-left: 10px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 0;
+  }
+  

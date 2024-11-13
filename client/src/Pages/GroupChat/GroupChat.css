@@ -1,0 +1,79 @@
+/* GroupChat.css */
+
+.GroupChat {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f6f8;
+    width: 100vw;
+  }
+  
+  .Left-side-chat {
+    width: 30%;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .GroupChat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .Group-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .Group-search input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+  }
+  
+  .Group-search button {
+    padding: 8px 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .Group-search button:hover {
+    background-color: #2563eb;
+  }
+  
+  .Group-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+  
+  .Right-side-chat {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f2f5;
+  }
+  
+  .No-group-selected {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+  }
+  
