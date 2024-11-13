@@ -1,57 +1,43 @@
 // GroupChatBox.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "./GroupChatBox.css";
 import { useSelector } from "react-redux";
+import { io } from "socket.io-client";
+import "./GroupChatBox.css";
 
 const GroupChatBox = ({ group }) => {
   const { userData } = useSelector((state) => state.user);
+  const socket = useRef();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    // Fetch messages for the selected group
+    // Initialize socket connection
+    socket.current = io("http://localhost:8800");
 
-    // single message
-    //     chatId
-    // :
-    // "67322c3995c97a6454834d97"
-    // createdAt
-    // :
-    // "2024-11-13T11:26:16.464Z"
-    // isGroup
-    // :
-    // true
-    // senderId
-    // :
-    // "6719d55ad5c87f747cd3548e"
-    // text
-    // :
-    // "first message on a group"
-    // updatedAt
-    // :
-    // "2024-11-13T11:26:16.464Z"
-    // __v
-    // :
-    // 0
-    // _id
-    // :
-    // "67348cd889e5ae7a5308e0ed
+    // Join the group chat room
+    socket.current.emit("join-group", group.data._id);
+
+    // Listen for incoming messages for the group
+    socket.current.on("receive-group-message", (data) => {
+      if (data.groupId === group.data._id) {
+        setMessages((prevMessages) => [...prevMessages, data.message]);
+      }
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [group]);
+
+  useEffect(() => {
+    // Fetch initial messages for the group
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/message/${group.data._id}`
-        );
-        setMessages(res.data.message); // Set `messages` to the `message` array
-        console.log("res.data groupchatbox", res.data.message);
-
-        console.log(
-          "group mess. grpchatbox.js group id",
-          res.data.message,
-          group.data._id
-        );
+        const res = await axios.get(`http://localhost:3000/message/${group.data._id}`);
+        setMessages(res.data.message); // Initialize messages
       } catch (err) {
-        console.log(err);
+        console.log("Error fetching messages:", err);
       }
     };
     fetchMessages();
@@ -59,17 +45,26 @@ const GroupChatBox = ({ group }) => {
 
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
+      const messageData = {
+        text: newMessage,
+        chatId: group.data._id,
+        isGroup: true,
+        senderId: userData._id, // Set current user as sender
+      };
+
+      // Emit the message to the group chat via Socket.IO
+      socket.current.emit("send-group-message", {
+        groupId: group.data._id,
+        message: messageData,
+      });
+
       try {
-        const message = {
-          text: newMessage,
-          chatId: group.data._id,
-          isGroup: true,
-        };
-        const res = await axios.post(`http://localhost:3000/message`, message);
-        setMessages((prev) => [...prev, res.data]);
+        // Save the message to the backend
+        const res = await axios.post(`http://localhost:3000/message`, messageData);
+        setMessages((prev) => [...prev, res.data]); // Update state with the new message
         setNewMessage("");
       } catch (err) {
-        console.log(err);
+        console.log("Error sending message:", err);
       }
     }
   };
@@ -77,20 +72,21 @@ const GroupChatBox = ({ group }) => {
   return (
     <div className="group-chat-box">
       <div className="messages">
-        {Array.isArray(messages) && messages.length > 0 ? (
-          messages.map((msg, index) => (
-            <div
-              key={msg._id || index}  // Fallback to index if _id is missing
-              className={`message ${msg.senderId === userData._id ? "own" : ""}`}
-            >
-              <p>{msg.text}</p>
-              <span>{msg.senderId}</span>
-            </div>
-          ))
-        ) : (
-          <p>No messages available</p> // Optional fallback if no messages are available
-        )}
+  {Array.isArray(messages) && messages.length > 0 ? (
+    messages.map((msg) => (
+      <div
+        key={msg._id || `${msg.senderId}-${msg.createdAt}`} // Ensure unique key, fallback to combination of senderId and createdAt
+        className={`message ${msg.senderId === userData._id ? "own" : ""}`}
+      >
+        <p>{msg.text}</p>
+        <span>{msg.senderId}</span>
       </div>
+    ))
+  ) : (
+    <p>No messages available</p>
+  )}
+</div>
+
 
       <div className="message-input">
         <input
