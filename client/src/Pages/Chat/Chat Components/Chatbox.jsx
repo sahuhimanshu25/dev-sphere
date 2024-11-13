@@ -41,7 +41,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage }) => {
       try {
         if (chat?._id) {
           const { data } = await axios.get(`http://localhost:3000/message/${chat._id}`);
-          setMessages(data);
+          setMessages(data.message);
           
           
           console.log("Fetched messages:", data);

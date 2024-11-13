@@ -1,0 +1,69 @@
+.group-chat-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  display: flex;               /* Ensure flexbox layout */
+  flex-direction: column;      /* Align messages vertically */
+  gap: 10px;                   /* Add gap between messages */
+}
+
+.message {
+  display: flex;               /* Use flex for each message */
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;              /* Control message width */
+  word-wrap: break-word;       /* Ensure long words break properly */
+  align-items: center;         /* Vertically align content */
+  color: black;
+}
+
+.message.own {
+  background-color: #dcf8c6;
+  align-self: flex-end;        /* Align this message to the right */
+  margin-left: auto;           /* Add auto margin for right alignment */
+}
+
+.message:not(.own) {
+  background-color: #ececec;
+  align-self: flex-start;      /* Align non-"own" messages to the left */
+}
+
+.message p {
+  margin: 0;
+}
+
+.message-input {
+  display: flex;
+  gap: 10px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.message-input button {
+  padding: 10px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.message-input button:hover {
+  background-color: #388e3c;
+}

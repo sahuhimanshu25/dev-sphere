@@ -118,3 +118,23 @@ export const joinGroup = AsyncHandler(async (req, res) => {
 
   return res.status(200).json(new ApiResponse(200, updatedGroup, "Successfully joined the group"));
 });
+
+
+export const getGroupDetails = AsyncHandler(async (req, res) => {
+  const groupId = req.params.id;
+  
+
+  // Find the group by ID
+  const group = await Group.findById(groupId);
+  if (!group) {
+    return res.status(404).json({ message: "Group not found" });
+  }
+
+  
+
+ 
+
+  return res.status(200).json(new ApiResponse(200, group, "Successfully Found the group"));
+});
+
+

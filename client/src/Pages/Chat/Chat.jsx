@@ -7,6 +7,8 @@ import Conversation from "./Chat Components/Conversation";
 import { io } from "socket.io-client";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { HiUserGroup } from "react-icons/hi";
+
 const Chat = () => {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
@@ -102,6 +104,7 @@ const Chat = () => {
           <div className="Left-side-chat">
             <div className="Chat-container">
               <h2>Chats</h2>
+              <HiUserGroup onClick={()=>navigate('/community')} />
 
               {/* User Search Input */}
               <div className="User-search">
