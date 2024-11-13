@@ -10,6 +10,6 @@ userRouter.post(
 );
 userRouter.post('/login',loginUser)
 userRouter.get('/logout',logout)
-userRouter.get('/me',isAuthenticated,getMyDetails)
 userRouter.get("/search-user",isAuthenticated, searchUser)
+userRouter.get('/me',isAuthenticated,getMyDetails)
 userRouter.get('/:id',isAuthenticated,getUserDetails)

@@ -19,6 +19,12 @@ function MainNavbar() {
         <li className={location.pathname === "/login" ? "active" : ""}>
           <Link to="/login">Login</Link>
         </li>
+        <li className={location.pathname=="/myProfile" ? "active":""}>
+        <Link to="/myProfile">MYProfile</Link>
+        </li>
+        <li className={location.pathname=="/logOut" ? "active":""}>
+        <Link to="/logOut">Logout</Link>
+        </li>
       </ul>
     </nav>
   );
