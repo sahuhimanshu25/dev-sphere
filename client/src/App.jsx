@@ -18,6 +18,7 @@ import Feed from "./Pages/Post/Feed.jsx";
 import MainNavbar from "./components/Navbar/MainNavbar.jsx";
 import AddFriend from "./Pages/AddFriend/addFriend.jsx";
 import GroupChat from "./Pages/GroupChat/GroupChat.jsx";
+import Profile from "./Pages/OthersProfile/Profile.jsx";
 axios.defaults.withCredentials = true;
 
 function Logout() {
@@ -71,6 +72,7 @@ function App() {
 
         <Route path="/addChat" element={<AddFriend/>} />
         <Route path="/community" element={<GroupChat/>} />
+        <Route path="/user/user-details" element={<Profile/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

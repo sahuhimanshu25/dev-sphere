@@ -190,7 +190,7 @@ export const getMyDetails = AsyncHandler(async (req, res, next) => {
 
 //get randomUserDetails
 export const getUserDetails = AsyncHandler(async (req, res, next) => {
-  const currentUser = req.user._id;
+  const currentUser = req.params.id;
   if (!req.user || !currentUser) {
     return res.status(401).json(new ApiResponse(401, null, "Unauthorized"));
   }

@@ -104,3 +104,30 @@ button {
   align-items: center;
   gap: 5px;
 }
+.post-header div {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 10px; 
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.post-header div:hover .post-username,
+.post-header div:hover img {
+  text-shadow: 2px 2px 4px #1e8fff5f;
+  filter: drop-shadow(2px 2px 4px #1e8fff5f);
+  text-decoration: underline;
+}
+.post-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1e90ff;
+  padding: 2px;
+}
+.post-username {
+  font-size: 1em;
+  color: #fff;
+}
