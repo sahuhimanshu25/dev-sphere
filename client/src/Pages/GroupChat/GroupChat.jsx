@@ -25,6 +25,8 @@ const GroupChat = () => {
           "http://localhost:3000/group/getUserGroups"
         );
         setGroups(response.data.data); // Access the `data` array within the response
+        console.log(groups);
+        
       } catch (error) {
         console.error("Error fetching groups:", error);
       }

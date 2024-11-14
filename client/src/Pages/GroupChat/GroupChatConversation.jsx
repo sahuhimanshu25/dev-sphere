@@ -12,8 +12,8 @@ const GroupChatConversation = ({ group, onSelect }) => {
     const fetchGroupData = async () => {
       try {
         const { data } = await axios.get(`http://localhost:3000/group/${group._id}`);
-        setGroupData(data);
-        console.log("Group data:", data);
+        await setGroupData(data);
+        console.log("Group data:", groupData.data.name);
       } catch (error) {
         console.error("Error fetching group data:", error);
       }
@@ -26,7 +26,7 @@ const GroupChatConversation = ({ group, onSelect }) => {
       <div>
         <HiUserGroup/>
         <div className="group-name" style={{ fontSize: "0.8rem" }}>
-          <span>{groupData?.name}</span>
+          <span>{groupData?.data?.name}</span>
         </div>
       </div>
       <hr />

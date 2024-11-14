@@ -14,7 +14,7 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
         const userId = data.members.find((id) => id !== currentUserId);
         const { data: user } = await axios.get(`http://localhost:3000/user/${userId}`);
         setUserData(user.data);
-        console.log("Conversation user data:", user.data);
+        console.log("Conversation user data:", user.data.userdata.username);
 
         // Check if the user is online
         setIsOnline(onlineUsers.some(user => user.userId === userId));
@@ -31,7 +31,7 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
         <div className={`online-dot ${isOnline ? "online" : "offline"}`}></div>
         <img src={userimg} alt="" className="followerImage" />
         <div className="name" style={{ fontSize: "0.8rem" }}>
-          <span>{userData?.username}</span>
+          <span>{userData?.userdata.username  }</span>
         </div>
         <span>{isOnline ? "Online" : "Offline"}</span>
       </div>
