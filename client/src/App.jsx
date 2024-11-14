@@ -5,7 +5,7 @@ import Chat from "./Pages/Chat/Chat.jsx";
 import "./App.css";
 import Login from "./Pages/Login/Login";
 import axios from "axios";
-import {UserProfile} from "./Pages/UserProfile/UserProfile.jsx";
+import { UserProfile } from "./Pages/UserProfile/UserProfile.jsx";
 import Home from "./screens/Home";
 import Playground from "./screens/Playground";
 import Error404 from "./screens/Error404";
@@ -18,6 +18,8 @@ import Feed from "./Pages/Post/Feed.jsx";
 import MainNavbar from "./components/Navbar/MainNavbar.jsx";
 import AddFriend from "./Pages/AddFriend/addFriend.jsx";
 import GroupChat from "./Pages/GroupChat/GroupChat.jsx";
+import { useSelector } from "react-redux";
+
 axios.defaults.withCredentials = true;
 
 function Logout() {
@@ -33,6 +35,7 @@ function Logout() {
 
 function App() {
   const [count, setCount] = useState(0);
+  const { userData } = useSelector((state) => state.user);
 
   return (
     <Router>
@@ -62,15 +65,12 @@ function App() {
         />
         <Route path="/" element={<MainHome />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/chat" element={<Chat />} />
-
-        <Route path="/post" element={<Feed />} />
-        <Route path="/addChat" element={<AddFriend />} />
-        <Route path="/myProfile" element={<UserProfile />} />
-        <Route path="/logout" element={<Logout />} />
-
-        <Route path="/addChat" element={<AddFriend/>} />
-        <Route path="/community" element={<GroupChat/>} />
+        <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
+        <Route path="/post" element={userData ? <Feed /> : <Navigate to="/login" />} />
+        <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
+        <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" />} />
+        <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />
+        <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

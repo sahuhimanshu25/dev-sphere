@@ -97,3 +97,31 @@
 .chat-sender .send-button:hover {
   background-color: #357ab8;
 }
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  max-width: 60%;
+}
+
+.message.own {
+  background-color: #dff7df;  /* Light green for own messages */
+  align-self: flex-end;
+}
+
+.message {
+  background-color: #f1f1f1;  /* Light gray for other messages */
+  align-self: flex-start;
+}
+
+.chat-body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.chat-sender {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}

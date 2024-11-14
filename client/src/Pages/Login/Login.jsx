@@ -20,7 +20,7 @@ const LoginPage = () => {
       dispatch(login({ email, password }));
       toast.success("Login DOne")
       // Navigate('/chat')
-      Navigate('/post')
+      await Navigate('/post')
     } catch (error) {
       alert('error')
       console.log("LOGIN.JSX ERROR ",error);

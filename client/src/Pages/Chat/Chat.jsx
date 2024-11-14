@@ -104,7 +104,7 @@ const Chat = () => {
           <div className="Left-side-chat">
             <div className="Chat-container">
               <h2>Chats</h2>
-              <HiUserGroup onClick={()=>navigate('/community')} />
+              <HiUserGroup onClick={()=>navigate('/community')} color="black" cursor={'pointer'} />
 
               {/* User Search Input */}
               <div className="User-search">
@@ -117,7 +117,7 @@ const Chat = () => {
                 <button onClick={handleSearch}>
                   Search
                 </button>
-                <FaPlus onClick={()=>navigate('/addChat')}  /> 
+                <FaPlus onClick={()=>navigate('/addChat')} color="black" /> 
               </div>
 
               {/* Display Search Results */}
@@ -157,6 +157,7 @@ const Chat = () => {
               currentUser={userData?._id}
               setSendMessage={setSendMessage}
               receiveMessage={receiveMessage}
+              onlineUsers={onlineUsers}
             />
           </div>
         </>
