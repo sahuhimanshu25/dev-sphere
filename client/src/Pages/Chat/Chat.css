@@ -34,3 +34,37 @@
   display: flex;
   flex-direction: column;
 }
+/* Ensure CodeMirror container doesn't inherit incorrect styles */
+.Chat {
+  display: flex;
+  height: 100vh;
+  background-color: hsl(0, 0%, 12%);
+  color: #f0f0f0;
+  width: 100vw;
+  justify-content: space-between;  /* Optional: Adjust layout */
+}
+
+.Right-side-chat {
+  width: 75%;
+  background-color: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;  /* Add padding for spacing */
+  justify-content: flex-start;
+}
+
+.CodeMirror {
+  border-radius: 5px;
+  margin-bottom: 10px; /* For spacing below */
+  background-color: #2e2e2e;  /* Dark background for the editor */
+  color: #f0f0f0;  /* Ensure text is light */
+}
+
+/* Optional: Set text input color */
+.CodeMirror .CodeMirror-lines {
+  color: #f0f0f0;
+}
+
+.CodeMirror-gutters {
+  background-color: #333;
+}
