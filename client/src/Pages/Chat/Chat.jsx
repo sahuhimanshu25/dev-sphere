@@ -24,7 +24,7 @@ const Chat = () => {
   // Initialize socket connection and setup listeners
   useEffect(() => {
     if (userData && userData._id) {
-      socket.current = io("http://localhost:8800");
+      socket.current = io("http://localhost:3000");
       socket.current.emit("new-user-add", userData._id);
 
       socket.current.on("get-users", (users) => {
