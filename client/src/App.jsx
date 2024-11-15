@@ -5,7 +5,7 @@ import Chat from "./Pages/Chat/Chat.jsx";
 import "./App.css";
 import Login from "./Pages/Login/Login";
 import axios from "axios";
-import { UserProfile } from "./Pages/UserProfile/UserProfile.jsx";
+import  UserProfile  from "./Pages/UserProfile/UserProfile.jsx";
 import Home from "./screens/Home";
 import Playground from "./screens/Playground";
 import Error404 from "./screens/Error404";
@@ -20,6 +20,8 @@ import AddFriend from "./Pages/AddFriend/addFriend.jsx";
 import GroupChat from "./Pages/GroupChat/GroupChat.jsx";
 import { useSelector } from "react-redux";
 import Profile from "./Pages/OthersProfile/Profile.jsx"
+import EditProfile from "./Pages/UserProfile/EditProfile/EditProfile.jsx";
+import { ToastContainer } from 'react-toastify';
 axios.defaults.withCredentials = true;
 
 function Logout() {
@@ -63,6 +65,7 @@ function App() {
             </PlaygroundProvider>
           }
         />
+        {/* <ToastContainer /> */}
         <Route path="/" element={<MainHome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
@@ -72,6 +75,7 @@ function App() {
         <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />
         <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
         <Route path="/user/user-details" element={<Profile/>} />
+        <Route path="/user/Edit-profile" element={<EditProfile/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

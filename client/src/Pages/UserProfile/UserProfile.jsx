@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaHeart, FaComment } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import "./UserProfile.css";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [avatar, setAvatar] = useState("");
@@ -13,6 +14,8 @@ const UserProfile = () => {
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,6 +34,12 @@ const UserProfile = () => {
     };
     fetchUserData();
   }, []);
+
+  const handleClick = () => {
+    navigate(`/user/Edit-profile`, {
+      state: { user: { avatar, userName, bio, posts, followers, following } },
+    });
+  };
 
   return (
     <div className="user-profile">
@@ -57,7 +66,7 @@ const UserProfile = () => {
       </div>
 
       <div className="edit-profile">
-        <button>Edit Profile</button>
+        <button onClick={handleClick}>Edit Profile</button>
       </div>
 
       <div className="posts-grid">
@@ -84,4 +93,4 @@ const UserProfile = () => {
   );
 };
 
-export { UserProfile };
+export default UserProfile;
