@@ -57,7 +57,7 @@
     font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background-color: #f9f9f9;
+    background-color: #000000;
     transition: background-color 0.2s ease-in-out;
   }
   
@@ -98,3 +98,8 @@
     margin-top: 10px;
   }
   
+  
+
+  .form-group input{
+    color: black;
+  }

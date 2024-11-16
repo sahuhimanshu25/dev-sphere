@@ -29,14 +29,16 @@
 }
 
 .message.own {
-  background-color: #dcf8c6;
+  background-color: #0065d0;
   align-self: flex-end;        /* Align this message to the right */
   margin-left: auto;           /* Add auto margin for right alignment */
+  gap: 10px;
 }
 
 .message:not(.own) {
   background-color: #ececec;
   align-self: flex-start;      /* Align non-"own" messages to the left */
+  gap: 10px;
 }
 
 .message p {

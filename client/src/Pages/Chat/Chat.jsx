@@ -152,13 +152,15 @@ const Chat = () => {
           </div>
 
           <div className="Right-side-chat">
-            <ChatBox
+            {currentChat?<ChatBox
               chat={currentChat}
               currentUser={userData?._id}
               setSendMessage={setSendMessage}
               receiveMessage={receiveMessage}
               onlineUsers={onlineUsers}
-            />
+            />:<div className="No-group-selected">
+            Select a group to start chatting
+          </div>}
           </div>
         </>
       ) : null}
