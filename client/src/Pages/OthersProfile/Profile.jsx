@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaHeart, FaComment } from "react-icons/fa";
 import "./profile.css";
 import { useSelector } from "react-redux";
+
 const Profile = ({}) => {
   const userId = useSelector((state) => state.post.userId);
   console.log("User ID:", userId);
@@ -29,7 +30,7 @@ const Profile = ({}) => {
       try {
         const response = await axios.get(`http://localhost:3000/user/${userId}`);
         const userData = response.data.data.userdata;
-        console.log(userData)
+        console.log(userData);
         if (userData) {
           setAvatar(userData.avatar || "");
           setUserName(userData.username || "No Name");
@@ -45,22 +46,23 @@ const Profile = ({}) => {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchUserData();
   }, [userId]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
   return (
-    <div className="user-profile">
-      <div className="profile-header">
-        <div className="avatar">
+    <div className="profile-container">
+      <div className="profile-header-section">
+        <div className="user-avatar">
           <img src={avatar} alt="User Avatar" />
         </div>
-        <div className="profile-info">
+        <div className="user-profile-info">
           <h2>{userName}</h2>
-          <div className="stats">
+          <div className="stats-container">
             <span>
               <strong>{posts.length}</strong> Posts
             </span>
@@ -71,16 +73,15 @@ const Profile = ({}) => {
               <strong>{following.length}</strong> Following
             </span>
           </div>
-          <p className="bio">{bio}</p>
-          <p className="description">{description}</p>
+          <p className="user-bio">{bio}</p>
         </div>
       </div>
-      <div className="edit-profile">
+      <div className="edit-profile-section">
         <button>Message {userName}</button>
       </div>
-      <div className="posts-grid">
+      <div className="user-posts-grid">
         {posts.map((post) => (
-          <div key={post._id} className="post-item">
+          <div key={post._id} className="user-post-item">
             {post.content.type === "image" ? (
               <img src={post.content.value} alt="Post Image" />
             ) : post.content.type === "video" ? (
@@ -88,8 +89,8 @@ const Profile = ({}) => {
             ) : (
               <p>{post.content.value}</p>
             )}
-            <div className="overlay">
-              <div className="overlay-info">
+            <div className="post-overlay">
+              <div className="overlay-info-container">
                 <span>
                   <FaHeart /> {post.likes.length}
                 </span>
@@ -101,4 +102,5 @@ const Profile = ({}) => {
     </div>
   );
 };
+
 export default Profile;

@@ -15,7 +15,8 @@ import PlaygroundProvider from "./context/PlaygroundContext";
 import MainHome from "./components/MainHome.jsx";
 import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
-import MainNavbar from "./components/Navbar/MainNavbar.jsx";
+// import MainNavbar from "./components/Navbar/Sidebar.jsx";
+import Sidebar from "./components/Navbar/Sidebar.jsx";
 import AddFriend from "./Pages/AddFriend/addFriend.jsx";
 import GroupChat from "./Pages/GroupChat/GroupChat.jsx";
 import { useSelector } from "react-redux";
@@ -41,7 +42,7 @@ function App() {
 
   return (
     <Router>
-      <MainNavbar />
+      <Sidebar />
       <GlobalStyle />
       <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
       <Routes>

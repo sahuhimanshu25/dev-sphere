@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaHeart } from "react-icons/fa";
+import { SlOptionsVertical } from "react-icons/sl";
+import { RiDeleteBin3Fill } from "react-icons/ri";
 import "./UserProfile.css";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +16,7 @@ const UserProfile = () => {
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [showOptions, setShowOptions] = useState(null);  // State to track which post has options shown
 
   const navigate = useNavigate();
 
@@ -41,6 +44,20 @@ const UserProfile = () => {
     });
   };
 
+  const handleDelete = async (postId) => {
+    try {
+      await axios.delete(`http://localhost:3000/post/post/${postId}`);
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+      setShowOptions(null);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
+  const toggleOptions = (postId) => {
+    setShowOptions((prev) => (prev === postId ? null : postId)); 
+  };
+
   return (
     <div className="user-profile">
       <div className="profile-header">
@@ -61,7 +78,6 @@ const UserProfile = () => {
             </span>
           </div>
           <p className="bio">{bio}</p>
-          <p className="description">{description}</p>
         </div>
       </div>
 
@@ -79,6 +95,27 @@ const UserProfile = () => {
             ) : (
               <p>{post.content.value}</p>
             )}
+            <div
+              className="options-icon"
+              onClick={(e) => {
+                e.stopPropagation(); 
+                toggleOptions(post._id);
+              }}
+            >
+              <SlOptionsVertical size={24} />
+            </div>
+            {showOptions === post._id && (
+              <div className="delete-option">
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(post._id)}
+                >
+                  <RiDeleteBin3Fill size={20} />
+                  Delete
+                </button>
+              </div>
+            )}
+
             <div className="overlay">
               <div className="overlay-info">
                 <span>
