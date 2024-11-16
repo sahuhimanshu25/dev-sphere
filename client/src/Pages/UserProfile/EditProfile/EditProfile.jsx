@@ -10,17 +10,20 @@ const EditProfile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const [bio, setBio] = useState(""); // Added state for bio
   const [isVerificationRequired, setIsVerificationRequired] = useState(false);
   const [serverCode, setServerCode] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [sCode, setsCode] = useState("")
+  const [sCode, setsCode] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       ...(username && { username }),
       ...(email && { email }),
       ...(oldPassword && newPassword && { oldPassword, newPassword }),
+      ...(bio && { bio }), // Add bio to the formData
     };
 
     if (email) {
@@ -30,11 +33,11 @@ const EditProfile = () => {
       setIsLoading(true);
       const response = await axios.post("http://localhost:3000/user/updateAccount", formData);
       const { data } = response;
-      console.log(response.data.data.user.verificationCode)
+      console.log(response.data.data.user.verificationCode);
       if (email) {
-      setIsVerificationRequired(true);
-    }
-      setsCode(response.data.data.user.verificationCode)
+        setIsVerificationRequired(true);
+      }
+      setsCode(response.data.data.user.verificationCode);
       if (data.verificationRequired) {
         setIsVerificationRequired(true);
         setServerCode(data.user.verificationCode);
@@ -128,6 +131,17 @@ const EditProfile = () => {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Enter new password"
+            />
+          </div>
+
+          {/* Bio Section */}
+          <div className="form-group">
+            <label htmlFor="bio">Bio</label>
+            <textarea
+              id="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Tell us about yourself"
             />
           </div>
 
