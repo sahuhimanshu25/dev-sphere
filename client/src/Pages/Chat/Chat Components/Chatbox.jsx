@@ -4,12 +4,20 @@ import userimg from '../../../../public/userimg.jpg';
 import axios from "axios";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
-
+import { Controlled as CodeMirror } from 'react-codemirror2'; // Import CodeMirror
+import 'codemirror/mode/javascript/javascript';  // For JavaScript syntax highlighting
+import 'codemirror/mode/clike/clike';  // For C/C++ syntax highlighting
+import 'codemirror/lib/codemirror.css';  // CodeMirror styles
+import 'codemirror/theme/material.css';  // Make sure to import the theme CSS
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'; // Import syntax highlighter style
 const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUsers }) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isOnline, setIsOnline] = useState(false);
+  const [inputMode, setInputMode] = useState("text");  // State to track input mode (text or code)
+  const [language, setLanguage] = useState("javascript");  // State to track language selection
   const messagesEndRef = useRef(null); // Ref for auto-scrolling
 
   // Fetch user data for the chat participant
@@ -55,20 +63,20 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
   // Handle sending a new message
   const handleSend = async (e) => {
     e.preventDefault();
-  
+
     // Create a new message object
     const message = {
       senderId: currentUser,
       text: newMessage,
       chatId: chat._id,
     };
-  
+
     // Optimistically update the messages list by adding the new message immediately
     setMessages((prevMessages) => [...prevMessages, message]);
-  
+
     try {
       const { data } = await axios.post('http://localhost:3000/message', message);
-  
+
       // Add the message from the server response, if it's not already in the list
       setMessages((prevMessages) => {
         const isMessageExist = prevMessages.some((msg) => msg._id === data._id);
@@ -77,17 +85,16 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
         }
         return prevMessages;
       });
-  
+
       setNewMessage("");  // Clear the input field after sending
     } catch (error) {
       console.error("Error sending message:", error);
       // Optionally, you can remove the optimistically added message if the request fails.
     }
-  
+
     const receiverId = chat.members.find((id) => id !== currentUser);
     setSendMessage({ ...message, receiverId });
   };
-  
 
   // Scroll to the bottom of the chat when messages are updated
   useEffect(() => {
@@ -95,6 +102,17 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  const renderMessage = (msg) => {
+    if (msg.text && inputMode === "code") {
+      return (
+        <SyntaxHighlighter language={language} style={docco}>
+          {msg.text}
+        </SyntaxHighlighter>
+      );
+    }
+    return <span>{msg.text}</span>;
+  };
 
   return (
     <div className="ChatBox-container">
@@ -112,17 +130,52 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
       <div className="chat-body">
         {messages.map((msg, idx) => (
           <div key={idx} className={msg.senderId === currentUser ? "message own" : "message"}>
-            <span>{msg.text}</span>
+            {renderMessage(msg)}
             <span>{format(msg.createdAt)}</span>
           </div>
         ))}
-        {/* Scroll to the latest message */}
         <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-sender">
-        <div>+</div>
-        <InputEmoji value={newMessage} onChange={setNewMessage} />
+        {/* Dropdown for selecting input mode */}
+        <select onChange={(e) => setInputMode(e.target.value)} value={inputMode}>
+          <option value="text">Text</option>
+          <option value="code">Code</option>
+        </select>
+
+        {/* Dropdown for selecting programming language */}
+        {inputMode === "code" && (
+          <select onChange={(e) => setLanguage(e.target.value)} value={language}>
+            <option value="javascript">JavaScript</option>
+            <option value="clike">C/C++</option>
+          </select>
+        )}
+
+        {/* Input Field */}
+        {inputMode === "code" ? (
+          <CodeMirror
+          value={newMessage}
+          options={{
+            mode: language, // Dynamically set the mode
+            lineNumbers: true,
+            theme: 'material', // Ensure you are using a supported theme
+          }}
+          onBeforeChange={(editor, data, value) => setNewMessage(value)}
+          style={{
+            height: '300px',   // Adjust as needed
+            width: '100%',
+            border: '1px solid #ccc', // Optional border styling
+            borderRadius: '5px',
+            
+          }}
+        />
+        
+        ) : (
+          <InputEmoji value={newMessage} onChange={setNewMessage} />
+        )}
+
+        {/* Send Button */}
         <div className="send-button button" onClick={handleSend}>Send</div>
       </div>
     </div>
