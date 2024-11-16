@@ -1,0 +1,126 @@
+/* General Container */
+.edit-profile-container {
+  background-color: #121212;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.edit-profile-container h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #37b2e9; /* Bright cyan color */
+  margin-bottom: 20px;
+}
+
+/* Success/Error Messages */
+.success-message {
+  color: #37b2e9;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #e74c3c;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Form Styles */
+.edit-profile-form,
+.verification-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #1f1f1f;
+  color: #f1f1f1;
+  font-size: 16px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #37b2e9;
+  background-color: #2c2c2c;
+}
+
+button {
+  padding: 12px 20px;
+  background-color: #37b2e9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #28a7c5;
+}
+
+/* Verification Code Form */
+.verification-form {
+  margin-top: 30px;
+}
+
+.verification-form h3 {
+  font-size: 20px;
+  color: #37b2e9;
+  margin-bottom: 10px;
+}
+
+.verification-form .form-group {
+  margin-bottom: 20px;
+}
+
+/* Input Placeholder Styling */
+input::placeholder {
+  color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .edit-profile-container {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .form-group label,
+  .form-group input {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}

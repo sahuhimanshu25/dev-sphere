@@ -13,7 +13,7 @@ const GroupChatBox = ({ group }) => {
 
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io("http://localhost:8800");
+    socket.current = io("http://localhost:3000");
 
     // Join the group chat room
     socket.current.emit("join-group", group.data._id);

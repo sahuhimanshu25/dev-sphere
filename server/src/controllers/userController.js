@@ -4,6 +4,8 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { sendToken } from "../middlewares/jwtToken.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {sendMail} from "../nodemailer/sendMail.js"
+import {sendMessage} from "../nodemailer/mailMessage.js"
 import mongoose from "mongoose";
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
@@ -161,11 +163,11 @@ export const getMyDetails = AsyncHandler(async (req, res, next) => {
     {
       $project: {
         password: 0,
-        "followers.password": 0, 
-        "followers.followers": 0, 
-        "followers.following": 0, 
-        "following.password": 0, 
-        "following.followers": 0, 
+        "followers.password": 0,
+        "followers.followers": 0,
+        "followers.following": 0,
+        "following.password": 0,
+        "following.followers": 0,
         "following.following": 0,
       },
     },
@@ -197,7 +199,9 @@ export const getUserDetails = AsyncHandler(async (req, res, next) => {
 
   const user = await User.findById(req.params.id);
   if (!user) {
-    return res.status(404).json(new ApiResponse(404, null, "User doesn't exist"));
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "User doesn't exist"));
   }
 
   const userDetails = await User.aggregate([
@@ -212,7 +216,7 @@ export const getUserDetails = AsyncHandler(async (req, res, next) => {
     },
     {
       $lookup: {
-        from: "users", 
+        from: "users",
         localField: "followers",
         foreignField: "_id",
         as: "followers",
@@ -229,11 +233,11 @@ export const getUserDetails = AsyncHandler(async (req, res, next) => {
     {
       $project: {
         password: 0,
-        "followers.password": 0, 
-        "followers.followers": 0, 
-        "followers.following": 0, 
-        "following.password": 0, 
-        "following.followers": 0, 
+        "followers.password": 0,
+        "followers.followers": 0,
+        "followers.following": 0,
+        "following.password": 0,
+        "following.followers": 0,
         "following.following": 0,
       },
     },
@@ -241,7 +245,114 @@ export const getUserDetails = AsyncHandler(async (req, res, next) => {
 
   const userdata = userDetails[0];
   if (!userdata) {
-    return res.status(404).json(new ApiResponse(404, null, "User doesn't exist"));
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "User doesn't exist"));
   }
-  res.status(200).json(new ApiResponse(200, { userdata, currentUser }, "User profile fetched successfully"));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { userdata, currentUser },
+        "User profile fetched successfully"
+      )
+    );
+});
+
+export const updateAccountDetails = AsyncHandler(async (req, res) => {
+  const { email, username, oldPassword, newPassword } = req.body;
+  let verificationRequired = false;
+  if (!email && !username && !oldPassword && !newPassword) {
+    throw new ErrorHandler(
+      "At least one of Email, Username, or Password is required"
+    );
+  }
+
+  const user = await User.findById(req.user._id).select("+password");
+  if (!user) {
+    throw new ErrorHandler("User not found", 404);
+  }
+  if (email && email !== user.email) {
+    throw new ErrorHandler("Enter correct email", 401);
+  }
+  if (email && email === user.email) {
+    verificationRequired = true;
+    const verificationCode = await sendMail(user.email);
+    if (!verificationCode) {
+      throw new ErrorHandler("Failed to send verification email", 500);
+    }
+    user.verificationCode = verificationCode;
+  }
+  if (oldPassword && newPassword) {
+    if (!oldPassword || !newPassword) {
+      throw new ErrorHandler("New password cannot be empty", 400);
+    }
+    const isPasswordCorrect = await user.comparePassword(oldPassword);
+    if (!isPasswordCorrect) {
+      throw new ErrorHandler(401, "Invalid Old Password");
+    }
+    user.password = newPassword;
+    const message="Password has been updated successfully!"
+    sendMail(user.email,message)
+  }
+  if (username) {
+    user.username = username;
+  }
+  await user.save({ validateBeforeSave: true });
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { user, verificationRequired },
+        "Account details updated successfully."
+      )
+    );
+});
+
+export const verifyAccountChanges = AsyncHandler(async (req, res) => {
+  const { verificationCode, newEmail } = req.body;
+  if (!verificationCode || !newEmail) {
+    throw new ErrorHandler(
+      "Verification code and new email are required.",
+      400
+    );
+  }
+
+  const user = await User.findById(req.user?._id).select("+password");
+  if (!user) {
+    throw new ErrorHandler("User not found", 404);
+  }
+
+  if (verificationCode !== user.verificationCode.toString()){
+    throw new ErrorHandler(
+      "Invalid verification code or code has expired",
+      400
+    );
+  }
+
+  const existedUser = await User.findOne({ email: newEmail });
+  if (existedUser) {
+    throw new ErrorHandler(
+      "This email is already registered. Please use another email."
+    );
+  }
+
+  user.email = newEmail;
+  const message = "Your email has been updated successfully.";
+  await sendMessage(newEmail, message); // Notify the user
+
+  user.verificationCode = undefined;
+  await user.save({ validateBeforeSave: true });
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        user,
+        "Account details updated successfully after verification."
+      )
+    );
 });
