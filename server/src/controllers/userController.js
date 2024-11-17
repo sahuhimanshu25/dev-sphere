@@ -261,11 +261,11 @@ export const getUserDetails = AsyncHandler(async (req, res, next) => {
 });
 
 export const updateAccountDetails = AsyncHandler(async (req, res) => {
-  const { email, username, oldPassword, newPassword } = req.body;
+  const { email, username, oldPassword, newPassword,bio} = req.body;
   let verificationRequired = false;
-  if (!email && !username && !oldPassword && !newPassword) {
+  if (!email && !username && !oldPassword && !newPassword && !bio) {
     throw new ErrorHandler(
-      "At least one of Email, Username, or Password is required"
+      "At least one of Email, Username,Password,or bio is required"
     );
   }
 
@@ -298,6 +298,9 @@ export const updateAccountDetails = AsyncHandler(async (req, res) => {
   }
   if (username) {
     user.username = username;
+  }
+  if(bio){
+    user.bio=bio;
   }
   await user.save({ validateBeforeSave: true });
   res

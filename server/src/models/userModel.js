@@ -41,6 +41,9 @@ const userSchema = new mongoose.Schema({
     },
     verificationCode:{
         type:Number,
+    },
+    bio:{
+        type:String,
     }
 },{timestamps:true});
 

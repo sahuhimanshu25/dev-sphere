@@ -27,8 +27,6 @@ export const createComment = AsyncHandler(async (req, res, next) => {
 
 export const getComments = AsyncHandler(async (req, res, next) => {
   const { id: postId } = req.params;
-
-
   const post = await Post.findById(postId);
   if (!post) {
     return next(new ErrorHandler("Post not found", 404));
@@ -36,7 +34,7 @@ export const getComments = AsyncHandler(async (req, res, next) => {
 
 
   const comments = await Comment.find({ post: postId })
-    .populate("owner", "username")
+    .populate("owner", "username avatar")
     .sort({ createdAt: -1 });
 
   res

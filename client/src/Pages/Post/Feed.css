@@ -1,56 +1,83 @@
 .feed {
-  background-color: #121212;
+  background-color: #12121200;
   padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  height: 30vw;
-  overflow: scroll;
+  width: 80vw;
+  margin: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(166, 154, 255, 0.3);
+  height: calc(100vh - 80px);
+  display: flex;
+  justify-content: space-between;
+  transition: margin-left 0.3s ease, background-color 0.3s ease;
+  overflow: hidden;
 }
+
+.posts {
+  width: 50%;
+  padding-right: 10px;
+  max-height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.Seacrh-user {
+  width: 50%;
+  padding-left: 10px;
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.separator {
+  width: 1px;
+  background-color: #7c78eb40;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.872);
+  margin: 0 20px;
+}
+
 .create-post {
-  background-color: #37b2e9;
+  background-color: #37b1e900;
   color: white;
-  border-radius: 6px;
-  padding: 12px 18px;
+  border-radius: 8px;
+  padding: 14px 18px;
   font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease;
   margin-bottom: 20px;
   width: 100%;
 }
 
 .create-post:hover {
-  background-color: #1f98c7;
+  transform: translateY(-3px);
 }
-
 
 .post {
   background-color: #1c1c1c;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  width: 80%;
 }
 
 .post:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
-
 
 .post-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #ffffff;
   font-weight: bold;
   margin-bottom: 12px;
 }
-
 
 .post-content {
   margin: 12px 0;
@@ -58,43 +85,39 @@
   color: #dcdcdc;
 }
 
-
-.post-content img {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin: 12px 0;
-}
-
-
+.post-content img,
 .post-content video {
   width: 100%;
   max-width: 600px;
   height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   margin: 12px 0;
+  transition: transform 0.3s ease-in-out;
 }
 
+.post-content img:hover,
+.post-content video:hover {
+  transform: scale(1.05);
+}
 
 .like-button {
   background-color: transparent;
   border: none;
   color: #fff;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .like-button:hover {
   color: #37b2e9;
+  transform: scale(1.1);
 }
-
 
 .thumbs-up {
   margin-right: 8px;
@@ -105,28 +128,50 @@
 }
 
 .like-button.liked:hover {
-  color: #ff4d4d;
+  color: #ff4d4d; 
 }
-
 
 @media (max-width: 768px) {
   .feed {
     padding: 15px;
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+  }
+
+  .posts {
+    width: 100%;
+    padding-right: 0;
+    max-height: none;
+  }
+
+  .Seacrh-user {
+    width: 100%;
+    padding-left: 0;
+    position: relative;
+    height: auto;
   }
 
   .create-post {
     font-size: 1rem;
+    padding: 12px 15px;
   }
 
   .post {
-    padding: 12px;
+    padding: 14px;
+    width: 90%;
   }
 
   .post-header {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .post-content {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  .like-button {
+    font-size: 1rem;
   }
 }

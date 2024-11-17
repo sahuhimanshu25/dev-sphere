@@ -3,7 +3,8 @@
   height: 100vh;
   background-color: hsl(0, 0%, 12%);
   color: #f0f0f0;
-  width: 100vw;
+  width: 60vw;
+  margin-left: 15rem;
 }
 
 .Left-side-chat {

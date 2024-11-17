@@ -48,10 +48,16 @@ function Feed() {
 
     return (
         <div className="feed">
-            <CreatePost onPostCreated={handlePostCreated} />
-            {posts.map((post) => (
-                <Post key={post._id} postData={post} onLike={handleLike} />
-            ))}
+            <div className='posts'>
+                <CreatePost onPostCreated={handlePostCreated} />
+                {posts.map((post) => (
+                    <Post key={post._id} postData={post} onLike={handleLike} />
+                ))}
+            </div>
+            <div className="separator"></div>
+            <div className='Seacrh-user'>
+                <h2>This is for Search User</h2>
+            </div>
         </div>
     );
 }

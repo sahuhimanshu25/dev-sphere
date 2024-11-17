@@ -1,6 +1,7 @@
 import { FaBars, FaHome, FaUser, FaCog, FaSearch } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
-import { FiLogOut } from "react-icons/fi"; // Importing logout icon
+import { FiLogOut } from "react-icons/fi";
+import { BiCodeAlt } from "react-icons/bi"; // Importing a new icon
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -17,6 +18,7 @@ const Sidebar = () => {
 
   return (
     <div className="main-container">
+      {/* Fixed syntax error in className */}
       <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
         <div className="top_section">
           {isOpen && <h1 className="logo">DevChat</h1>}
@@ -78,7 +80,7 @@ const Sidebar = () => {
           <div className="menu">
             <Link to="/compile" className="menu_item">
               <div className="icon">
-                <FaCog />
+                <BiCodeAlt /> {/* Updated icon */}
               </div>
               {isOpen && <div className="link_text">Compile</div>}
             </Link>

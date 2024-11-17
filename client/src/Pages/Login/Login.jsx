@@ -30,7 +30,7 @@ const LoginPage = () => {
   };
 
   return (
-    <>
+    <div className="log">
       <div className="login-container">
         <h2 className="login-title">Login</h2>
         <form onSubmit={handleLogin} className="login-form">
@@ -63,7 +63,7 @@ const LoginPage = () => {
 
         {error && <p className="error-msg">{error}</p>}
       </div>
-    </>
+    </div>
   );
 };
 

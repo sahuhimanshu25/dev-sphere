@@ -4,14 +4,15 @@
   height: 100%;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 250px; 
-  z-index: 1000;
+  margin-left: 250px;
 }
 
 .sidebar {
   width: 250px;
   height: 100%;
-  background-color: #292B50;
+  background: rgba(255, 255, 255, 0); 
+  backdrop-filter: blur(15px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
   color: #FFFFFF;
   position: fixed;
   top: 0;
@@ -22,21 +23,26 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: center;
+  border-radius: 10px 0 0 10px; /* Rounded left corners for a smooth look */
+  overflow: hidden;
 }
 
 .sidebar.open {
   width: 250px;
 }
-.top_section h1{
-  color: white;
-}
-.top_section .bars{
-  color: #A69AFF;
-}
+
 .sidebar.closed {
   width: 80px;
+}
+
+.top_section h1 {
+  color: white;
+}
+
+.top_section .bars {
+  color: #A69AFF;
 }
 
 .top_section {
@@ -66,7 +72,6 @@
   justify-content: space-between;
   gap: 10px;
   width: 100%;
-  transition: background-color 0.3s ease;
 }
 
 .search_icon {
@@ -75,17 +80,18 @@
 }
 
 .search input {
-  background-color: transparent;
+  background: rgba(255, 255, 255, 0.15); /* Transparent input with some white */
   color: #FFFFFF;
   padding: 8px 10px;
   font-size: 1em;
   outline: none;
   width: 100%;
+  border-radius: 8px;
+  backdrop-filter: blur(6px); /* Glassmorphism on the input */
   transition: width 0.2s ease, background-color 0.3s ease;
 }
 
 .search input::placeholder {
-  border-radius: 20px;
   color: #cfd0d2;
 }
 
@@ -111,17 +117,21 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
   border-radius: 8px;
   width: 100%;
-  justify-content: flex-start; 
+  justify-content: flex-start;
 }
 
-.icon {
+.menu_item:hover {
+  background-color: #7C78EB;
+  transform: scale(1.05);
+}
+
+.menu_item .icon {
   margin-right: 18px;
   font-size: 1.8em;
   color: #A69AFF;
 }
 
 .link_text {
-  transition: opacity 0.3s ease;
   font-size: 18px;
   font-weight: 550;
   letter-spacing: 1px;
@@ -141,8 +151,7 @@
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 100%; 
-  
+  width: 100%;
 }
 
 .submenu_item:hover {
@@ -151,7 +160,6 @@
 }
 
 .submenu_item .link_text {
-  transition: opacity 0.3s ease;
   font-size: 18px;
   font-weight: 550;
   letter-spacing: 1px;
@@ -194,7 +202,7 @@
 
 .sidebar .menu_item .icon {
   margin-right: 10px;
-  font-size: 20px;
+  font-size: 26px;
 }
 
 .sidebar .submenu {
@@ -217,7 +225,7 @@
 
 .sidebar .submenu_item .icon {
   margin-right: 10px;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .sidebar .submenu_item .link_text {
@@ -228,6 +236,7 @@
 .sidebar .submenu_item:hover .link_text {
   color: #fff;
 }
+
 .user-info {
   display: flex;
   flex-direction: column;
@@ -241,16 +250,16 @@
   height: 60px;
   border-radius: 50%;
   margin-right: 10px;
-}
-.user-info img{
   border: 2px solid white;
   object-fit: cover;
 }
+
 .username {
   font-size: 18px;
   font-weight: bold;
   letter-spacing: 0.8px;
 }
+
 .logout-btn {
   position: absolute;
   bottom: 20px;
