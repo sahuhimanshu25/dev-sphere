@@ -22,6 +22,8 @@ function Post({ postData, onLike }) {
   useEffect(() => {
     if (showComments) {
       fetchComments();
+      console.log(postData.user.avatar);
+      
     }
   }, [showComments]);
 
@@ -130,6 +132,10 @@ function Post({ postData, onLike }) {
     }
   };
 
+  if (!postData || !postData.user || !postData.user.avatar) {
+    return <div>Loading...</div>;
+  }
+  
   return (
     <div className="post">
       <div className="post-header">

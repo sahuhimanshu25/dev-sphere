@@ -14,14 +14,18 @@ function Feed() {
         const fetchPosts = async () => {
             try {
                 const { data } = await axios.get('http://localhost:3000/post/posts/feed');
-                setPosts(data.posts);
+                setPosts(data.posts); // Correctly sets the posts
+                console.log("posts",data.posts);
+                
             } catch (error) {
                 console.error("Error fetching posts:", error);
             } finally {
-                setPostsLoading(false); // Stop loading posts
+                setPostsLoading(false);
             }
         };
+        
         fetchPosts();
+        
     }, []);
 
     const handlePostCreated = (newPost) => {
@@ -44,6 +48,7 @@ function Feed() {
 
     if (postsLoading) {
         return <div>Loading posts...</div>;
+
     }
 
     return (
