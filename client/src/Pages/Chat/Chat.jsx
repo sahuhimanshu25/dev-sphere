@@ -17,7 +17,7 @@ const Chat = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const socket = useRef();
   const { userData } = useSelector((state) => state.user);
 
@@ -46,7 +46,7 @@ const Chat = () => {
     const getChats = async () => {
       if (userData && userData._id) {
         try {
-          const { data } = await axios.get(`http://localhost:3000/chat/chats`);
+          const { data } = await axios.get("http://localhost:3000/chat/chats");
           setChats(data);
         } catch (error) {
           console.error("Error fetching chats:", error);
@@ -75,7 +75,7 @@ const Chat = () => {
         const { data } = await axios.get(
           `http://localhost:3000/following/search?username=${searchTerm}`
         );
-        setSearchResults(data.data); // Assuming data.data contains the list of followed users
+        setSearchResults(data.data); 
       } catch (error) {
         console.error("Error searching followed users:", error);
       }
@@ -85,13 +85,16 @@ const Chat = () => {
   // Initiate a new chat with the selected user
   const handleNewChat = async (user) => {
     try {
-      const { data: chat } = await axios.post(`http://localhost:3000/chat/create`, {
-        receiverId: user._id
-      });
-      setChats((prevChats) => [...prevChats, chat]); // Add new chat to the chat list
-      setCurrentChat(chat); // Set as the current chat
-      setSearchResults([]); // Clear search results after selection
-      setSearchTerm(""); // Clear search input
+      const { data: chat } = await axios.post(
+        "http://localhost:3000/chat/create",
+        {
+          receiverId: user._id,
+        }
+      );
+      setChats((prevChats) => [...prevChats, chat]); 
+      setCurrentChat(chat);
+      setSearchResults([]); 
+      setSearchTerm("");
     } catch (error) {
       console.error("Error creating a new chat:", error);
     }
@@ -100,69 +103,95 @@ const Chat = () => {
   return (
     <div className="Chat">
       {userData ? (
-        <>
+        <div className="main-chat">
           <div className="Left-side-chat">
             <div className="Chat-container">
-              <h2>Chats</h2>
-              <HiUserGroup onClick={()=>navigate('/community')} color="black" cursor={'pointer'} />
-
-              {/* User Search Input */}
-              <div className="User-search">
-                <input
-                  type="text"
-                  placeholder="Search people you follow"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button onClick={handleSearch}>
-                  Search
-                </button>
-                <FaPlus onClick={()=>navigate('/addChat')} color="black" /> 
+              <div className="left-side-chat-top">
+                <div className="head-chat-l">
+                  <h2>Chats</h2>
+                </div>
+                <div className="User-search">
+                  <input
+                    type="text"
+                    placeholder="Search people you follow"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <button onClick={handleSearch}>Search</button>
+                </div>
+                {searchResults.length > 0 && (
+                  <div className="Search-results">
+                    {searchResults.map((user) => (
+                      <div
+                        key={user._id}
+                        className="Search-result-item"
+                        onClick={() => handleNewChat(user)}
+                      >
+                        {user.username} <FaPlus className="Add-icon" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="sep-chat"></div>
               </div>
 
-              {/* Display Search Results */}
-              {searchResults.length > 0 && (
-                <div className="Search-results">
-                  {searchResults.map((user) => (
-                    <div
-                      key={user._id}
-                      className="Search-result-item"
-                      onClick={() => handleNewChat(user)}
-                    >
-                      {user.username} <FaPlus className="Add-icon" />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Chat List */}
               <div className="Chat-list">
                 {chats.map((chat) => (
-                  <div key={chat._id} style={{ backgroundColor: "red" }}>
+                  <div
+                    key={chat._id}
+                    className={`Chat-list-in ${
+                      currentChat?._id === chat._id ? "active-chat" : ""
+                    }`}
+                    onClick={() => handleConversationClick(chat)}
+                    aria-selected={currentChat?._id === chat._id}
+                  >
                     <Conversation
                       data={chat}
                       currentUserId={userData._id}
                       onlineUsers={onlineUsers}
-                      onClick={() => handleConversationClick(chat)}
                     />
                   </div>
                 ))}
               </div>
             </div>
+            <div className="left-side-chat-footer">
+              <div
+                onClick={() => navigate("/community")}
+                className="community group"
+              >
+                <div className="icon-container">
+                  <HiUserGroup color="#7C78EB" />
+                </div>
+                <div className="hover-label">Communities</div>
+              </div>
+              <div className="group">
+                <div
+                  className="icon-container "
+                  onClick={() => navigate("/addChat")}
+                >
+                  <FaPlus color="#7C78EB" />
+                </div>
+                <div className="hover-label">Add Chat</div>
+              </div>
+            </div>
           </div>
 
           <div className="Right-side-chat">
-            {currentChat?<ChatBox
-              chat={currentChat}
-              currentUser={userData?._id}
-              setSendMessage={setSendMessage}
-              receiveMessage={receiveMessage}
-              onlineUsers={onlineUsers}
-            />:<div className="No-group-selected">
-            Select a group to start chatting
-          </div>}
+            {currentChat ? (
+              <ChatBox
+                chat={currentChat}
+                currentUser={userData?._id}
+                setSendMessage={setSendMessage}
+                receiveMessage={receiveMessage}
+                onlineUsers={onlineUsers}
+              />
+            ) : (
+              <div className="No-group-selected">
+                Select a group to start chatting
+              </div>
+            )}
           </div>
-        </>
+        </div>
       ) : null}
     </div>
   );

@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #1e1e1e;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -10,191 +9,150 @@
 .chat-header {
   display: flex;
   align-items: center;
-  padding: 20px;
-  background-color: #2e2e2e;
+  padding: 23px 20px;
+  background-color: #292b5089;
   border-bottom: 1px solid #333;
   color: #f0f0f0;
 }
 
-.chat-header .online-dot {
-  width: 10px;
-  height: 10px;
-  background-color: #00ff00;
+.image-container {
+  position: relative;
+  width: 49px;
+  height: 49px;
   border-radius: 50%;
-  margin-right: 10px;
+  object-fit: cover;
+  border: 3px solid #7c78eb;
 }
 
-.chat-header .followerImage {
-  width: 40px;
-  height: 40px;
+.followerImage {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  margin-right: 10px;
+}
+
+.online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0; 
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #292B50;
+}
+
+.online-dot.online {
+  background-color: #00ff00; 
+}
+
+.online-dot.offline {
+  background-color: #ff0000; 
+}
+
+.chat-header-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .chat-header .name {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.chat-header .name :nth-child(1) {
+  color: #f0f0f0;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 20px;
+  letter-spacing: 0.5px;
 }
 
 .chat-body {
   flex-grow: 1;
-  padding: 20px;
+  padding: 15px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background-color: #4b4b4b39;
 }
 
 .message {
-  max-width: 70%;
-  padding: 10px;
-  border-radius: 8px;
-  color: #000000;
+  background: #3b3b3b;
+  color: #f0f0f0;
+  padding: 0.8rem;
+  border-radius: 1rem;
+  max-width: 26rem;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   word-wrap: break-word;
+  letter-spacing: 0.5px;
 }
+
+/* Received messages */
+.message:not(.own) {
+  align-self: flex-start;
+  background: #3b3b3b;
+  color: #f0f0f0;
+  border-radius: 1rem 1rem 1rem 0;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 
 .message.own {
   align-self: flex-end;
-  background-color: #fdfdfd;
-  color: #e0e0e0;
-}
-
-.message:not(.own) {
-  align-self: flex-start;
-  background-color: #4b4b4b;
+  color: #ffffff;
+  background: #292929;
+  border-radius: 1rem 1rem 0 1rem;
+  border: 2px solid #7c78eb;
 }
 
 .message span:last-child {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: #a0a0a0;
   margin-top: 5px;
   display: block;
+  text-align: right;
+}
+
+.message.own span:last-child {
+  color: #e0e0e0;
 }
 
 .chat-sender {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   padding: 15px;
-  background-color: #2e2e2e;
+  background-color: #292b50;
   border-top: 1px solid #333;
 }
 
-.chat-sender div {
-  color: #f0f0f0;
+.chat-sender button {
+  background: none;
   cursor: pointer;
+  border: none;
+  color: #7c78eb;
+  font-size: 20px;
+  transition: transform 0.2s ease, color 0.2s ease, filter 0.2s ease; /* Added filter transition */
 }
 
-.chat-sender .send-button {
-  margin-left: 10px;
-  padding: 8px 15px;
-  background-color: #4a90e2;
+.chat-sender button:hover {
+  transform: scale(1.1); /* Slightly increase the size on hover */
+  color: #4d92ff; /* Change color on hover */
+  filter: brightness(1.3); /* Increase brightness on hover */
+}
+
+.chat-sender input {
+  flex-grow: 1;
+  background: #3b3b3b;
   color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.chat-sender .send-button:hover {
-  background-color: #357ab8;
-}
-.message {
+  border: none;
   padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  max-width: 60%;
-}
-
-.message.own {
-  background-color: #dff7df;  /* Light green for own messages */
-  align-self: flex-end;
-}
-
-.message {
-  background-color: #f1f1f1;  /* Light gray for other messages */
-  align-self: flex-start;
-}
-
-.chat-body {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.chat-sender {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-}
-/* Ensure CodeMirror takes up the full width of the container */
-.CodeMirror {
-  width: 100% !important;
-  height: 300px !important; /* You can adjust the height as necessary */
-  font-family: 'Courier New', monospace;
-}
-
-/* Optionally, style the dropdowns */
-select {
-  margin: 10px 0;
-  padding: 5px;
-}
-/* Add these styles to your ChatBox.css or the parent CSS file */
-
-.CodeMirror {
-  width: 100% !important;
-  height: 300px !important; /* Adjust as needed */
-  font-family: 'Courier New', monospace;
-  background-color: #2e2e2e; /* Or another dark color that complements the theme */
-}
-
-/* Optional: Override background for the input area (if needed) */
-.CodeMirror .CodeMirror-lines {
-  background-color: #2e2e2e; /* Dark background for code area */
-  color: #f0f0f0;  /* Ensure text remains visible */
-}
-
-.CodeMirror-gutters {
-  background-color: #333;  /* Make sure line numbers have good contrast */
-}
-/* Style for message bubbles */
-.message {
-  background-color: #333;  /* Dark background for messages */
-  color: #f0f0f0;  /* Light text color */
-  padding: 10px;
-  margin-bottom: 10px;
   border-radius: 10px;
-  max-width: 75%;
-  /* background-color: red; */
-}
-
-/* Style for your own messages */
-
-/* Optionally add a timestamp style */
-.message span {
-  font-size: 12px;
-  color: #000000;  /* Lighter color for timestamps */
-}
-/* Ensuring proper CodeMirror visibility */
-.message .own {
-  background-color: #4b5055;  /* Blue background for your messages */
-  align-self: flex-end;
-  display: flex;
-  padding: 0;
-
-}
-.own span{
-  color: white;
-}
-.CodeMirror {
-  background-color: #2e2e2e; /* Dark background */
-  color: #000000;  /* Light text color */
-  font-family: 'Courier New', monospace;
-  height: 300px; /* Adjust the height */
-  border-radius: 8px;
-  padding: 10px;
-}
-
-/* Ensure line numbers have enough contrast */
-.CodeMirror-gutters {
-  background-color: #444; /* Slightly darker background for line numbers */
-  color: #ccc; /* Light color for line numbers */
+  font-size: 14px;
+  outline: none;
+  max-height: 40px;
 }

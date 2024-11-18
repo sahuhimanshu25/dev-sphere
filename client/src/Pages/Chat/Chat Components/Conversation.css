@@ -1,55 +1,137 @@
-.conversation {
+
+.conv-conversation {
+  padding: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px); 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.conv-conversation:hover {
+  transform: translateY(-3px);
+}
+
+.conv-list {
   display: flex;
   align-items: center;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #3a3a3a;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  justify-content: space-between;
+  flex-wrap: wrap; 
+  gap: 10px;
 }
 
-.conversation:hover {
-  background-color: #4a4a4a;
+.conv-list :nth-child(1) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.conversation .online-dot {
-  width: 10px;
-  height: 10px;
-  background-color: #00ff00;
+.conv-img-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.conv-followerImage {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-right: 10px;
+  object-fit: cover;
+  border: 3px solid #7c78eb;
+}
+.conv-list .conv-on-s{
+  font-size: 17px;
+  letter-spacing: 0.5px;
+}
+.conv-list .conv-on-s .Online-s{
+  color:white;
+}
+.conv-list .conv-on-s .Offline-s{
+  color: black;
 }
 
-.followerImage {
-  width: 40px;
-  height: 40px;
+.conv-online-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  margin-right: 10px;
+  border: 2px solid #3a3a3a; 
 }
 
-.name {
+.conv-online-dot.conv-online {
+  background-color: green;
+}
+
+.conv-online-dot.conv-offline {
+  background-color: red;
+}
+
+
+.conv-name {
   color: #f0f0f0;
   font-weight: 500;
+  transition: color 0.3s;
+  font-size: 17px;
+  font-weight: 550;
+  letter-spacing: 0.5px;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid #444;
-  margin: 10px 0;
+.conv-conversation:hover .conv-name {
+  color: #7c78eb;
 }
-/* Conversation.css */
-.online-dot {
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  background-color: gray; /* Default offline color */
+@media (max-width: 768px) {
+  .conv-conversation {
+    padding: 10px;
+  }
+
+  .conv-followerImage {
+    width: 40px;
+    height: 40px;
+  }
+
+  .conv-name {
+    font-size: 0.9rem;
+  }
+
+  .conv-online-dot {
+    width: 10px;
+    height: 10px;
+  }
 }
 
-.online-dot.online {
-  background-color: green; /* Online color */
-}
+@media (max-width: 500px) {
+  .conv-conversation {
+    padding: 8px;
+  }
 
-.online-dot.offline {
-  background-color: red; /* Offline color */
+  .conv-followerImage {
+    width: 35px;
+    height: 35px;
+  }
+
+  .conv-name {
+    font-size: 0.8rem;
+  }
+
+  .conv-online-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .conv-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .conv-list :nth-child(1) {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
 }

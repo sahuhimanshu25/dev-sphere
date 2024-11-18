@@ -1,12 +1,12 @@
-// Conversation.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import userimg from '../../../../public/userimg.jpg';
+import userimg from "../../../../public/userimg.jpg";
 import "./Conversation.css";
 
 const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
   const [userData, setUserData] = useState(null);
-  const [isOnline, setIsOnline] = useState(false); // State to track online status
+  const [isOnline, setIsOnline] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -15,27 +15,40 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
         const { data: user } = await axios.get(`http://localhost:3000/user/${userId}`);
         setUserData(user.data);
         console.log("Conversation user data:", user.data.userdata.username);
-
-        // Check if the user is online
-        setIsOnline(onlineUsers.some(user => user.userId === userId));
+        setIsOnline(onlineUsers.some((user) => user.userId === userId));
       } catch (error) {
         console.error("Error fetching conversation user data:", error);
       }
     };
     fetchUserData();
-  }, [data, currentUserId, onlineUsers]); // Add onlineUsers to the dependency array
+  }, [data, currentUserId, onlineUsers]);
+
+  const handleClick = () => {
+    setSelectedChat(userData?.userdata.username); 
+    onClick(userData); 
+  };
 
   return (
-    <div className="follower conversation" onClick={() => onClick(userData)}>
-      <div>
-        <div className={`online-dot ${isOnline ? "online" : "offline"}`}></div>
-        <img src={userimg} alt="" className="followerImage" />
-        <div className="name" style={{ fontSize: "0.8rem" }}>
-          <span>{userData?.userdata.username  }</span>
+    <div
+      className={`conv-follower conv-conversation ${
+        selectedChat === userData?.userdata.username ? "conv-selected" : ""
+      }`}
+      onClick={handleClick}
+    >
+      <div className="conv-list">
+        <div>
+          <div className="conv-img-wrapper">
+            <img src={userimg} alt="" className="conv-followerImage" />
+            <div className={`conv-online-dot ${isOnline ? "conv-online" : "conv-offline"}`}></div>
+          </div>
+          <div className="conv-name">
+            <span>{userData?.userdata.username}</span>
+          </div>
         </div>
-        <span>{isOnline ? "Online" : "Offline"}</span>
+        <div className="conv-on-s">
+          <span className={isOnline ? "Online-s" : "Offline-s"}>{isOnline ? "Online" : "Offline"}</span>
+        </div>
       </div>
-      <hr />
     </div>
   );
 };

@@ -1,23 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./ChatBox.css";
-import userimg from '../../../../public/userimg.jpg';
+import userimg from "../../../../public/userimg.jpg";
 import axios from "axios";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
-import { Controlled as CodeMirror } from 'react-codemirror2'; // Import CodeMirror
-import 'codemirror/mode/javascript/javascript';  // For JavaScript syntax highlighting
-import 'codemirror/mode/clike/clike';  // For C/C++ syntax highlighting
-import 'codemirror/lib/codemirror.css';  // CodeMirror styles
-import 'codemirror/theme/material.css';  // Make sure to import the theme CSS
-import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'; // Import syntax highlighter style
-const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUsers }) => {
+import { IoSend } from "react-icons/io5";
+
+const ChatBox = ({
+  chat,
+  currentUser,
+  setSendMessage,
+  receiveMessage,
+  onlineUsers,
+}) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isOnline, setIsOnline] = useState(false);
-  const [inputMode, setInputMode] = useState("text");  // State to track input mode (text or code)
-  const [language, setLanguage] = useState("javascript");  // State to track language selection
   const messagesEndRef = useRef(null); // Ref for auto-scrolling
 
   // Fetch user data for the chat participant
@@ -27,10 +26,12 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
       if (!userId) return;
 
       try {
-        const { data } = await axios.get(`http://localhost:3000/user/${userId}`);
+        const { data } = await axios.get(
+          `http://localhost:3000/user/${userId}`
+        );
         setUserData(data.data);
         // Check if the user is online
-        setIsOnline(onlineUsers.some(user => user.userId === userId));
+        setIsOnline(onlineUsers.some((user) => user.userId === userId));
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -50,7 +51,9 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
     const fetchMessages = async () => {
       try {
         if (chat?._id) {
-          const { data } = await axios.get(`http://localhost:3000/message/${chat._id}`);
+          const { data } = await axios.get(
+            `http://localhost:3000/message/${chat._id}`
+          );
           setMessages(data.message);
         }
       } catch (error) {
@@ -75,7 +78,10 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
     setMessages((prevMessages) => [...prevMessages, message]);
 
     try {
-      const { data } = await axios.post('http://localhost:3000/message', message);
+      const { data } = await axios.post(
+        "http://localhost:3000/message",
+        message
+      );
 
       // Add the message from the server response, if it's not already in the list
       setMessages((prevMessages) => {
@@ -86,7 +92,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
         return prevMessages;
       });
 
-      setNewMessage("");  // Clear the input field after sending
+      setNewMessage(""); // Clear the input field after sending
     } catch (error) {
       console.error("Error sending message:", error);
       // Optionally, you can remove the optimistically added message if the request fails.
@@ -104,32 +110,32 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
   }, [messages]);
 
   const renderMessage = (msg) => {
-    if (msg.text && inputMode === "code") {
-      return (
-        <SyntaxHighlighter language={language} style={docco}>
-          {msg.text}
-        </SyntaxHighlighter>
-      );
-    }
     return <span>{msg.text}</span>;
   };
 
   return (
     <div className="ChatBox-container">
       <div className="chat-header">
-        <div>
-          <div className={`online-dot ${isOnline ? "online" : "offline"}`}></div>
-          <img src={userimg} alt="" className="followerImage" />
+        <div className="chat-header-in">
+          <div className="image-container">
+            <img src={userimg} alt="" className="followerImage" />
+            <div
+              className={`online-dot ${isOnline ? "online" : "offline"}`}
+            ></div>
+          </div>
           <div className="name">
             <span>{userData?.userdata.username}</span>
+            <span>{isOnline ? "Online" : "Offline"}</span>
           </div>
-          <span>{isOnline ? "Online" : "Offline"}</span>
         </div>
       </div>
 
       <div className="chat-body">
         {messages.map((msg, idx) => (
-          <div key={idx} className={msg.senderId === currentUser ? "message own" : "message"}>
+          <div
+            key={idx}
+            className={msg.senderId === currentUser ? "message own" : "message"}
+          >
             {renderMessage(msg)}
             <span>{format(msg.createdAt)}</span>
           </div>
@@ -138,45 +144,15 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receiveMessage, onlineUser
       </div>
 
       <div className="chat-sender">
-        {/* Dropdown for selecting input mode */}
-        <select onChange={(e) => setInputMode(e.target.value)} value={inputMode}>
-          <option value="text">Text</option>
-          <option value="code">Code</option>
-        </select>
-
-        {/* Dropdown for selecting programming language */}
-        {inputMode === "code" && (
-          <select onChange={(e) => setLanguage(e.target.value)} value={language}>
-            <option value="javascript">JavaScript</option>
-            <option value="clike">C/C++</option>
-          </select>
-        )}
-
-        {/* Input Field */}
-        {inputMode === "code" ? (
-          <CodeMirror
-          value={newMessage}
-          options={{
-            mode: language, // Dynamically set the mode
-            lineNumbers: true,
-            theme: 'material', // Ensure you are using a supported theme
-          }}
-          onBeforeChange={(editor, data, value) => setNewMessage(value)}
-          style={{
-            height: '300px',   // Adjust as needed
-            width: '100%',
-            border: '1px solid #ccc', // Optional border styling
-            borderRadius: '5px',
-            
-          }}
-        />
-        
-        ) : (
-          <InputEmoji value={newMessage} onChange={setNewMessage} />
-        )}
-
-        {/* Send Button */}
-        <div className="send-button button" onClick={handleSend}>Send</div>
+        <InputEmoji value={newMessage} onChange={setNewMessage}/>
+        <button
+          className="send-button button"
+          onClick={handleSend}
+          disabled={newMessage.trim().length === 0} // Disable if the message is empty or only spaces
+          style={{ background: "none", cursor: "pointer" }}
+        >
+          <IoSend style={{ color: "#7c78eb8e", fontSize: "20px" }} />
+        </button>
       </div>
     </div>
   );
