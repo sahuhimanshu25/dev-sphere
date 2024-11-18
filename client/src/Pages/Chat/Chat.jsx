@@ -108,7 +108,13 @@ const Chat = () => {
             <div className="Chat-container">
               <div className="left-side-chat-top">
                 <div className="head-chat-l">
-                  <h2>Chats</h2>
+                  <h2>
+                    <span>C</span>
+                    <span>h</span>
+                    <span>a</span>
+                    <span>t</span>
+                    <span>s</span>
+                  </h2>
                 </div>
                 <div className="User-search">
                   <input

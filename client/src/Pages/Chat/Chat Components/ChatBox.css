@@ -79,6 +79,7 @@
 }
 
 .message {
+  font-size: 16px;
   background: #3b3b3b;
   color: #f0f0f0;
   padding: 0.8rem;
@@ -107,7 +108,7 @@
   color: #ffffff;
   background: #292929;
   border-radius: 1rem 1rem 0 1rem;
-  border: 2px solid #7c78eb;
+  background: #7c78ebb2;
 }
 
 .message span:last-child {

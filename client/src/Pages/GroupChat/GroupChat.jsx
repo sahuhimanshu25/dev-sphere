@@ -6,7 +6,7 @@ import GroupChatBox from "./GroupChatBox";
 import GroupChatConversation from "./GroupChatConversation";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import { RiChatSmile3Line } from "react-icons/ri";
 const GroupChat = () => {
   const [groups, setGroups] = useState([]);
   const [currentGroup, setCurrentGroup] = useState(null);
@@ -50,48 +50,78 @@ const GroupChat = () => {
   };
 
   return (
-    <div className="GCB-GroupChat">
-      {userData ? (
-        <>
-          <div className="GCB-LeftSideChat">
-            <div className="GCB-Container">
-              <h2>Groups</h2>
+    <div className="GCB-chat">
+      <div className="GCB-GroupChat">
+        {userData ? (
+          <>
+            <div className="GCB-LeftSideChat">
+              <div className="GCB-Container">
+                <div className="GCB-LeftSideChat-top">
+                  <h2>
+                    <span>G</span>
+                    <span>r</span>
+                    <span>o</span>
+                    <span>u</span>
+                    <span>p</span>
+                    <span>s</span>
+                  </h2>
 
-              <div className="GCB-Search">
-                <input
-                  type="text"
-                  placeholder="Search for groups"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button onClick={handleSearch}>Search</button>
-                <FaPlus onClick={() => navigate("/addGroup")} />
+                  <div className="GCB-Search">
+                    <input
+                      type="text"
+                      placeholder="Search for groups"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button onClick={handleSearch}>Search</button>
+                  </div>
+                </div>
+                <div className="GCB-GroupList">
+                  {groups.map((group) => (
+                    <div key={group._id} className="GCB-GroupList-in">
+                      <GroupChatConversation
+                        group={group}
+                        onSelect={handleGroupSelect}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="GCB-GroupList">
-                {groups.map((group) => (
-                  <div key={group._id}>
-                    <GroupChatConversation
-                      group={group}
-                      onSelect={handleGroupSelect}
-                    />
+              <div className="GCB-tleft-side-chat-footer">
+                <div
+                  onClick={() => navigate("/chat")}
+                  className="GCB-community group"
+                >
+                  <div className="GCB-icon-container">
+                    <RiChatSmile3Line className="icon" style={{fontSize:"30px"}}/>
                   </div>
-                ))}
+                  <div className="GCB-hover-label">Chats</div>
+                </div>
+                <div className="GCB-add-chat group">
+                  <div
+                    className="GCB-icon-container"
+                    onClick={() => navigate("/addChat")}
+                  >
+                    <FaPlus className="icon" />
+                  </div>
+                  <div className="GCB-hover-label">Add Chat</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="GCB-RightSideChat">
-            {currentGroup ? (
-              <GroupChatBox group={currentGroup} />
-            ) : (
-              <div className="GCB-NoGroupSelected">
-                Select a group to start chatting
-              </div>
-            )}
-          </div>
-        </>
-      ) : null}
+            <div className="GCB-RightSideChat">
+              {currentGroup ? (
+                <GroupChatBox group={currentGroup} />
+              ) : (
+                <div className="GCB-NoGroupSelected">
+                  Select a group to start chatting
+                </div>
+              )}
+            </div>
+          </>
+        ) : null}
+      </div>
     </div>
   );
 };

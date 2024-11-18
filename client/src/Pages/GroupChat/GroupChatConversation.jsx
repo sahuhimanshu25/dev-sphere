@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { HiUserGroup } from "react-icons/hi";
-
+import userimg from "../../../public/userimg.jpg";
 import "./GroupChatConversation.css";
 
-const GroupChatConversation = ({ group, onSelect }) => {
+const GroupChatConversation = ({ group, onSelect, selectedGroup }) => {
   const [groupData, setGroupData] = useState(null);
 
-  // Fetch group data on component mount
   useEffect(() => {
     const fetchGroupData = async () => {
       try {
         const { data } = await axios.get(`http://localhost:3000/group/${group._id}`);
-        await setGroupData(data);
-        console.log("Group data:", groupData.data.name);
+        setGroupData(data);
+        console.log("Group data:", groupData?.data?.name);
       } catch (error) {
         console.error("Error fetching group data:", error);
       }
@@ -21,15 +19,21 @@ const GroupChatConversation = ({ group, onSelect }) => {
     fetchGroupData();
   }, [group._id]);
 
+  const handleClick = () => {
+    onSelect(groupData); 
+  };
+
   return (
-    <div className="group-conversation" onClick={() => onSelect(groupData)}>
-      <div>
-        <HiUserGroup/>
-        <div className="group-name" style={{ fontSize: "0.8rem" }}>
+    <div
+      className={`group-conversation ${selectedGroup === groupData?.data?.name ? "group-conversation-selected" : ""}`}
+      onClick={handleClick}
+    >
+      <div className="group-conversation-det">
+        <img src={userimg} alt="" />
+        <div className="group-name">
           <span>{groupData?.data?.name}</span>
         </div>
       </div>
-      <hr />
     </div>
   );
 };
