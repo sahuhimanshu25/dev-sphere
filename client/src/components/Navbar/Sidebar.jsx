@@ -3,11 +3,12 @@ import { MdMessage } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import { BiCodeAlt } from "react-icons/bi"; // Importing a new icon
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./Sidebar.css";
 
 const Sidebar = () => {
+  const navigate=useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,6 +16,10 @@ const Sidebar = () => {
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleSettingsMenu = () => setIsSettingsOpen(!isSettingsOpen);
+
+  const handleMyProfileClick=async()=>{
+    await navigate('/myProfile');
+  }
 
   return (
     <div className="main-container">
@@ -29,7 +34,7 @@ const Sidebar = () => {
         <div className="user-info">
           {user ? (
             <>
-              <div>
+              <div onClick={handleMyProfileClick} className="sidebar-profile-container" >
                 <img
                   src={user.avatar}
                   alt="User Avatar"

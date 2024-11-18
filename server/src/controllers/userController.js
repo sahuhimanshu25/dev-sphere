@@ -9,9 +9,9 @@ import {sendMessage} from "../nodemailer/mailMessage.js"
 import mongoose from "mongoose";
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password} = req.body;
 
-  if (!username || !email || !password) {
+  if (!username || !email || !password){
     throw new ErrorHandler("All fields are required", 400);
   }
 

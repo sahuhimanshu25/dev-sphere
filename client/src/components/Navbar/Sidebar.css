@@ -277,3 +277,15 @@
 .logout-btn:hover {
   color: #ffffff;
 }
+
+
+.sidebar-profile-container{
+  cursor: pointer;
+  
+}
+
+.sidebar-profile-container img:hover{
+  transform: scale(1.1);
+  border: 5px solid rgb(193, 106, 193);
+  transition: 0.3s ease-in;
+}
