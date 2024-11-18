@@ -359,3 +359,50 @@ export const verifyAccountChanges = AsyncHandler(async (req, res) => {
       )
     );
 });
+
+
+export const getRecommendedUsers = AsyncHandler(async (req, res, next) => {
+  const currentUserId = req.user._id;
+
+  // Fetch the current user's following list
+  const user = await User.findById(currentUserId).select("following");
+  if (!user) {
+    return res.status(404).json(new ApiResponse(404, null, "User not found"));
+  }
+
+  const followingList = user.following;
+
+  // Find users followed by the people the current user follows
+  const recommendedUsers = await User.aggregate([
+    { $match: { _id: { $in: followingList } } }, // Find users the current user follows
+    {
+      $lookup: {
+        from: "users", // Lookup users followed by these people
+        localField: "following",
+        foreignField: "_id",
+        as: "recommended",
+      },
+    },
+    { $unwind: "$recommended" }, // Flatten the recommended users array
+    {
+      $project: {
+        _id: "$recommended._id",
+        username: "$recommended.username",
+        email: "$recommended.email",
+        avatar: "$recommended.avatar",
+      },
+    },
+    {
+      $match: {
+        _id: { $ne: currentUserId, $nin: followingList }, // Exclude the current user and their already-followed users
+      },
+    },
+    { $group: { _id: "$_id", username: { $first: "$username" }, email: { $first: "$email" }, avatar: { $first: "$avatar" } } }, // Deduplicate
+  ]);
+
+  if (!recommendedUsers || recommendedUsers.length === 0) {
+    return res.status(404).json(new ApiResponse(404, [], "No recommendations found"));
+  }
+
+  res.status(200).json(new ApiResponse(200, recommendedUsers, "Recommended users fetched successfully"));
+});
