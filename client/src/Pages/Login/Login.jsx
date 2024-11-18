@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Slices/authSlice.js"; // import the login async thunk
 import './Login.css';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
@@ -57,8 +57,11 @@ const LoginPage = () => {
             />
           </div>
           <button type="submit" className="login-button" disabled={loading}>
+
             {loading ? "Logging in..." : "Login"}
           </button>
+
+          <Link to={'/register'}>Register</Link>
         </form>
 
         {error && <p className="error-msg">{error}</p>}

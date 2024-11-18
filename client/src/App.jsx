@@ -16,12 +16,13 @@ import MainHome from "./components/MainHome.jsx";
 import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
 import Sidebar from "./components/Navbar/Sidebar.jsx";
-import AddFriend from "./Pages/AddFriend/addFriend.jsx";
+import AddFriend from "./Pages/AddFriend/AddFriend.jsx";
 import GroupChat from "./Pages/GroupChat/GroupChat.jsx";
 import { useSelector } from "react-redux";
 import Profile from "./Pages/OthersProfile/Profile.jsx"
 import EditProfile from "./Pages/UserProfile/EditProfile/EditProfile.jsx";
 import { ToastContainer } from 'react-toastify';
+import RegisterPage from "./Pages/Register/Register.jsx";
 axios.defaults.withCredentials = true;
 
 function Logout() {
@@ -76,6 +77,7 @@ function App() {
         <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
         <Route path="/user/user-details" element={<Profile/>} />
         <Route path="/user/Edit-profile" element={<EditProfile/>} />
+        <Route path="/register" element={<RegisterPage/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>
