@@ -118,7 +118,7 @@ const ChatBox = ({
       <div className="chat-header">
         <div className="chat-header-in">
           <div className="image-container">
-            <img src={userimg} alt="" className="followerImage" />
+            <img src={userData?.userdata.avatar} alt="" className="followerImage" />
             <div
               className={`online-dot ${isOnline ? "online" : "offline"}`}
             ></div>

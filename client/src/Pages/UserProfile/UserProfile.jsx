@@ -17,6 +17,7 @@ const UserProfile = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [showOptions, setShowOptions] = useState(null);  // State to track which post has options shown
+  const [activeList, setActiveList] = useState(null);  // State to track which list (followers or following) is active
 
   const navigate = useNavigate();
 
@@ -58,8 +59,14 @@ const UserProfile = () => {
     setShowOptions((prev) => (prev === postId ? null : postId)); 
   };
 
+  const toggleActiveList = (list) => {
+    let blur=document.getElementById('user-profile')
+    blur.classList.toggle('blur-active')
+    setActiveList((prevState) => (prevState === list ? null : list));  // Toggle between followers and following
+  };
+
   return (
-    <div className="user-profile">
+    <div className="user-profile" id="user-profile" >
       <div className="profile-header">
         <div className="avatar">
           <img src={avatar} alt="User Avatar" />
@@ -70,16 +77,46 @@ const UserProfile = () => {
             <span>
               <strong>{posts.length}</strong> Posts
             </span>
-            <span>
+            <span 
+              onClick={() => toggleActiveList("followers")} 
+              style={{ cursor: "pointer" }}
+            >
               <strong>{followers.length}</strong> Followers
             </span>
-            <span>
+            <span 
+              onClick={() => toggleActiveList("following")} 
+              style={{ cursor: "pointer" }}
+            >
               <strong>{following.length}</strong> Following
             </span>
           </div>
           <p className="bio">{bio}</p>
         </div>
       </div>
+
+      {/* Followers list */}
+      {activeList === "followers" && (
+        <div className="followers-list" id="followers-list" >
+          <h3>Followers</h3>
+          <ul>
+            {followers.map((follower) => (
+              <li key={follower._id}>{follower.username}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Following list */}
+      {activeList === "following" && (
+        <div className="following-list">
+          <h3>Following</h3>
+          <ul>
+            {following.map((followed) => (
+              <li key={followed._id}>{followed.username}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="edit-profile">
         <button onClick={handleClick}>Edit Profile</button>

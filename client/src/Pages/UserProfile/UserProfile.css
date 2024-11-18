@@ -29,11 +29,13 @@
 .profile-info h2 {
   margin: 0;
   font-size: 1.8rem;
+  color: white;
 }
 .stats {
   display: flex;
   gap: 20px;
   margin: 10px 0;
+  color: white;
 }
 .stats span {
   font-size: 1rem;
@@ -202,4 +204,20 @@
   .profile-info h2 {
     font-size: 1.3rem;
   }
+}
+.followers-list {
+  margin-top: 20px;
+}
+
+.followers-list h3 {
+  margin-bottom: 10px;
+}
+
+.followers-list ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.followers-list li {
+  margin: 5px 0;
 }
