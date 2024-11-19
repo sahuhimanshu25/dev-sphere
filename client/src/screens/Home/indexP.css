@@ -1,0 +1,16 @@
+.home-container {
+  display: flex;
+  height: 95vh;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  width: 67.2vw;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(166, 154, 255, 0.3);
+  border: 2px solid #7c78eb66;
+}
+.sep{
+    height: 100%;
+    width: 2px;
+    background-color:#7c78eb66;
+    box-shadow: 0 4px 12px rgba(166, 154, 255, 0.3);
+}
