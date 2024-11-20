@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
+import Loader from "../../components/Loader/Loader";
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -17,6 +18,7 @@ const Chat = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(true); // Added loading state
   const navigate = useNavigate();
   const socket = useRef();
   const { userData } = useSelector((state) => state.user);
@@ -46,11 +48,16 @@ const Chat = () => {
     const getChats = async () => {
       if (userData && userData._id) {
         try {
+          setLoading(true); // Set loading to true before fetching
           const { data } = await axios.get("http://localhost:3000/chat/chats");
           setChats(data);
         } catch (error) {
           console.error("Error fetching chats:", error);
+        } finally {
+          setLoading(false); // Set loading to false after fetching
         }
+      } else {
+        setLoading(false); // Handle case where no user data exists
       }
     };
     getChats();
@@ -75,7 +82,7 @@ const Chat = () => {
         const { data } = await axios.get(
           `http://localhost:3000/following/search?username=${searchTerm}`
         );
-        setSearchResults(data.data); 
+        setSearchResults(data.data);
       } catch (error) {
         console.error("Error searching followed users:", error);
       }
@@ -91,14 +98,18 @@ const Chat = () => {
           receiverId: user._id,
         }
       );
-      setChats((prevChats) => [...prevChats, chat]); 
+      setChats((prevChats) => [...prevChats, chat]);
       setCurrentChat(chat);
-      setSearchResults([]); 
+      setSearchResults([]);
       setSearchTerm("");
     } catch (error) {
       console.error("Error creating a new chat:", error);
     }
   };
+
+  if (loading) {
+    return <Loader />; // Render Loader while loading
+  }
 
   return (
     <div className="Chat">

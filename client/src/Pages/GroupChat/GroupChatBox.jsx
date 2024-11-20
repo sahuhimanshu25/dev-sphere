@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import "./GroupChatBox.css";
 import userimg from "../../../public/userimg.jpg";
 import { IoSend } from "react-icons/io5";
+import { format } from "timeago.js";
 
 const GroupChatBox = ({ group }) => {
   const { userData } = useSelector((state) => state.user);
@@ -12,6 +13,7 @@ const GroupChatBox = ({ group }) => {
   const messagesEndRef = useRef(null); // Ref for auto-scrolling
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const localMessageIds = useRef(new Set()); // Track locally sent messages
 
   useEffect(() => {
     // Initialize socket connection
@@ -22,7 +24,7 @@ const GroupChatBox = ({ group }) => {
 
     // Listen for incoming messages for the group
     socket.current.on("receive-group-message", (data) => {
-      if (data.groupId === group.data._id) {
+      if (data.groupId === group.data._id && !localMessageIds.current.has(data.message._id)) {
         setMessages((prevMessages) => [...prevMessages, data.message]);
       }
     });
@@ -36,7 +38,9 @@ const GroupChatBox = ({ group }) => {
     // Fetch initial messages for the group
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/message/${group.data._id}`);
+        const res = await axios.get(
+          `http://localhost:3000/message/${group.data._id}`
+        );
         setMessages(res.data.message); // Initialize messages
       } catch (err) {
         console.log("Error fetching messages:", err);
@@ -45,56 +49,58 @@ const GroupChatBox = ({ group }) => {
     fetchMessages();
   }, [group]);
 
+  const handleSendMessage = async () => {
+    if (newMessage.trim()) {
+      const tempMessageId = Date.now(); // Temporary ID for the local message
+      const messageData = {
+        text: newMessage,
+        chatId: group.data._id,
+        isGroup: true,
+        senderId: userData._id,
+        _id: tempMessageId, // Add a temporary ID
+        createdAt: new Date().toISOString(),
+      };
+
+      try {
+        // Add the message to the local state immediately
+        setMessages((prev) => [...prev, messageData]);
+        localMessageIds.current.add(tempMessageId); // Track this local message
+
+        // Save the message to the backend
+        const res = await axios.post(`http://localhost:3000/message`, {
+          text: newMessage,
+          chatId: group.data._id,
+          isGroup: true,
+        });
+
+        // Replace the temporary ID with the actual ID from the backend
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg._id === tempMessageId ? { ...msg, _id: res.data.data._id } : msg
+          )
+        );
+        localMessageIds.current.delete(tempMessageId); // Remove the temporary ID from tracking
+
+        // Emit the message to the group chat via Socket.IO
+        socket.current.emit("send-group-message", {
+          groupId: group.data._id,
+          message: res.data.data,
+        });
+
+        setNewMessage(""); // Clear the input field after sending
+      } catch (err) {
+        console.error("Error sending message:", err);
+        alert("Failed to send message. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
     // Scroll to the bottom when messages change
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);  // Dependency on messages to trigger scrolling when they change
-
-  const handleSendMessage = async () => {
-    if (newMessage.trim()) {  // Ensure message is not empty
-      const messageData = {
-        text: newMessage,
-        chatId: group.data._id,
-        isGroup: true,
-        senderId: userData._id, // Set current user as sender
-      };
-
-      try {
-        // Save the message to the backend
-        const res = await axios.post(`http://localhost:3000/message`, messageData);
-
-        // Emit the message to the group chat via Socket.IO
-        socket.current.emit("send-group-message", {
-          groupId: group.data._id,
-          message: res.data, // Emit the message returned from the server
-        });
-
-        // Optimistically update the messages list by adding the new message immediately
-        setMessages((prev) => [...prev, res.data]); // Add the message from the server response
-        setNewMessage(""); // Clear the input field after sending
-      } catch (err) {
-        console.log("Error sending message:", err);
-      }
-    } else {
-      console.log("Message is empty or invalid");
-    }
-  };
-
-  // Function to format the time like "5 days ago"
-  const formatTimeAgo = (timestamp) => {
-    const timeDifference = new Date().getTime() - new Date(timestamp).getTime();
-    const seconds = Math.floor(timeDifference / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
-  };
+  }, [messages]);
 
   return (
     <div className="group-chat-box">
@@ -102,22 +108,21 @@ const GroupChatBox = ({ group }) => {
         <img src={userimg} alt="" />
         <div className="name">{group.data.name}</div>
       </div>
-
       <div className="gb-messages">
         {Array.isArray(messages) && messages.length > 0 ? (
           messages.map((msg) => (
             <div
-              key={`${msg.createdAt}`} 
-              className={`gb-message ${msg.senderId === userData._id ? "own" : ""}`}
+              key={msg._id || `${msg.createdAt}-${Math.random()}`} // Fallback if _id is not available
+              className={`gb-message ${
+                msg.senderId === userData._id ? "own" : ""
+              }`}
             >
               <p>{msg.text}</p>
               <div className="message-info">
                 <span className="message-sender">
-                  {msg.senderId === userData._id ? "You" : msg.senderName} {/* Display sender name */}
+                  {msg.senderId === userData._id ? "You" : msg.senderName}{" "}
                 </span>
-                <span className="message-time">
-                  {formatTimeAgo(msg.createdAt)} {/* Display formatted time */}
-                </span>
+                <span className="message-time">{format(msg.createdAt)}</span>
               </div>
             </div>
           ))
@@ -125,18 +130,17 @@ const GroupChatBox = ({ group }) => {
           <p>No messages available</p>
         )}
       </div>
-
       <div ref={messagesEndRef} /> {/* To scroll to the bottom */}
-
       <div className="gb-message-input">
         <input
           type="text"
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-         
         />
-        <button onClick={handleSendMessage}>{<IoSend/>}</button>
+        <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
+          <IoSend />
+        </button>
       </div>
     </div>
   );

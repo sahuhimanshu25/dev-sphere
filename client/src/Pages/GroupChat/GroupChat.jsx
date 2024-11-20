@@ -107,7 +107,7 @@ const GroupChat = () => {
                   </div>
                   <div className="GCB-hover-label">Add Chat</div>
                 </div>
-              </div>
+              </div> 
             </div>
 
             <div className="GCB-RightSideChat">
