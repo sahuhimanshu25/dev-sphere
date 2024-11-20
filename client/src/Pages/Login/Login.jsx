@@ -17,8 +17,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      // Wait for the login action to complete
-      const result = await dispatch(login({ email, password })).unwrap(); // Using `unwrap` to wait for the action's result
+      const result = await dispatch(login({ email, password })).unwrap();
       if (result) {
         toast.success("Login Successful");
         Navigate('/post'); // Navigate only after successful login
@@ -32,10 +31,16 @@ const LoginPage = () => {
   return (
     <div className="log">
       <div className="login-container">
-        <h2 className="login-title">Login</h2>
+        <h2 className="login-title">
+          <span>Log</span>
+          <span>in</span>
+        </h2>
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label>Email</label>
+            <label>
+              <span className="icon">📧</span> 
+              <span className="icon-t">Email</span>
+            </label>
             <input
               type="email"
               value={email}
@@ -46,7 +51,10 @@ const LoginPage = () => {
             />
           </div>
           <div className="form-group">
-            <label>Password</label>
+            <label>
+              <span className="icon">🔒</span>
+              <span className="icon-t">Password</span>
+            </label>
             <input
               type="password"
               value={password}
@@ -57,13 +65,14 @@ const LoginPage = () => {
             />
           </div>
           <button type="submit" className="login-button" disabled={loading}>
-
             {loading ? "Logging in..." : "Login"}
-          </button>
+          </button> 
 
-          <Link to={'/register'}>Register</Link>
+          <div className="reg">
+          <span>Don't have an account? </span>
+         <Link to={'/register'}>Register</Link>
+         </div>
         </form>
-
         {error && <p className="error-msg">{error}</p>}
       </div>
     </div>

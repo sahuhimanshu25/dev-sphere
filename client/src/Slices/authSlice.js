@@ -11,9 +11,10 @@ const initialState = {
 
 // Async action for signup
 const signup = createAsyncThunk("signup", async (userCredentials) => {
-  const { data } = await axios.post("http://localhost:3000/auth/register", userCredentials,{
-    withCredentials:true,
-  });
+  console.log(userCredentials)
+  const { data } = await axios.post("http://localhost:3000/auth/register", userCredentials, {
+    withCredentials: true,
+  });  
   return data;
 });
 

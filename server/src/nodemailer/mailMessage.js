@@ -12,7 +12,7 @@ export const sendMessage = async (ReceiverMail, message) => {
     });
 
     const fullMessage = `
-      Hello from DevChat Support Team! 👋
+      Hello from DevSphere Support Team! 👋
 
       We hope you're having a great day!
 
@@ -23,21 +23,21 @@ export const sendMessage = async (ReceiverMail, message) => {
       If you have any questions or need further assistance, feel free to reach out to us.
 
       Best regards,
-      The DevChat Support Team
+      The DevSphere Support Team
       🌐📬
     `;
     await transporter.sendMail({
-      from: '"🌐 DevChat Support Team 📬" <devchatapplication@gmail.com>',
+      from: '"🌐 DevSphere Support Team 📬" <devchatapplication@gmail.com>',
       to: ReceiverMail,
-      subject: "Message from DevChat Support", 
+      subject: "Message from DevSphere Support", 
       text: fullMessage, 
-      html: `<p>Hello from DevChat Support Team! 👋</p>
+      html: `<p>Hello from DevSphere Support Team! 👋</p>
              <p>We hope you're having a great day!</p>
              <p>Here’s the message you requested:</p>
              <p><em>"${message}"</em></p>
              <p>If you have any questions or need further assistance, feel free to reach out to us.</p>
              <p>Best regards,</p>
-             <p>The DevChat Support Team 🌐📬</p>`, 
+             <p>The DevSphere Support Team 🌐📬</p>`, 
     });
 
     console.log("Message sent successfully:", message);
