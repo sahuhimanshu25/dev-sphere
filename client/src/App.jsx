@@ -49,21 +49,22 @@ function App() {
         <Route
           path="/compile"
           element={
+            userData?
             <PlaygroundProvider>
               <ModalProvider>
                 <Home />
               </ModalProvider>
-            </PlaygroundProvider>
+            </PlaygroundProvider>:<Navigate to={'/login'} />
           }
         />
         <Route
           path="/playground/:folderId/:playgroundId"
           element={
-            <PlaygroundProvider>
-              <ModalProvider>
-                <Playground />
-              </ModalProvider>
-            </PlaygroundProvider>
+            userData?<PlaygroundProvider>
+            <ModalProvider>
+              <Playground />
+            </ModalProvider>
+          </PlaygroundProvider>:<Navigate to={'/login'} />
           }
         />
         {/* <ToastContainer /> */}
