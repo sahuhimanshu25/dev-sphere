@@ -4,14 +4,14 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { sendToken } from "../middlewares/jwtToken.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import {sendMail} from "../nodemailer/sendMail.js"
-import {sendMessage} from "../nodemailer/mailMessage.js"
+import { sendMail } from "../nodemailer/sendMail.js";
+import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
-  const { username, email, password} = req.body;
+  const { username, email, password } = req.body;
 
-  if (!username || !email || !password){
+  if (!username || !email || !password) {
     throw new ErrorHandler("All fields are required", 400);
   }
 
@@ -20,35 +20,63 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
     throw new ErrorHandler("Username or email already exists", 409);
   }
 
-  // console.log(req.files);
-
   const avatarFile = req.files?.avatar?.[0];
   if (!avatarFile) {
     throw new ErrorHandler("Avatar file is required", 400);
   }
 
-  // Upload avatar to Cloudinary
   const avatar = await uploadOnCloudinary(avatarFile.path);
   if (!avatar) {
     throw new ErrorHandler("Error uploading avatar file", 500);
   }
 
+  const verificationCode = await sendMail(email);
+  req.session.verificationData = {
+    username,
+    email,
+    password,
+    avatar: { url: avatar.url, publicId: avatar.public_id },
+    verificationCode,
+  };
+
+  res.status(200).json({
+    success: true,
+    message: "Verification code sent to your email. Please verify to complete registration.",
+  });
+});
+export const verifyUser = AsyncHandler(async (req, res, next) => {
+  const { verificationCode } = req.body;
+
+  const verificationData = req.session.verificationData;
+  if (!verificationData) {
+    throw new ErrorHandler("No registration process found. Please register again.", 400);
+  }
+
+  if (verificationData.verificationCode !== Number(verificationCode)) {
+
+    if (verificationData.avatar.publicId) {
+      await deleteAvatarFromCloudinary(verificationData.avatar.publicId);
+    }
+    throw new ErrorHandler("Invalid verification code", 400);
+  }
+
+  const { username, email, password, avatar } = verificationData;
   const user = await User.create({
     username,
     email,
     password,
     avatar: avatar.url,
+    avatarPublicId: avatar.publicId,
   });
 
-  if (!user) {
-    throw new ErrorHandler(
-      "Something went wrong while registering the user",
-      500
-    );
-  }
+  req.session.verificationData = null;
 
-  sendToken(user, 201, res);
+  const message = "Your email has been successfully verified! Welcome to DevSphere!";
+  await sendMessage(email, message);
+
+  sendToken(user, 200, res);
 });
+
 
 //LOGIN
 // LOGIN
@@ -261,7 +289,7 @@ export const getUserDetails = AsyncHandler(async (req, res, next) => {
 });
 
 export const updateAccountDetails = AsyncHandler(async (req, res) => {
-  const { email, username, oldPassword, newPassword,bio} = req.body;
+  const { email, username, oldPassword, newPassword, bio } = req.body;
   let verificationRequired = false;
   if (!email && !username && !oldPassword && !newPassword && !bio) {
     throw new ErrorHandler(
@@ -293,14 +321,14 @@ export const updateAccountDetails = AsyncHandler(async (req, res) => {
       throw new ErrorHandler(401, "Invalid Old Password");
     }
     user.password = newPassword;
-    const message="Password has been updated successfully!"
-    sendMail(user.email,message)
+    const message = "Password has been updated successfully!";
+    sendMail(user.email, message);
   }
   if (username) {
     user.username = username;
   }
-  if(bio){
-    user.bio=bio;
+  if (bio) {
+    user.bio = bio;
   }
   await user.save({ validateBeforeSave: true });
   res
@@ -328,7 +356,7 @@ export const verifyAccountChanges = AsyncHandler(async (req, res) => {
     throw new ErrorHandler("User not found", 404);
   }
 
-  if (verificationCode !== user.verificationCode.toString()){
+  if (verificationCode !== user.verificationCode.toString()) {
     throw new ErrorHandler(
       "Invalid verification code or code has expired",
       400
@@ -359,7 +387,6 @@ export const verifyAccountChanges = AsyncHandler(async (req, res) => {
       )
     );
 });
-
 
 export const getRecommendedUsers = AsyncHandler(async (req, res, next) => {
   const currentUserId = req.user._id;
@@ -397,12 +424,29 @@ export const getRecommendedUsers = AsyncHandler(async (req, res, next) => {
         _id: { $ne: currentUserId, $nin: followingList }, // Exclude the current user and their already-followed users
       },
     },
-    { $group: { _id: "$_id", username: { $first: "$username" }, email: { $first: "$email" }, avatar: { $first: "$avatar" } } }, // Deduplicate
+    {
+      $group: {
+        _id: "$_id",
+        username: { $first: "$username" },
+        email: { $first: "$email" },
+        avatar: { $first: "$avatar" },
+      },
+    }, // Deduplicate
   ]);
 
   if (!recommendedUsers || recommendedUsers.length === 0) {
-    return res.status(404).json(new ApiResponse(404, [], "No recommendations found"));
+    return res
+      .status(404)
+      .json(new ApiResponse(404, [], "No recommendations found"));
   }
 
-  res.status(200).json(new ApiResponse(200, recommendedUsers, "Recommended users fetched successfully"));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        recommendedUsers,
+        "Recommended users fetched successfully"
+      )
+    );
 });

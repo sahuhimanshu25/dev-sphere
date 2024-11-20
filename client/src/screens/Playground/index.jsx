@@ -10,7 +10,7 @@ import { ModalContext } from '../../context/ModalContext';
 import Modal from '../../components/Modal';
 import { Buffer } from 'buffer';
 import axios from 'axios';
-
+import "./indexK.css"
 const MainContainer = styled.div`
   display: grid;
   grid-template-columns: ${({ isFullScreen }) => (isFullScreen ? '1fr' : '2fr 1fr')};
@@ -184,7 +184,7 @@ const Playground = () => {
   }
 
   return (
-    <div>
+    <div className='playGround'>
       <Navbar isFullScreen={isFullScreen} />
       <MainContainer isFullScreen={isFullScreen}>
         <EditorContainer
@@ -201,7 +201,7 @@ const Playground = () => {
           isFullScreen={isFullScreen}
           setIsFullScreen={setIsFullScreen}
         />
-        <Consoles>
+        <Consoles className='console'>
           <InputConsole
             currentInput={currentInput}
             setCurrentInput={setCurrentInput}

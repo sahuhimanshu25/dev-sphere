@@ -42,17 +42,23 @@ export const TextArea = styled.textarea`
 `
 const InputConsole = ({ currentInput, setCurrentInput, getFile }) => {
   return (
-    <Console>
-      <Header>
+    <Console style={{backgroundColor:"transparent"}}>
+      <Header style={{backgroundColor: "transparent",border: "",background: "rgba(255, 255, 255, 0.1)",backdropFilter: "blur(10px)",WebkitBackdropFilter: "blur(10px)",boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",color:"whitesmoke"}}>
         Input: 
-        <label htmlFor="inputfile">
-          <input type="file" accept="." id="inputfile" onChange={(e) => getFile(e, setCurrentInput)} /> <BiImport /> Import Input
+        <label htmlFor="inputfile" style={{color:"whitesmoke",fontSize:"18px"}}>
+          <input type="file" accept="." id="inputfile" onChange={(e) => getFile(e, setCurrentInput)}/> <BiImport style={{color:"whitesmoke",fontSize:"20px"}}/> Import Input
         </label>
       </Header>
       <TextArea
         onChange={(e) => setCurrentInput(e.target.value)}
         value={currentInput}
-      />
+        style={{
+          backgroundColor: "transparent",
+          border: "1px solid #7C78EB",
+          background: "transparent",
+          boxShadow: "0 4px 12px rgba(166, 154, 255, 0.3)"
+        }}
+        />
     </Console>
   )
 }

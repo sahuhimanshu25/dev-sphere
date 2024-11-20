@@ -39,6 +39,9 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    avatarPublicId:{
+        type:String
+    },
     verificationCode:{
         type:Number,
     },

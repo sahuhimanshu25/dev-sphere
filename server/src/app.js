@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 export const app=express();
 import { expressRouter } from './routes/authRoutes.js';
 import { postRouter } from './routes/postRoutes.js';
@@ -20,6 +21,15 @@ app.use(express.static("public"))
 app.get("/",(req,res)=>{
     res.send("Hello World")
 })
+
+
+app.use(session({
+  secret: 'Mushraf123',  // Using your custom secret key
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }  // Set to true if using HTTPS in production
+}));
+
 app.use('/auth',expressRouter);
 app.use('/post',postRouter)
 app.use('/user',userRouter)
