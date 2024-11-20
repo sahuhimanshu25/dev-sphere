@@ -4,23 +4,27 @@ import { ApiResponse } from "../utils/apiResponse.js";
 
 // Create a new group
 export const createGroup = AsyncHandler(async (req, res) => {
-  const { name, description, members } = req.body; // We expect name, description, and members array
+  const { name, description, members } = req.body; // Expect name, description, and members array
 
-  if (!Array.isArray(members) || members.length < 2) {
-    return res.status(400).json({ message: "A group must have at least two members." });
+  if (!Array.isArray(members) || members.length < 1) {
+    return res
+      .status(400)
+      .json({ message: "A group must have at least one additional member." });
   }
 
-  // Add the current user to the members list (assumes the user is req.user.id)
   const userId = req.user.id;
   const newGroup = new Group({
     name,
     description,
-    members: [...members, userId], // Include the current user in the group
+    members: [...members, userId], // Include the current user
   });
 
   const result = await newGroup.save();
-  return res.status(201).json(new ApiResponse(201, result, "Group created successfully"));
+  return res
+    .status(201)
+    .json(new ApiResponse(201, result, "Group created successfully"));
 });
+
 
 // Get all groups that the current user is a member of
 export const getUserGroups = AsyncHandler(async (req, res) => {

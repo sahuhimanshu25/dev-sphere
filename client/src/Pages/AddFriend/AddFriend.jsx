@@ -21,15 +21,13 @@ const AddFriend = () => {
   const fetchUserFollowers = async () => {
     try {
       const { data } = await axios.get("http://localhost:3000/user/me");
-      const followerIds = data.data.followers;
+      const followers = data.data.followers; // Array of follower objects with `_id` and `username`
 
-      // Fetch details for each follower to get the usernames
-      const followerDetails = await Promise.all(
-        followerIds.map(async (id) => {
-          const response = await axios.get(`http://localhost:3000/user/${id}`);
-          return response.data.data;
-        })
-      );
+      // Map to extract relevant fields for display
+      const followerDetails = followers.map((follower) => ({
+        _id: follower._id,
+        username: follower.username,
+      }));
 
       setFollowersList(followerDetails);
     } catch (error) {
@@ -94,24 +92,28 @@ const AddFriend = () => {
 
   // Handle creating a new group
   const handleCreateGroup = async () => {
-    if (!groupName || !groupDescription || selectedMembers.length === 0) {
-      toast.error("Please fill all fields and select at least one member.");
+    if (!groupName || !groupDescription || selectedMembers.length < 1) {
+      toast.error("Please fill all fields and select at least one additional member.");
       return;
     }
-
+  
     try {
       await axios.post("http://localhost:3000/group/create", {
         name: groupName,
         description: groupDescription,
-        members: selectedMembers,
+        members: selectedMembers, // Send selected members only; backend adds the current user
       });
       toast.success("Group created successfully!");
+      // Clear form fields after successful group creation
+      setGroupName("");
+      setGroupDescription("");
+      setSelectedMembers([]);
     } catch (error) {
       console.error("Error creating group:", error);
       toast.error(error.response?.data?.message || "Error creating group");
     }
   };
-
+  
   // Handle selecting members
   const handleMemberSelect = (memberId) => {
     setSelectedMembers((prevMembers) =>
@@ -123,56 +125,66 @@ const AddFriend = () => {
 
   return (
     <div className="Search-container">
-      {/* User Search */}
-      <div className="User-search">
-        <input
-          type="text"
-          placeholder="Search users by username"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search Users</button>
-        {searchResults.length > 0 && (
-          <div className="Search-results">
-            {searchResults.map((user) => (
-              <div key={user._id} className="Search-result-item">
-                {user.username}
-                <FaPlus
-                  onClick={() => handleFollow(user._id)}
-                  style={{ cursor: "pointer", marginLeft: "8px" }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Left Column */}
+      <div className="Left-column">
+        {/* User Search */}
+        <div className="User-search">
+          <h3>Search Users</h3>
+          <input
+            type="text"
+            placeholder="Search users by username"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search Users</button>
+          {searchResults.length > 0 && (
+            <div className="Search-results">
+              {searchResults.map((user) => (
+                <div key={user._id} className="Search-result-item">
+                  <img
+                    src={user.avatar || "default-avatar.png"}
+                    alt={`${user.username}'s avatar`}
+                  />
+                  <span>{user.username}</span>
+                  <FaPlus
+                    onClick={() => handleFollow(user._id)}
+                    className="FaPlus"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+  
+        {/* Group Search */}
+        <div className="Group-search">
+          <h3>Search Groups</h3>
+          <input
+            type="text"
+            placeholder="Search groups by name or description"
+            value={groupSearchTerm}
+            onChange={(e) => setGroupSearchTerm(e.target.value)}
+          />
+          <button onClick={handleGroupSearch}>Search Groups</button>
+          {groupSearchResults.length > 0 && (
+            <div className="Search-results">
+              {groupSearchResults.map((group) => (
+                <div key={group._id} className="Search-result-item">
+                  <span>{group.name}</span>
+                  <FaPlus
+                    onClick={() => handleJoinGroup(group._id)}
+                    className="FaPlus"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* Group Search */}
-      <div className="Group-search">
-        <input
-          type="text"
-          placeholder="Search groups by name or description"
-          value={groupSearchTerm}
-          onChange={(e) => setGroupSearchTerm(e.target.value)}
-        />
-        <button onClick={handleGroupSearch}>Search Groups</button>
-        {groupSearchResults.length > 0 && (
-          <div className="Search-results">
-            {groupSearchResults.map((group) => (
-              <div key={group._id} className="Search-result-item">
-                {group.name}
-                <FaPlus
-                  onClick={() => handleJoinGroup(group._id)}
-                  style={{ cursor: "pointer", marginLeft: "8px" }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Group Creation */}
-      <div className="Create-group">
+  
+      {/* Right Column */}
+      <div className="Right-column">
+        {/* Group Creation */}
         <h3>Create New Group</h3>
         <input
           type="text"
@@ -194,15 +206,16 @@ const AddFriend = () => {
                 checked={selectedMembers.includes(follower._id)}
                 onChange={() => handleMemberSelect(follower._id)}
               />
-              <label>{follower.username}</label> {/* Display username */}
+              <label>{follower.username}</label>
             </div>
           ))}
         </div>
-
+  
         <button onClick={handleCreateGroup}>Create Group</button>
       </div>
     </div>
   );
+  
 };
 
 export default AddFriend;
