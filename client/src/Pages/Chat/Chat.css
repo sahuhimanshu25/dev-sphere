@@ -41,6 +41,7 @@
 }
 .Chat-container .head-chat-l{
   width: 100%;
+  
 }
 
 
@@ -103,6 +104,9 @@
   font-size: 18px;
   letter-spacing: 1px;
   width: 10rem;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  margin-top: -15px;
 
   background: rgba(255, 255, 255, 0.1); 
   backdrop-filter: blur(10px); 

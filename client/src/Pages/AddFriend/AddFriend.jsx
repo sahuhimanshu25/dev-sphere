@@ -136,7 +136,7 @@ const AddFriend = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={handleSearch}>Search Users</button>
+          <button onClick={handleSearch} className="btn-c">Search Users</button>
           {searchResults.length > 0 && (
             <div className="Search-results">
               {searchResults.map((user) => (
@@ -165,7 +165,7 @@ const AddFriend = () => {
             value={groupSearchTerm}
             onChange={(e) => setGroupSearchTerm(e.target.value)}
           />
-          <button onClick={handleGroupSearch}>Search Groups</button>
+          <button onClick={handleGroupSearch} className="btn-c">Search Groups</button>
           {groupSearchResults.length > 0 && (
             <div className="Search-results">
               {groupSearchResults.map((group) => (
@@ -196,6 +196,7 @@ const AddFriend = () => {
           placeholder="Group Description"
           value={groupDescription}
           onChange={(e) => setGroupDescription(e.target.value)}
+          className="text-area-c"
         />
         <div className="Followers-list">
           <h4>Select Members</h4>
@@ -211,7 +212,7 @@ const AddFriend = () => {
           ))}
         </div>
   
-        <button onClick={handleCreateGroup}>Create Group</button>
+        <button onClick={handleCreateGroup} className="btn-c">Create Group</button>
       </div>
     </div>
   );

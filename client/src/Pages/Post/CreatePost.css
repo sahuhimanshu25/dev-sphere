@@ -51,6 +51,8 @@
     color: whitesmoke;
     font-size: 18px;
     letter-spacing: 1px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .post-button:active {
