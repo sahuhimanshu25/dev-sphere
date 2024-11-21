@@ -20,7 +20,7 @@ const AddFriend = () => {
 
   const fetchUserFollowers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/user/me");
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`);
       const followers = data.data.followers; // Array of follower objects with `_id` and `username`
 
       // Map to extract relevant fields for display
@@ -41,7 +41,7 @@ const AddFriend = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/user/search-user?username=${searchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`
         );
         setSearchResults(data.data); // Update user search results
       } catch (error) {
@@ -55,7 +55,7 @@ const AddFriend = () => {
     if (groupSearchTerm) {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/group/search?query=${groupSearchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`
         );
         setGroupSearchResults(data.data); // Update group search results
       } catch (error) {
@@ -68,8 +68,8 @@ const AddFriend = () => {
   // Handle following a user
   const handleFollow = async (userId) => {
     try {
-      await axios.put(`http://localhost:3000/follow/${userId}`);
-      await axios.post(`http://localhost:3000/chat/create`, {
+      await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`);
+      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, {
         receiverId: userId,
       });
       toast.success("User followed successfully!");
@@ -82,7 +82,7 @@ const AddFriend = () => {
   // Handle joining a group
   const handleJoinGroup = async (groupId) => {
     try {
-      await axios.post(`http://localhost:3000/group/join`, { groupId });
+      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/group/join`, { groupId });
       toast.success("Successfully joined the group!");
     } catch (error) {
       console.error("Error joining group:", error);
@@ -98,7 +98,7 @@ const AddFriend = () => {
     }
   
     try {
-      await axios.post("http://localhost:3000/group/create", {
+      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/group/create`, {
         name: groupName,
         description: groupDescription,
         members: selectedMembers, // Send selected members only; backend adds the current user

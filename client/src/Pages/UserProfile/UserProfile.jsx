@@ -24,7 +24,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/user/me");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`);
         const userData = response.data.data;
         setAvatar(userData.avatar || "");
         setUserName(userData.username || "");
@@ -47,7 +47,7 @@ const UserProfile = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:3000/post/post/${postId}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postId}`);
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
       setShowOptions(null);
     } catch (error) {

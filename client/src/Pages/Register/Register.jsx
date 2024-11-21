@@ -56,7 +56,7 @@ const RegisterPage = () => {
 
     try {
       // const result = await dispatch(signup(completeData)).unwrap();
-      const result =await axios.post("http://localhost:3000/user/register",completeData);
+      const result =await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,completeData);
       if (result) {
         toast.success("Registration Successful. Please login.");
         navigate("/login"); // Navigate to login page after successful signup

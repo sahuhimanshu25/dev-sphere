@@ -23,7 +23,7 @@ function CreatePost({ onPostCreated }) {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/post/post",
+        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -26,7 +26,7 @@ const Chat = () => {
   // Initialize socket connection and setup listeners
   useEffect(() => {
     if (userData && userData._id) {
-      socket.current = io("http://localhost:3000");
+      socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`);
       socket.current.emit("new-user-add", userData._id);
 
       socket.current.on("get-users", (users) => {
@@ -49,7 +49,7 @@ const Chat = () => {
       if (userData && userData._id) {
         try {
           setLoading(true); // Set loading to true before fetching
-          const { data } = await axios.get("http://localhost:3000/chat/chats");
+          const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`);
           setChats(data);
         } catch (error) {
           console.error("Error fetching chats:", error);
@@ -80,7 +80,7 @@ const Chat = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/following/search?username=${searchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`
         );
         setSearchResults(data.data);
       } catch (error) {
@@ -93,7 +93,7 @@ const Chat = () => {
   const handleNewChat = async (user) => {
     try {
       const { data: chat } = await axios.post(
-        "http://localhost:3000/chat/create",
+        `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
         {
           receiverId: user._id,
         }

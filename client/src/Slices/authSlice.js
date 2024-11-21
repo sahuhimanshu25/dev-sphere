@@ -12,14 +12,14 @@ const initialState = {
 // Async action for signup
 const signup = createAsyncThunk("signup", async (userCredentials) => {
   console.log(userCredentials)
-  const { data } = await axios.post("http://localhost:3000/auth/register", userCredentials, {
+  const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/auth/register`, userCredentials, {
     withCredentials: true,
   });  
   return data;
 });
 
 const login = createAsyncThunk('login', async (userCredentials) => {
-  const { data } = await axios.post("http://localhost:3000/auth/login", userCredentials, {
+  const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/auth/login`, userCredentials, {
     withCredentials: true,  // Include cookies in requests
   });
   return data;

@@ -19,7 +19,7 @@ const GroupChat = () => {
     const fetchGroups = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/group/getUserGroups"
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/getUserGroups`
         );
         setGroups(response.data.data);
         console.log(groups);
@@ -40,7 +40,7 @@ const GroupChat = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/group/search?query=${searchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${searchTerm}`
         );
         setSearchResults(data);
       } catch (error) {

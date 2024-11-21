@@ -16,7 +16,7 @@ function Feed() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const { data } = await axios.get('http://localhost:3000/post/posts/feed');
+                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`);
                 setPosts(data.posts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
@@ -27,7 +27,7 @@ function Feed() {
 
         const fetchRecommendedUsers = async () => {
             try {
-                const { data } = await axios.get('http://localhost:3000/user/recommended-users');
+                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/recommended-users`);
                 setRecommendedUsers(data.data);
             } catch (error) {
                 console.error("Error fetching recommended users:", error);
@@ -51,8 +51,8 @@ function Feed() {
 
     const handleFollow = async (userId) => {
         try {
-            await axios.put(`http://localhost:3000/follow/${userId}`);
-            await axios.post(`http://localhost:3000/chat/create`, { receiverId: userId });
+            await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`);
+            await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, { receiverId: userId });
             toast.success("User followed successfully!");
         } catch (error) {
             console.error("Error following user:", error);

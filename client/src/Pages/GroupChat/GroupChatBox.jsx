@@ -17,7 +17,7 @@ const GroupChatBox = ({ group }) => {
 
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io("http://localhost:3000");
+    socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`);
 
     // Join the group chat room
     socket.current.emit("join-group", group.data._id);
@@ -39,7 +39,7 @@ const GroupChatBox = ({ group }) => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/message/${group.data._id}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`
         );
         setMessages(res.data.message); // Initialize messages
       } catch (err) {
@@ -67,7 +67,7 @@ const GroupChatBox = ({ group }) => {
         localMessageIds.current.add(tempMessageId); // Track this local message
 
         // Save the message to the backend
-        const res = await axios.post(`http://localhost:3000/message`, {
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/message`, {
           text: newMessage,
           chatId: group.data._id,
           isGroup: true,

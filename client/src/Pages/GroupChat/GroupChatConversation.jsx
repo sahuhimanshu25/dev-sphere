@@ -9,7 +9,7 @@ const GroupChatConversation = ({ group, onSelect, selectedGroup }) => {
   useEffect(() => {
     const fetchGroupData = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3000/group/${group._id}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/group/${group._id}`);
         setGroupData(data);
         console.log("Group data:", groupData?.data?.name);
       } catch (error) {

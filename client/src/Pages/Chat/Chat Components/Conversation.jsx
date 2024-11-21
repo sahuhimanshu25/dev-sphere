@@ -12,7 +12,7 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
     const fetchUserData = async () => {
       try {
         const userId = data.members.find((id) => id !== currentUserId);
-        const { data: user } = await axios.get(`http://localhost:3000/user/${userId}`);
+        const { data: user } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`);
         setUserData(user.data);
         console.log("Conversation user data:", user.data.userdata);
         setIsOnline(onlineUsers.some((user) => user.userId === userId));

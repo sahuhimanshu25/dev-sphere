@@ -26,7 +26,7 @@ import RegisterPage from "./Pages/Register/Register.jsx";
 axios.defaults.withCredentials = true;
 
 function Logout() {
-  axios.get("http://localhost:3000/user/logout")
+  axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/logout`)
     .then(() => {
       window.location.href = "/login";
     })

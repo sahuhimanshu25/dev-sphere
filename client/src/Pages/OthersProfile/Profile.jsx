@@ -28,7 +28,7 @@ const Profile = ({}) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3000/user/${userId}`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`);
         const userData = response.data.data.userdata;
         console.log(userData);
         if (userData) {

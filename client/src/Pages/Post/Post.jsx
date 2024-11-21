@@ -30,7 +30,7 @@ function Post({ postData, onLike }) {
   const fetchComments = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/post/post/${postData._id}/comments`
+        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comments`
       );
       setComments(data.data);
     } catch (error) {
@@ -41,7 +41,7 @@ function Post({ postData, onLike }) {
   const handleLike = async () => {
     try {
       const { data } = await axios.put(
-        `http://localhost:3000/post/post/like/${postData._id}`
+        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/like/${postData._id}`
       );
       setLiked(!liked);
       onLike(postData._id, data.data.likes);
@@ -54,7 +54,7 @@ function Post({ postData, onLike }) {
     if (!newComment) return;
     try {
       const { data } = await axios.post(
-        `http://localhost:3000/post/post/${postData._id}/comment`,
+        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comment`,
         {
           content: newComment,
         }

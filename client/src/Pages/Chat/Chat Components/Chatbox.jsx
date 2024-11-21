@@ -27,7 +27,7 @@ const ChatBox = ({
 
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/user/${userId}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`
         );
         setUserData(data.data);
         // Check if the user is online
@@ -52,7 +52,7 @@ const ChatBox = ({
       try {
         if (chat?._id) {
           const { data } = await axios.get(
-            `http://localhost:3000/message/${chat._id}`
+            `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`
           );
           setMessages(data.message);
         }
@@ -79,7 +79,7 @@ const ChatBox = ({
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/message",
+        `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
         message
       );
 
