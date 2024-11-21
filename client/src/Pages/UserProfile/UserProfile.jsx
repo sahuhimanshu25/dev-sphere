@@ -67,6 +67,8 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile" id="user-profile" >
+
+      <div className="p-top">
       <div className="profile-header">
         <div className="avatar">
           <img src={avatar} alt="User Avatar" />
@@ -95,6 +97,8 @@ const UserProfile = () => {
       </div>
 
       {/* Followers list */}
+      <div className="fol-er">
+      <div className="Followers">
       {activeList === "followers" && (
         <div className="followers-list" id="followers-list" >
           <h3>Followers</h3>
@@ -105,8 +109,10 @@ const UserProfile = () => {
           </ul>
         </div>
       )}
-
+      </div>
+      </div>
       {/* Following list */}
+      <div className="Following">
       {activeList === "following" && (
         <div className="following-list">
           <h3>Following</h3>
@@ -117,11 +123,13 @@ const UserProfile = () => {
           </ul>
         </div>
       )}
+      </div>
 
       <div className="edit-profile">
         <button onClick={handleClick}>Edit Profile</button>
       </div>
-
+      </div>
+      <div className="post-in">
       <div className="posts-grid">
         {posts.map((post) => (
           <div key={post._id} className="post-item">
@@ -148,7 +156,6 @@ const UserProfile = () => {
                   onClick={() => handleDelete(post._id)}
                 >
                   <RiDeleteBin3Fill size={20} />
-                  Delete
                 </button>
               </div>
             )}
@@ -162,6 +169,7 @@ const UserProfile = () => {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

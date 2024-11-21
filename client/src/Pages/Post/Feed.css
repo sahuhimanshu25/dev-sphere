@@ -21,14 +21,46 @@
   margin-right: 20px;
 }
 
-.Seacrh-user {
-  width: 50%;
+.Search-user {
+  width: 45%;  
   padding-left: 10px;
   height: 100vh;
   overflow-y: auto;
   position: relative;
+  display: flex;
+  justify-self: center;
+  flex-direction: column;
+  gap: 20px;
 }
+.rec-top{
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: whitesmoke;
 
+  background: rgba(255, 255, 255, 0.038); 
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  border-radius: 15px; 
+}
+.rec-top h2{
+  display: flex;
+  gap: 8px;
+  font-size: 26px;
+  letter-spacing: 1px;
+  font-weight: 550;
+}
+.rec-top h2 :nth-child(1){
+  color: #7c78ebec;
+}
+.rec-users-list{
+  height: 71.2%;
+  padding: 20px;
+  overflow: auto;
+}
 .separator {
   width: 1px;
   background-color: #7c78eb40;
@@ -54,82 +86,121 @@
   transform: translateY(-3px);
 }
 
+/* Post container with glassmorphism */
 .post {
-  background-color: #1c1c1c;
-  border-radius: 10px;
-  padding: 16px;
+  background: rgba(255, 255, 255, 0.032); /* Semi-transparent background */
+  border-radius: 12px; /* Rounded corners */
+  padding: 15px; /* Padding for content */
   margin: 20px auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-  width: 80%;
+  width: 100%;
+  max-width: 600px; /* Full-width posts with a max width */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  height: auto; /* Automatically adjust to the content height */
+  overflow: hidden;
+  backdrop-filter: blur(10px); /* Apply blur effect for the glassmorphism */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
 }
 
-.post:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
+/* Post header: Username and time */
 .post-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 1.2rem;
-  color: #ffffff;
+  font-size: 1.1rem; /* Adjust font size */
   font-weight: bold;
-  margin-bottom: 12px;
+  color: #fff; /* White color for the text */
+  margin-bottom: 10px; 
 }
 
+.post-header .username {
+  color: #7C78EB; /* Purple color for the username */
+  /* margin-right: 10px; Space between username and timestamp */
+}
+
+/* Post content */
 .post-content {
-  margin: 12px 0;
+  margin-top: 10px; /* Space between content and header */
   font-size: 1rem;
-  color: #dcdcdc;
+  color: #e0e0e0; /* Light grey text */
+  line-height: 1.5; /* Spacing between lines for better readability */
 }
 
+/* Media (Image/Video) */
 .post-content img,
 .post-content video {
   width: 100%;
-  max-width: 600px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  margin: 12px 0;
-  transition: transform 0.3s ease-in-out;
+  height: auto; /* Auto adjust height */
+  border-radius: 12px; /* Rounded corners for media */
+  margin-top: 10px;
+  max-height: 400px; /* Max height for images or videos */
+  object-fit: cover;
 }
 
-.post-content img:hover,
-.post-content video:hover {
-  transform: scale(1.05);
-}
-
+/* Like button */
 .like-button {
   background-color: transparent;
   border: none;
-  color: #fff;
+  color: #7C78EB; /* Purple like button */
   cursor: pointer;
   font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition: color 0.3s ease;
 }
 
 .like-button:hover {
-  color: #37b2e9;
-  transform: scale(1.1);
+  color: #ff4d4d; /* Red color on hover */
 }
 
-.thumbs-up {
+.like-button .thumbs-up {
   margin-right: 8px;
 }
 
 .liked {
-  color: #ff0000;
+  color: #ff0000; /* Red color when liked */
 }
 
-.like-button.liked:hover {
-  color: #ff4d4d; 
+/* Comment section */
+.comment-section {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
 }
+
+.comment-section input {
+  flex: 1;
+  background-color: #333; 
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 20px;
+  margin-right: 10px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.comment-section input::placeholder {
+  color: #888;
+}
+
+/* Comment button */
+.comment-section button {
+  background-color: #7C78EB;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comment-section button:hover {
+  background-color: #5a53d0;
+}
+
+
 
 @media (max-width: 768px) {
   .feed {
@@ -146,8 +217,8 @@
     max-height: none;
   }
 
-  .Seacrh-user {
-    width: 100%;
+  .Search-user {
+    width: 100%; /* Full width for small screens */
     padding-left: 0;
     position: relative;
     height: auto;
@@ -175,42 +246,7 @@
     font-size: 1rem;
   }
 }
-.search-user {
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 20px;
-}
 
-.search-user ul {
-  list-style: none;
-  padding: 0;
-}
-
-.recommended-user {
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.user-info h4 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.user-info p {
-  margin: 0;
-  color: #ffffff;
-  font-size: 14px;
-}
 .recommended-users {
   margin-top: 20px;
 }
@@ -231,5 +267,11 @@
 .recommended-user-item span {
   font-size: 16px;
   font-weight: 500;
+  color: white;
+}
+
+.recommended-user-item .fa-plus {
+  cursor: pointer;
+  margin-left: 8px;
   color: white;
 }

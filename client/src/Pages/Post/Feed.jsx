@@ -82,7 +82,13 @@ function Feed() {
             </div>
             <div className="separator"></div>
             <div className='Search-user'>
-                <h2>Recommended Users</h2>
+                <div className="rec-top">
+                <h2> 
+                    <span>Recommended</span>
+                    <span>Users</span>
+                </h2>
+                </div>
+                <div className="rec-users-list">
                 {recommendedUsers.length > 0 ? (
                     <div className="recommended-users">
                         {recommendedUsers.map(user => (
@@ -99,6 +105,7 @@ function Feed() {
                 ) : (
                     <p>No recommended users found.</p>
                 )}
+                </div>
             </div>
         </div>
     );

@@ -80,7 +80,7 @@ function Post({ postData, onLike }) {
       return <img src={value} alt="Post content" className="post-image" />;
     } else if (type === "video") {
       return (
-        <video controls className="post-video">
+        <video controls className="post-video" autoPlay muted loop>
           <source src={value} type="video/mp4" />
         </video>
       );
@@ -167,7 +167,7 @@ function Post({ postData, onLike }) {
           onClick={() => setShowComments(!showComments)}
           className="comment-btn">
           <FaRegComment />
-          {comments.length}
+          {/* {comments.length} */}
         </button>
       </div>
 

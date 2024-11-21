@@ -32,7 +32,7 @@
 }
 
 input[type="text"],
-textarea {
+.text-area-c {
   width: 100%;
   padding: 0.8rem;
   border-radius: 5px;
@@ -44,16 +44,16 @@ textarea {
 }
 
 input[type="text"]::placeholder,
-textarea::placeholder {
+.text-area-c::placeholder {
   color: #888;
 }
 
-textarea {
+.text-area-c {
   resize: none;
   height: 80px;
 }
 
-button {
+.btn-c {
   padding: 0.8rem 1.5rem;
   background-color: #3b82f6;
   color: #fff;
@@ -64,9 +64,7 @@ button {
   transition: all 0.3s ease;
 }
 
-button:hover {
-  background-color: #2563eb;
-}
+
 
 .Search-results, .Followers-list {
   margin-top: 1rem;
