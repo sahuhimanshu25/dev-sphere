@@ -5,6 +5,7 @@ import axios from "axios";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { IoSend } from "react-icons/io5";
+import Loader from "../../../components/Loader/Loader";
 
 const ChatBox = ({
   chat,
@@ -17,6 +18,8 @@ const ChatBox = ({
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isOnline, setIsOnline] = useState(false);
+  const [loading, setLoading] = useState(true); // Loader state
+  const [sending, setSending] = useState(false); // Sending state
   const messagesEndRef = useRef(null); // Ref for auto-scrolling
 
   // Fetch user data for the chat participant
@@ -26,14 +29,16 @@ const ChatBox = ({
       if (!userId) return;
 
       try {
+        setLoading(true);
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`
         );
         setUserData(data.data);
-        // Check if the user is online
         setIsOnline(onlineUsers.some((user) => user.userId === userId));
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     if (chat) getUserData();
@@ -50,6 +55,7 @@ const ChatBox = ({
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        setLoading(true);
         if (chat?._id) {
           const { data } = await axios.get(
             `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`
@@ -58,6 +64,8 @@ const ChatBox = ({
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchMessages();
@@ -67,14 +75,15 @@ const ChatBox = ({
   const handleSend = async (e) => {
     e.preventDefault();
 
-    // Create a new message object
+    if (sending || newMessage.trim() === "") return;
+
+    setSending(true);
     const message = {
       senderId: currentUser,
       text: newMessage,
       chatId: chat._id,
     };
 
-    // Optimistically update the messages list by adding the new message immediately
     setMessages((prevMessages) => [...prevMessages, message]);
 
     try {
@@ -82,20 +91,12 @@ const ChatBox = ({
         `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
         message
       );
-
-      // Add the message from the server response, if it's not already in the list
-      setMessages((prevMessages) => {
-        const isMessageExist = prevMessages.some((msg) => msg._id === data._id);
-        if (!isMessageExist) {
-          return [...prevMessages, data];
-        }
-        return prevMessages;
-      });
-
-      setNewMessage(""); // Clear the input field after sending
+      setMessages((prevMessages) => [...prevMessages, data]);
+      setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
-      // Optionally, you can remove the optimistically added message if the request fails.
+    } finally {
+      setSending(false);
     }
 
     const receiverId = chat.members.find((id) => id !== currentUser);
@@ -110,21 +111,33 @@ const ChatBox = ({
   }, [messages]);
 
   const renderMessage = (msg) => {
-    return <span>{msg.text}</span>;
+    return <span>{msg.text || "Message content unavailable"}</span>;
   };
+
+  if (loading) {
+    return (
+      <div className="ChatBox-container">
+        <Loader /> {/* Show loader while fetching data */}
+      </div>
+    );
+  }
 
   return (
     <div className="ChatBox-container">
       <div className="chat-header">
         <div className="chat-header-in">
           <div className="image-container">
-            <img src={userData?.userdata.avatar} alt="" className="followerImage" />
+            <img
+              src={userData?.userdata.avatar || userimg}
+              alt="User"
+              className="followerImage"
+            />
             <div
               className={`online-dot ${isOnline ? "online" : "offline"}`}
             ></div>
           </div>
           <div className="name">
-            <span>{userData?.userdata.username}</span>
+            <span>{userData?.userdata.username || "Unknown User"}</span>
             <span>{isOnline ? "Online" : "Offline"}</span>
           </div>
         </div>
@@ -137,21 +150,25 @@ const ChatBox = ({
             className={msg.senderId === currentUser ? "message own" : "message"}
           >
             {renderMessage(msg)}
-            <span>{format(msg.createdAt)}</span>
+            <span>{format(msg.createdAt || new Date())}</span>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-sender">
-        <InputEmoji value={newMessage} onChange={setNewMessage}/>
+        <InputEmoji
+          value={newMessage}
+          onChange={setNewMessage}
+          placeholder="Type a message"
+        />
         <button
           className="send-button button"
           onClick={handleSend}
-          disabled={newMessage.trim().length === 0} // Disable if the message is empty or only spaces
-          style={{ background: "none", cursor: "pointer" }}
+          disabled={newMessage.trim().length === 0 || sending}
+          style={{ background: "none", cursor: sending ? "not-allowed" : "pointer" }}
         >
-          <IoSend style={{ color: "#7c78eb8e", fontSize: "20px" }} />
+          <IoSend style={{ color: sending ? "#ccc" : "#7c78eb8e", fontSize: "20px" }} />
         </button>
       </div>
     </div>

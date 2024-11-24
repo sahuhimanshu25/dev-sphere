@@ -10,6 +10,14 @@ dotenv.config({ path: '../.env' });
 
 const PORT = process.env.PORT || 3000;
 
+//HANDLING UNCAUGHT 
+process.on('uncaughtException',(err)=>{
+  console.log("!!! ERROR !!! ",err);
+  console.log("SHUTTING DOWN THE SERVER!!!");
+  process.exit(1)
+})
+
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -73,3 +81,17 @@ connection()
   .catch((err) => {
     console.error('Database connection failed:', err);
   });
+
+
+
+
+
+  //UNHANDLED PROMISE REJECTION
+  process.on("unhandledRejection",err=>{
+    console.log(err);
+    console.log("SHUTTING DOWN THE SERVER!!!");
+    server.close(()=>{
+      process.exit(1);
+    })
+    
+  })

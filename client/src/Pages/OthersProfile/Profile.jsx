@@ -1,36 +1,42 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaHeart, FaComment } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import "./profile.css";
 import { useSelector } from "react-redux";
+import Loader from "../../components/Loader/Loader";
 
-const Profile = ({}) => {
-  const userId = useSelector((state) => state.post.userId);
+const Profile = () => {
+  const userId = useSelector((state) => state.post.userId); // Replace `state.post.userId` if userId is stored elsewhere
   console.log("User ID:", userId);
 
   const [avatar, setAvatar] = useState("");
   const [userName, setUserName] = useState("");
-  const [bio, setBio] = useState("");
-  const [description, setDescription] = useState(
-    "This is a detailed description about the user."
-  );
+  const [bio, setBio] = useState("No bio available");
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!userId) {
       console.error("User ID is not available");
+      setError("User ID is not available.");
+      setLoading(false);
       return;
     }
 
     const fetchUserData = async () => {
       setLoading(true);
+      setError(null); // Reset error before fetching data
+
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`);
-        const userData = response.data.data.userdata;
-        console.log(userData);
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`
+        );
+
+        const userData = response.data?.data?.userdata;
+
         if (userData) {
           setAvatar(userData.avatar || "");
           setUserName(userData.username || "No Name");
@@ -40,25 +46,36 @@ const Profile = ({}) => {
           setFollowing(userData.following || []);
         } else {
           console.error("User data is missing.");
+          setError("User data is not available.");
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching user data:", error);
+        setError("Failed to load user data. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchUserData();
   }, [userId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />; // Display a loader while data is being fetched
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>; // Display error message if fetching fails
   }
 
   return (
     <div className="profile-container">
       <div className="profile-header-section">
         <div className="user-avatar">
-          <img src={avatar} alt="User Avatar" />
+          <img
+            src={avatar || "/default-avatar.png"} // Fallback to a default avatar
+            alt={`${userName}'s Avatar`}
+            onError={(e) => (e.target.src = "/default-avatar.png")} // Handle broken image URLs
+          />
         </div>
         <div className="user-profile-info">
           <h2>{userName}</h2>
@@ -80,24 +97,32 @@ const Profile = ({}) => {
         <button>Message {userName}</button>
       </div>
       <div className="user-posts-grid">
-        {posts.map((post) => (
-          <div key={post._id} className="user-post-item">
-            {post.content.type === "image" ? (
-              <img src={post.content.value} alt="Post Image" />
-            ) : post.content.type === "video" ? (
-              <video controls src={post.content.value}></video>
-            ) : (
-              <p>{post.content.value}</p>
-            )}
-            <div className="post-overlay">
-              <div className="overlay-info-container">
-                <span>
-                  <FaHeart /> {post.likes.length}
-                </span>
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <div key={post._id} className="user-post-item">
+              {post.content.type === "image" ? (
+                <img
+                  src={post.content.value}
+                  alt="Post Image"
+                  onError={(e) => (e.target.src = "/default-post-image.png")} // Fallback for broken images
+                />
+              ) : post.content.type === "video" ? (
+                <video controls src={post.content.value}></video>
+              ) : (
+                <p>{post.content.value}</p>
+              )}
+              <div className="post-overlay">
+                <div className="overlay-info-container">
+                  <span>
+                    <FaHeart /> {post.likes.length}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No posts available.</p>
+        )}
       </div>
     </div>
   );
