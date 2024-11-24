@@ -254,10 +254,10 @@
 .recommended-user-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.user-avatar {
+.recommended-user-item .user-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;

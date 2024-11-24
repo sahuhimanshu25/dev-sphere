@@ -198,8 +198,9 @@ const AddFriend = () => {
           onChange={(e) => setGroupDescription(e.target.value)}
           className="text-area-c"
         />
+        
         <div className="Followers-list">
-          <h4>Select Members</h4>
+          <div className="f-list">
           {followersList.map((follower) => (
             <div key={follower._id} className="Follower-item">
               <input
@@ -210,6 +211,7 @@ const AddFriend = () => {
               <label>{follower.username}</label>
             </div>
           ))}
+          </div>
         </div>
   
         <button onClick={handleCreateGroup} className="btn-c">Create Group</button>

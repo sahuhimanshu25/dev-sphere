@@ -1,126 +1,220 @@
-/* General Container */
+.main-cont-edit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: transparent;
+  width: 100vw;
+}
+
 .edit-profile-container {
-  background-color: #121212;
-  color: #f1f1f1;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 28%;
+  background: rgba(124, 120, 235, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 15px; /* Reduced padding */
+  text-align: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Header */
 .edit-profile-container h2 {
-  text-align: center;
-  font-size: 24px;
-  color: #37b2e9; /* Bright cyan color */
-  margin-bottom: 20px;
+  font-size: 1.8rem; /* Reduced font size */
+  color: white;
+  margin-bottom: 10px; /* Reduced margin */
+  display: flex;
+  gap: 5px; /* Reduced gap */
+  justify-content: center;
+  align-items: center;
 }
 
-/* Success/Error Messages */
-.success-message {
-  color: #37b2e9;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: bold;
+.edit-profile-container h2 :nth-child(1) {
+  color: #7c78eb;
 }
 
-.error-message {
-  color: #e74c3c;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-/* Form Styles */
-.edit-profile-form,
-.verification-form {
+.edit-profile-form {
   display: flex;
   flex-direction: column;
+  gap: 8px; 
 }
 
 .form-group {
-  margin-bottom: 15px;
+  /* text-align: left; */
+  margin-bottom: 8px; /* Reduced bottom margin */
 }
 
-.edit-profile-container label {
-  font-size: 16px;
-  margin-bottom: 5px;
-  color: #ccc;
+.form-group label {
+  display: flex;
+  align-items: center;
+  color: #7c78eb;
+  font-size: 18px; /* Reduced font size */
+  letter-spacing: 1px;
+  font-weight: 550;
 }
 
-.edit-profile-container input {
+.form-group label .icon {
+  font-size: 24px;
+}
+
+/* Input field styling */
+.edit-profile-container input,
+textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #444;
-  border-radius: 6px;
-  background-color: #1f1f1f;
-  color: #f1f1f1;
-  font-size: 16px;
-}
-
-.edit-profile-container input:focus {
-  outline: none;
-  border-color: #37b2e9;
-  background-color: #2c2c2c;
-}
-
-.edit-profile-container button {
-  padding: 12px 20px;
-  background-color: #37b2e9;
-  color: white;
+  padding: 10px; /* Reduced padding */
   border: none;
-  border-radius: 6px;
+  border-radius: 25px;
+  outline: none;
+  background: rgba(124, 120, 235, 0.2);
+  color: white;
+  font-size: 0.95rem; /* Slightly reduced font size */
+  transition: all 0.3s ease;
+  border: 1px solid #7c78eb8e;
+  letter-spacing: 0.5px;
+}
+
+.edit-profile-container input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.edit-profile-container input:focus,
+textarea:focus {
+  background: rgba(124, 120, 235, 0.3);
+  border: 1px solid #7c78eb;
+}
+
+/* Bio section styling */
+#bio {
+  width: 100%;
+  padding: 8px; /* Reduced padding */
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  background: rgba(124, 120, 235, 0.2);
+  color: white;
+  font-size: 0.95rem; /* Slightly reduced font size */
+  transition: all 0.3s ease;
+  border: 1px solid #7c78eb8e;
+  letter-spacing: 0.5px;
+  resize: none;
+}
+
+#bio::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#bio:focus {
+  background: rgba(124, 120, 235, 0.3);
+  border: 1px solid #7c78eb;
+}
+
+/* Submit button styling */
+.edit-profile-container button {
+  width: 100%;
+  padding: 0.7rem 0.4rem; /* Reduced padding */
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  color: white;
+  background: #7c78eb;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0.5em 0.5em 0.5em rgba(0, 0, 0, 0.3);
+  font-weight: 550;
+  letter-spacing: 0.5px;
+}
+
+/* Button hover and active states */
+.edit-profile-container button::before {
+  position: absolute;
+  content: "";
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(33, 33, 33, 0.741) 0%,
+    rgba(33, 33, 33, 0.671) 50%,
+    rgba(150, 4, 31, 1) 50%,
+    rgba(191, 4, 38, 1) 60%
+  );
+  border-radius: 0 0 0.5em 0;
+  box-shadow: 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+}
+
+.edit-profile-container button:hover::before {
+  width: 1.6em;
+  height: 1.6em;
+}
+
+.edit-profile-container button:active {
+  box-shadow: 0.2em 0.2em 0.3em rgba(0, 0, 0, 0.3);
+  transform: translate(0.1em, 0.1em);
+}
+
+.edit-profile-container button:hover {
+  background: #605dd3; /* Darker shade of primary */
 }
 
 .edit-profile-container button:disabled {
-  background-color: #888;
+  background-color: rgba(124, 120, 235, 0.5);
   cursor: not-allowed;
 }
 
-.edit-profile-container button:hover:not(:disabled) {
-  background-color: #28a7c5;
+/* Error message styling */
+.error-msg {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
 }
 
-/* Verification Code Form */
-.verification-form {
-  margin-top: 30px;
+/* Register link */
+.edit-profile-form a {
+  color: #7c78eb;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-block;
 }
 
-.verification-form h3 {
-  font-size: 20px;
-  color: #37b2e9;
-  margin-bottom: 10px;
-}
-
-.verification-form .form-group {
-  margin-bottom: 20px;
-}
-
-/* Input Placeholder Styling */
-.edit-profile-container input::placeholder {
-  color: #888;
+.edit-profile-form a:hover {
+  text-decoration: underline;
 }
 
 /* Responsive Design */
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   .edit-profile-container {
-    padding: 15px;
+    padding: 25px 15px; /* Reduced padding */
   }
 
-  h2 {
-    font-size: 20px;
+  .edit-profile-container h2 {
+    font-size: 1.8rem;
   }
 
-  .form-group label,
-  .form-group input {
-    font-size: 14px;
+  .edit-profile-container input,
+  textarea {
+    font-size: 0.9rem;
+    padding: 8px;
   }
 
-  button {
-    font-size: 14px;
+  .edit-profile-container button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-profile-container {
+    padding: 15px; /* Reduced padding */
+    border-radius: 10px;
+  }
+
+  .edit-profile-container h2 {
+    font-size: 1.6rem;
   }
 }

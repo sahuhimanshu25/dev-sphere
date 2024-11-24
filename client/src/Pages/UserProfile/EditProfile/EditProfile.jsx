@@ -83,15 +83,22 @@ const EditProfile = () => {
   
 
   return (
+    <div className="main-cont-edit">
     <div className="edit-profile-container">
-      <h2>Edit Profile</h2>
+      <h2> 
+        <span>Edit</span>
+        <span>Profile</span>
+      </h2>
 
       {message && <p className="success-message">{message}</p>}
 
       {!isVerificationRequired && (
         <form onSubmit={handleSubmit} className="edit-profile-form">
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">
+            <span className="icon">👤</span>
+            <span className="icon-t">Username</span>
+            </label>
             <input
               type="text"
               id="username"
@@ -100,9 +107,10 @@ const EditProfile = () => {
               placeholder="Enter new username"
             />
           </div>
-
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+            <span className="icon">📧</span> 
+            <span className="icon-t">Email</span></label>
             <input
               type="email"
               id="email"
@@ -113,7 +121,10 @@ const EditProfile = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="oldPassword">Current Password</label>
+            <label htmlFor="oldPassword">
+            <span className="icon">🔒</span>
+            <span className="icon-t">Current Password</span>
+            </label>
             <input
               type="password"
               id="oldPassword"
@@ -124,7 +135,10 @@ const EditProfile = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="newPassword">New Password</label>
+            <label htmlFor="newPassword">
+            <span className="icon">🔒</span>
+            <span className="icon-t">New Password</span>
+            </label>
             <input
               type="password"
               id="newPassword"
@@ -136,7 +150,10 @@ const EditProfile = () => {
 
           {/* Bio Section */}
           <div className="form-group">
-            <label htmlFor="bio">Bio</label>
+            <label htmlFor="bio">
+            <span className="icon">✏️</span>
+            <span className="icon-t">Bio</span>
+            </label>
             <textarea
               id="bio"
               value={bio}
@@ -183,6 +200,7 @@ const EditProfile = () => {
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 };

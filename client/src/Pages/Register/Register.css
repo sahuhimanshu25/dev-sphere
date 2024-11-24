@@ -211,7 +211,7 @@
   text-decoration: underline;
 }
 
-/* Media Queries for responsiveness */
+/* Media Queries for responsiveness*/
 @media (max-width: 768px) {
   .reg-register-container {
     padding: 30px 20px;

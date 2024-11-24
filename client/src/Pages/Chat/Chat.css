@@ -209,7 +209,7 @@
   align-items: center;
   justify-content: space-around;
   border: 2px solid rgba(255, 255, 255, 0.3); 
-  border: 2px solid #7c78eb49; 
+  border: 2px solid #7c78eb49;  
   position:sticky;
   bottom:0;
   font-size: 23px;

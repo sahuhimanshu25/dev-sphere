@@ -87,6 +87,7 @@ const RegisterPage = () => {
       {step === 1 && (
         <div className="reg-main-reg-cont">
           <div className="reg-avatar-section">
+
             <div className="reg-avatar-wrapper">
               <img
                 src={avatarPreview}
@@ -104,6 +105,8 @@ const RegisterPage = () => {
                 className="reg-avatar-input"
               />
             </div>
+
+            
           </div>
           <div className="reg-register-container">
             <h2 className="reg-register-title">
