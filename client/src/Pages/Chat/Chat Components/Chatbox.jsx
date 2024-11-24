@@ -91,8 +91,15 @@ const ChatBox = ({
         `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
         message
       );
-      setMessages((prevMessages) => [...prevMessages, data]);
-      setNewMessage("");
+            // Add the message from the server response, if it's not already in the list
+            setMessages((prevMessages) => {
+              const isMessageExist = prevMessages.some((msg) => msg._id === data._id);
+              if (!isMessageExist) {
+                return [...prevMessages, data];
+              }
+              return prevMessages;
+            });
+            setNewMessage(""); // Clear the input field after sending
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
