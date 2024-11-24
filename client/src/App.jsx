@@ -23,6 +23,7 @@ import Profile from "./Pages/OthersProfile/Profile.jsx"
 import EditProfile from "./Pages/UserProfile/EditProfile/EditProfile.jsx";
 import { ToastContainer } from 'react-toastify';
 import RegisterPage from "./Pages/Register/Register.jsx";
+import DevProfile from "./Pages/DevProfile/DevProfile.jsx";
 axios.defaults.withCredentials = true;
 
 function Logout() {
@@ -78,6 +79,7 @@ function App() {
         <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
         <Route path="/user/user-details" element={<Profile/>} />
         <Route path="/user/Edit-profile" element={<EditProfile/>} />
+        <Route path="/devProfile" element={<DevProfile/>} />
         <Route path="/register" element={<RegisterPage/>} />
         <Route path="*" element={<Error404 />} />
       </Routes>

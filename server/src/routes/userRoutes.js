@@ -1,5 +1,5 @@
 import express from 'express'
-import { getMyDetails, getRecommendedUsers, getUserDetails, loginUser,logout,registerUser, searchUser,updateAccountDetails ,verifyAccountChanges,verifyUser} from '../controllers/userController.js';
+import { getMyDetails, getRecommendedUsers, getUserDetails, loginUser,logout,registerUser, searchUser,updateAccountDetails ,verifyAccountChanges,verifyUser,updateUserAvatar} from '../controllers/userController.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 import { upload } from '../middlewares/multer.js';
 export const userRouter=express.Router();
@@ -17,3 +17,4 @@ userRouter.post('/updateAccount',isAuthenticated,updateAccountDetails)
 userRouter.post('/verification',isAuthenticated,verifyAccountChanges)
 userRouter.get('/recommended-users',isAuthenticated,getRecommendedUsers)
 userRouter.get('/:id',isAuthenticated,getUserDetails)
+userRouter.patch("/updateAvatar", isAuthenticated, upload.single("avatar"), updateUserAvatar);

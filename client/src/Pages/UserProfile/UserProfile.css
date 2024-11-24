@@ -4,13 +4,12 @@
   font-family: Arial, sans-serif;
   color: #f5f5f5;
   padding: 20px;
-
   background: rgba(255, 255, 255, 0.041);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  height: 70vh;
+  height: auto;
 }
 
 .profile-header {
@@ -20,13 +19,45 @@
   flex-wrap: wrap;
 }
 
-.avatar img {
+.avatar {
+  position: relative;
+  display: inline-block;
   width: 100px;
   height: 100px;
   border-radius: 50%;
   margin-right: 20px;
-  border: 3px solid #7c78eb;
-  box-shadow: 0 2px 8px #7c78eb49;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #7c78ebdf;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.avatar-edit-pencil {
+  font-size: 18px;
+  color: #7c78eb;
+  background-color: transparent;
+  transform: scaleX(-1);
+}
+
+.avatar-edit-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  transition: background 0.3s ease;
 }
 
 .profile-info {
@@ -76,24 +107,21 @@
   border-radius: 2em;
   background: transparent;
   border: 2px solid #7C78EB;
-
   padding: 12px 30px;
   font-size: 18px;
   width: 40%;
   letter-spacing: 1px;
-
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-
   transition: color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
 }
 
 .edit-profile button:hover {
   color: #ffffff;
   border-color: #7C78EB;
-  transform: scale(1.05); /* Slight scale-up effect on hover */
+  transform: scale(1.05);
 }
 
 .edit-profile button:before,
@@ -171,134 +199,70 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
   display: flex;
-  align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 10px;
-}
-
-.overlay-info {
-  color: #fff;
-  display: flex;
-  gap: 15px;
+  align-items: center;
   font-size: 1.2rem;
 }
 
-.overlay-info span {
+.overlay-info {
   display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.post-item:hover .overlay {
-  opacity: 1;
+  gap: 10px;
 }
 
 .options-icon {
   position: absolute;
   top: 10px;
   right: 10px;
+  color: #f5f5f5;
   cursor: pointer;
-  display: none;
-  z-index: 10;
-}
-
-.post-item:hover .options-icon {
-  display: block;
 }
 
 .delete-option {
   position: absolute;
-  top: 30px;
+  top: 10px;
   right: 10px;
-  border-radius:100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: none;
-  z-index: 20;
-  
+  background: rgba(0, 0, 0, 0.6);
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .delete-button {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  color: #f44336;
-  cursor: pointer;
   background: transparent;
-  border: 2px solid #f44336;
-  border-radius: 50%; /* Circular button */
-  font-size: 18px;
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  border: none;
+  color: #f5f5f5;
+  cursor: pointer;
 }
 
-.delete-button:hover {
-  color: #ffffff;
-  border-color: #f44336;
-  transform: scale(1.1); 
+.clc-list {
+  margin-top: 20px;
 }
 
-.delete-button:before,
-.delete-button:after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  transition: all 0.4s ease-in-out;
-  z-index: -1;
+.followers-list, .following-list {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
 }
 
-.delete-button:before {
-  background-color: rgba(255, 0, 0, 0.2);
+.followers-list ul, .following-list ul {
+  list-style: none;
+  padding: 0;
 }
 
-.delete-button:after {
-  background-color: rgba(255, 0, 0, 0.5);
+.followers-list li, .following-list li {
+  margin: 5px 0;
 }
 
-.delete-button:hover:before {
-  width: 180%;
-  height: 180%;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.delete-button:hover:after {
-  width: 200%;
-  height: 200%;
-  transform: translate(-50%, -50%) scale(1.2);
-}
-
-.delete-button svg {
-  position: relative;
-  z-index: 1; 
-  margin-right: 0; 
-  font-size: 1.2rem; 
-}
-
-
-.post-item:hover .delete-option {
-  display: block;
-}
-
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .profile-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .avatar img {
-    width: 80px;
-    height: 80px;
+  .avatar {
+    margin-bottom: 20px;
   }
 
   .profile-info h2 {
@@ -310,31 +274,55 @@
     gap: 10px;
   }
 
+  .stats span {
+    font-size: 0.9rem;
+  }
+
   .edit-profile button {
-    width: auto;
-    margin-top: 15px;
+    width: 70%;
   }
 
   .posts-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
+
+  .post-item {
+    aspect-ratio: 1;
+  }
 }
 
-@media (max-width: 400px) {
-  .user-profile {
+@media (max-width: 480px) {
+  .profile-header {
     padding: 10px;
   }
 
-  .avatar img {
-    width: 70px;
-    height: 70px;
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .avatar-edit-pencil {
+    font-size: 14px;
   }
 
   .profile-info h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+  }
+
+  .stats {
+    gap: 10px;
   }
 
   .edit-profile button {
-    width: 100%;
+    width: 80%;
+    font-size: 16px;
+  }
+
+  .posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .post-item {
+    aspect-ratio: 1;
   }
 }

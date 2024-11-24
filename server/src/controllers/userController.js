@@ -3,7 +3,7 @@ import ErrorHandler from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { sendToken } from "../middlewares/jwtToken.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
 import { sendMail } from "../nodemailer/sendMail.js";
 import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
@@ -449,4 +449,39 @@ export const getRecommendedUsers = AsyncHandler(async (req, res, next) => {
         "Recommended users fetched successfully"
       )
     );
+});
+//Update user Avatar
+export const updateUserAvatar = AsyncHandler(async (req, res, next) => {
+  const avatarLocalPath = req.file?.path;
+
+  if (!avatarLocalPath) {
+    throw new ErrorHandler("Avatar file is missing", 400);
+  }
+
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+  if (!avatar?.url) {
+    throw new ErrorHandler("Error while uploading to Cloudinary", 400);
+  }
+
+  const user = await User.findById(req.user?._id);
+  if (!user) {
+    throw new ErrorHandler("User doesn't exist", 404);
+  }
+
+  const oldAvatar = user.avatar;
+
+  if (oldAvatar) {
+    const imagePublicId = oldAvatar.split('/').pop().split('.')[0];
+    const deleteResult = await deleteFromCloudinary(imagePublicId);
+
+    if (!deleteResult?.success) {
+      console.error("Error deleting old avatar from Cloudinary");
+    }
+  }
+
+  user.avatar = avatar.url; 
+  await user.save();
+
+  res.status(200).json(new ApiResponse(200, {avatar}, "User avatar updated successfully"));
 });

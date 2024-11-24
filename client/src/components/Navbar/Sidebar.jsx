@@ -5,6 +5,7 @@ import { BiCodeAlt } from "react-icons/bi"; // Importing a new icon
 import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { HiUsers } from "react-icons/hi2";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -26,23 +27,23 @@ const Sidebar = () => {
       {/* Fixed syntax error in className */}
       <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
         <div className="top_section">
-          {isOpen && <h1 className="logo">DevChat</h1>}
+          {isOpen && <h1 className="logo">DevSphere</h1>}
           <div className="bars" onClick={toggleSidebar}>
             <FaBars />
           </div>
         </div>
         <div className="user-info">
           {user ? (
-            <>
+            <div className="top-sdb-in">
               <div onClick={handleMyProfileClick} className="sidebar-profile-container" >
                 <img
                   src={user.avatar}
                   alt="User Avatar"
-                  className="user-avatar"
+                  className="user-avatar-1"
                 />
               </div>
-              {isOpen && <h3 className="username">{user.username}</h3>}
-            </>
+              {isOpen && <h3 className="username" onClick={handleMyProfileClick}>{user.username}</h3>}
+            </div>
           ) : (
             <>
               <div></div>
@@ -51,19 +52,7 @@ const Sidebar = () => {
           )}
         </div>
 
-        <div className="search">
-          <div className="search_icon">
-            <FaSearch />
-          </div>
-          {isOpen && (
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          )}
-        </div>
+
 
         <section className="routes">
           <div className="menu">
@@ -115,7 +104,6 @@ const Sidebar = () => {
               </div>
               {isOpen && <div className="link_text">Settings</div>}
             </div>
-
             {isSettingsOpen && (
               <div className="submenu">
                 <div className="submenu_item">
@@ -129,6 +117,15 @@ const Sidebar = () => {
               </div>
             )}
           </div>
+          <div className="menu">
+            <Link to="/devProfile" className="menu_item">
+              <div className="icon">
+                <HiUsers />
+              </div>
+              {isOpen && <div className="link_text">Dev Profiles</div>}
+            </Link>
+          </div>
+
         </section>
         {user && (
           <div className="logout-btn">

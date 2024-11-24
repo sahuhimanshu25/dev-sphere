@@ -1,4 +1,4 @@
-/* User Profile Container */
+
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
@@ -11,18 +11,30 @@
 .profile-header-section {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid #e6e6e6;
   flex-wrap: wrap;
 }
 
 /* Avatar Styling */
-.user-avatar img {
+.user-avatar{
+  position: relative;
+  display: inline-block;
   width: 100px;
   height: 100px;
   border-radius: 50%;
   margin-right: 20px;
-  border: 3px solid rgb(37, 178, 233);
+}
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #7c78ebdf;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Profile Info Section */
@@ -30,10 +42,13 @@
   flex: 1;
 }
 
+/* User Name */
 .user-profile-info h2 {
   margin: 0;
   font-size: 1.8rem;
   color: white;
+  font-weight: bold;
+  margin-bottom: 10px; /* Add margin for spacing */
 }
 
 /* Stats Section */
@@ -46,27 +61,15 @@
 .stats-container span {
   font-size: 1rem;
   color: white;
+  font-weight: 600; /* Make the stats bold */
 }
 
 /* Bio Styling */
 .user-bio {
   color: #f5f5f5;
-}
-
-/* Description Styling */
-.user-description {
   font-size: 1rem;
-  color: #333;
-  line-height: 1.5;
   margin-top: 10px;
-}
-
-/* Posts Grid */
-.user-posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-  margin-top: 20px;
+  line-height: 1.5; /* Ensure readability */
 }
 
 /* Edit Profile Button */
@@ -85,6 +88,14 @@
 
 .edit-profile-section button:hover {
   background-color: #f24a8e;
+}
+
+/* Posts Grid */
+.user-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
 }
 
 /* Post Item Styling */
@@ -164,19 +175,90 @@
     width: auto;
     margin-top: 15px;
   }
+
+  .user-bio {
+    font-size: 0.9rem;
+  }
+
+  .user-description {
+    font-size: 0.9rem;
+  }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
+  /* Adjust profile container padding */
   .profile-container {
     padding: 10px;
   }
 
+  /* Adjust avatar size */
+  .user-avatar img {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Adjust user name font size */
+  .user-profile-info h2 {
+    font-size: 1.3rem;
+    color: white;
+  }
+
+  /* Reduce space between stats */
+  .stats-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Adjust post grid for small screens */
+  .user-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
   .edit-profile-section button {
     width: 100%;
+    padding: 12px;
+    font-size: 1rem;
   }
 }
 
+@media (max-width: 350px) {
+  /* Further reduce profile container padding for smaller screens */
+  .profile-container {
+    padding: 5px;
+  }
 
-.stats-container span strong{
-  color: white;
+  /* Adjust user profile header */
+  .profile-header-section {
+    padding: 15px;
+  }
+
+  /* Adjust the font size for stats and bio */
+  .user-profile-info h2 {
+    font-size: 1.2rem;
+    color: white;
+  }
+
+  .stats-container span {
+    font-size: 0.9rem;
+    color: white;
+  }
+
+  .user-bio {
+    font-size: 0.85rem;
+  }
+
+  /* Ensure buttons fit the screen */
+  .edit-profile-section button {
+    padding: 10px 20px;
+  }
+
+  /* Handle user post items for smaller screens */
+  .user-post-item {
+    height: 180px; /* Adjust height for better fit */
+  }
+
+  .overlay-info-container {
+    font-size: 1rem;
+  }
 }
