@@ -317,3 +317,46 @@
   transform: scale(1.1);
   transition: 0.3s ease-in;
 }
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 0;
+    height: fit-content;
+    margin-top: 20px;
+  }
+
+  .sidebar.open {
+    width: 250px;
+    display: block;
+  }
+
+  .main-container {
+    margin-left: 0;
+  }
+
+  .search input {
+    width: 70%;
+  }
+
+  .top_section .bars {
+    display: block;
+  }
+
+  .top_section .logo,
+  .menu,
+  .user-info,
+  .routes,
+  .logout-btn {
+    display: none; 
+  }
+
+  .sidebar.open .menu,
+  .sidebar.open .user-info,
+  .sidebar.open .routes,
+  .sidebar.open .logout-btn {
+    display: flex; 
+    flex-direction: column;
+  }
+}
+
+

@@ -82,10 +82,6 @@ connection()
     console.error('Database connection failed:', err);
   });
 
-
-
-
-
   //UNHANDLED PROMISE REJECTION
   process.on("unhandledRejection",err=>{
     console.log(err);
