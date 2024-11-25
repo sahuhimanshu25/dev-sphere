@@ -27,9 +27,9 @@ const LoginPage = () => {
       }
     } catch (err) {
       toast.error(err.message || "Login failed. Please check your credentials.");
-      console.error("LOGIN.JSX ERROR: ", err);
+      console.error(err);
     } finally {
-      setIsSubmitting(false); // Hide button loader after request
+      setIsSubmitting(false); 
     }
   };
 
