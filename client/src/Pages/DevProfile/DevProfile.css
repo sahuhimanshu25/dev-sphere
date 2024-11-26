@@ -4,7 +4,7 @@
   align-items: flex-start;
   gap: 30px;
   flex-wrap: wrap;
-  min-height: 100vh;
+  height: 100vh;
   padding: 40px;
 }
 

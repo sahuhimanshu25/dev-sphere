@@ -19,11 +19,13 @@
   overflow-y: auto;
   flex-shrink: 0;
   margin-right: 20px;
+  flex: 1;
 }
 
 .Search-user {
-  width: 45%;  
-  padding-left: 10px;
+  max-width: 25%;  
+  /* margin-left: -80px; */
+  margin-right: 40px;
   height: 100vh;
   overflow-y: auto;
   position: relative;
@@ -31,6 +33,7 @@
   justify-self: center;
   flex-direction: column;
   gap: 20px;
+  flex:1;
 }
 .rec-top{
   width: 100%;
@@ -86,28 +89,26 @@
   transform: translateY(-3px);
 }
 
-/* Post container with glassmorphism */
 .post {
-  background: rgba(255, 255, 255, 0.032); /* Semi-transparent background */
-  border-radius: 12px; /* Rounded corners */
-  padding: 15px; /* Padding for content */
+  background: rgba(255, 255, 255, 0.032); 
+  border-radius: 12px; 
+  padding: 15px; 
   margin: 20px auto;
   width: 100%;
-  max-width: 600px; /* Full-width posts with a max width */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-  height: auto; /* Automatically adjust to the content height */
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  height: auto;
   overflow: hidden;
-  backdrop-filter: blur(10px); /* Apply blur effect for the glassmorphism */
-  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-/* Post header: Username and time */
 .post-header {
   display: flex;
   align-items: center;
-  font-size: 1.1rem; /* Adjust font size */
+  font-size: 1.1rem;
   font-weight: bold;
-  color: #fff; /* White color for the text */
+  color: #fff;
   margin-bottom: 10px; 
 }
 
