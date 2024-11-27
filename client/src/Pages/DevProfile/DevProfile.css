@@ -26,6 +26,7 @@
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   overflow: hidden;
   text-align: center;
+  height: 90vh;
 }
 
 .dev-profile-card:hover {
