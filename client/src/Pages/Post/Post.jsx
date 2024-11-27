@@ -22,7 +22,6 @@ function Post({ postData, onLike }) {
   useEffect(() => {
     if (showComments) {
       fetchComments();
-      console.log(postData.user.avatar);
       
     }
   }, [showComments]);
@@ -88,7 +87,6 @@ function Post({ postData, onLike }) {
     return null;
   };
   const handleDownload = async () => {
-    console.log(postData)
     // const { type, value } = postData.content;
     // if (!value) {
     //   console.error("No content available to download");

@@ -3,15 +3,15 @@ import './Home.css'
 const Home = () => {
   return (
     <>
-    <div class="home-card">
-  <div class="home-loader">
+    <div className="home-card">
+  <div className="home-loader">
     <p>loading</p>
-    <div class="home-words">
-      <span class="home-word">buttons</span>
-      <span class="home-word">forms</span>
-      <span class="home-word">switches</span>
-      <span class="home-word">cards</span>
-      <span class="home-word">buttons</span>
+    <div className="home-words">
+      <span className="home-word">buttons</span>
+      <span className="home-word">forms</span>
+      <span className="home-word">switches</span>
+      <span className="home-word">cards</span>
+      <span className="home-word">buttons</span>
     </div>
   </div>
 </div>
