@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { HiUsers } from "react-icons/hi2";
+import Logo from "../../../public/bgrLogo2.png"
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -24,10 +25,12 @@ const Sidebar = () => {
 
   return (
     <div className="main-container">
-      {/* Fixed syntax error in className */}
       <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
         <div className="top_section">
-          {isOpen && <h1 className="logo">DevSphere</h1>}
+          {isOpen && <h1 className="logo">
+            <span>Dev</span>
+            <span>Sphere</span>
+            </h1>}
           <div className="bars" onClick={toggleSidebar}>
             <FaBars />
           </div>
