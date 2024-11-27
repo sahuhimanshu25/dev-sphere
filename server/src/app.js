@@ -12,7 +12,7 @@ import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
 app.use(cors({
-    origin: 'https://devsphere-server.onrender.com', // allow requests from your frontend
+    origin: 'https://devsphereclient2.onrender.com', // allow requests from your frontend
     credentials: true, // if you're using cookies or HTTP authentication
   }));
 app.use(express.json())
