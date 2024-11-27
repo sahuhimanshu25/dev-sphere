@@ -106,27 +106,30 @@ const MainHome = () => {
           <div className="footer-section social">
             <h3>Follow Us</h3>
             <div className="social-icons">
+            <a
+              href="https://www.instagram.com/_mushraf_jm/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon instagram"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://github.com/JM-Mushraf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon github"
+            >
+              <FaGithub />
+            </a>
               <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaTwitter />
-              </a>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaGithub />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaLinkedin />
-              </a>
+              href="https://www.linkedin.com/in/mushraf-jm-386564306/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon linkedin"
+            >
+              <FaLinkedin />
+            </a>
             </div>
           </div>
         </div>
