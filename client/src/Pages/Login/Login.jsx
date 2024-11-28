@@ -25,7 +25,7 @@ const LoginPage = () => {
         toast.success("Login Successful");
         console.log(result);
         
-        navigate('/post'); // Navigate only after successful login
+        navigate('/chat'); // Navigate only after successful login
       }
     } catch (err) {
       toast.error(err || "Login failed. Please check your credentials.");
