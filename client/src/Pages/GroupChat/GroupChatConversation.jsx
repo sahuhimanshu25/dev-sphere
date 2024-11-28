@@ -3,9 +3,9 @@ import axios from "axios";
 import userimg from "../../../public/userimg.jpg";
 import "./GroupChatConversation.css";
 import { useSelector } from "react-redux";
-const { token } = useSelector((state) => state.user);
 
 const GroupChatConversation = ({ group, onSelect, selectedGroup }) => {
+  const { token } = useSelector((state) => state.user);
   const [groupData, setGroupData] = useState(null);
 
   useEffect(() => {
