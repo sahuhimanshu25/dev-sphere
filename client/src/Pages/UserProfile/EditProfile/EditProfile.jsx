@@ -31,7 +31,7 @@ const EditProfile = () => {
     }
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:3000/user/updateAccount", formData);
+      const response = await axios.post("https://devsphere-server.onrender.com/user/updateAccount", formData);
       const { data } = response;
       console.log(response.data.data.user.verificationCode);
       if (email) {
@@ -60,7 +60,7 @@ const EditProfile = () => {
     if (verificationCode === sCode.toString()) {
       try {
         const response = await axios.post(
-          "http://localhost:3000/user/verification",
+          "https://devsphere-server.onrender.com/user/verification",
           { verificationCode, newEmail }
         );
   

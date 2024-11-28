@@ -74,7 +74,7 @@ const UserProfile = () => {
       const formData = new FormData();
       formData.append("avatar", file);
       setLoadingAvatar(true);
-      axios.patch("http://localhost:3000/user/updateAvatar", formData, {
+      axios.patch(`https://devsphere-server.onrender.com/user/updateAvatar`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
