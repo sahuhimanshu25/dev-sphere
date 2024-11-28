@@ -4,7 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import "./profile.css";
 import { useSelector } from "react-redux";
 import Loader from "../../components/Loader/Loader";
-import { useSelector } from "react-redux";
+
 const Profile = () => {
   const userId = useSelector((state) => state.post.userId); // Replace `state.post.userId` if userId is stored elsewhere
   console.log("User ID:", userId);
