@@ -11,12 +11,16 @@ function Feed() {
     const [posts, setPosts] = useState([]);
     const [postsLoading, setPostsLoading] = useState(true);
     const [recommendedUsers, setRecommendedUsers] = useState([]);
-    const { userData, loading: userLoading } = useSelector((state) => state.user);
+    const {token, userData, loading: userLoading } = useSelector((state) => state.user);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`);
+                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Send token in the request header
+                    }
+                });
                 setPosts(data.posts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
@@ -27,7 +31,11 @@ function Feed() {
 
         const fetchRecommendedUsers = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/recommended-users`);
+                const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/recommended-users`,{
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Send token in the request header
+                    }
+                });
                 setRecommendedUsers(data.data);
             } catch (error) {
                 console.error("Error fetching recommended users:", error);
@@ -51,8 +59,16 @@ function Feed() {
 
     const handleFollow = async (userId) => {
         try {
-            await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`);
-            await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, { receiverId: userId });
+            await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,{}, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Send token in the request header
+                }
+            });
+            await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, { receiverId: userId }, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Send token in the request header
+                }
+            });
             toast.success("User followed successfully!");
         } catch (error) {
             console.error("Error following user:", error);
