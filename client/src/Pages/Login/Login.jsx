@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); 
+    setIsSubmitting(true); // Show button loader during request
 
     try {
       const result = await dispatch(login({ email, password })).unwrap();
@@ -25,7 +25,7 @@ const LoginPage = () => {
         toast.success("Login Successful");
         console.log(result);
         
-        navigate('/chat'); // Navigate only after successful login
+        navigate('/post'); // Navigate only after successful login
       }
     } catch (err) {
       toast.error(err || "Login failed. Please check your credentials.");

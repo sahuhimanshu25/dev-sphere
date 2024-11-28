@@ -5,8 +5,7 @@ export const sendToken = (user, statusCode, res) => {
     const options = {
         expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days
         httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-         // Use secure cookies in production
-        secure:false,
+        secure:true,
     };
 
     res.status(statusCode).cookie('token', token, options).json({
