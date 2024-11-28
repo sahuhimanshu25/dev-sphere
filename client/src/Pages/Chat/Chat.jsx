@@ -21,7 +21,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(true); // Added loading state
   const navigate = useNavigate();
   const socket = useRef();
-  const { userData } = useSelector((state) => state.user);
+  const { userData,token } = useSelector((state) => state.user);
 
   // Initialize socket connection and setup listeners
   useEffect(() => {

@@ -13,7 +13,7 @@ const GroupChat = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
-  const { userData } = useSelector((state) => state.user);
+  const { userData ,token} = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchGroups = async () => {

@@ -53,7 +53,10 @@ const RegisterPage = () => {
     completeData.append("avatar", avatar);
 
     try {
-      const result = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/user/register`, completeData);
+      const result = await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,
+        completeData
+      );
       if (result.data.success) {
         toast.success("Verification code sent to your email.");
         setStep(2);
@@ -68,9 +71,12 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      const result = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`, {
-        verificationCode
-      });
+      const result = await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`,
+        {
+          verificationCode,
+        }
+      );
       if (result.data.success) {
         toast.success("Registration successful. Please log in.");
         navigate("/login");
@@ -80,14 +86,12 @@ const RegisterPage = () => {
       console.error("VERIFICATION ERROR: ", err);
     }
   };
-  
 
   return (
     <div className="register">
       {step === 1 && (
         <div className="reg-main-reg-cont">
           <div className="reg-avatar-section">
-
             <div className="reg-avatar-wrapper">
               <img
                 src={avatarPreview}
@@ -105,8 +109,6 @@ const RegisterPage = () => {
                 className="reg-avatar-input"
               />
             </div>
-
-            
           </div>
           <div className="reg-register-container">
             <h2 className="reg-register-title">

@@ -7,8 +7,9 @@ import userimg from "../../../public/userimg.jpg";
 import { IoSend } from "react-icons/io5";
 import { format } from "timeago.js";
 
+
 const GroupChatBox = ({ group }) => {
-  const { userData } = useSelector((state) => state.user);
+  const { userData,token } = useSelector((state) => state.user);
   const socket = useRef();
   const messagesEndRef = useRef(null); // Ref for auto-scrolling
   const [messages, setMessages] = useState([]);

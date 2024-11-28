@@ -4,11 +4,11 @@ import { FaHeart } from "react-icons/fa";
 import "./profile.css";
 import { useSelector } from "react-redux";
 import Loader from "../../components/Loader/Loader";
-
+import { useSelector } from "react-redux";
 const Profile = () => {
   const userId = useSelector((state) => state.post.userId); // Replace `state.post.userId` if userId is stored elsewhere
   console.log("User ID:", userId);
-
+  const {token}=useSelector((state)=>state.user)
   const [avatar, setAvatar] = useState("");
   const [userName, setUserName] = useState("");
   const [bio, setBio] = useState("No bio available");
@@ -32,7 +32,11 @@ const Profile = () => {
 
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        }
         );
 
         const userData = response.data?.data?.userdata;

@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaPlus } from "react-icons/fa";
 import "./AddFriend.css";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const AddFriend = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +14,7 @@ const AddFriend = () => {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [selectedMembers, setSelectedMembers] = useState([]);
+  const {token}=useSelector((state)=>state.user)
 
   useEffect(() => {
     fetchUserFollowers();

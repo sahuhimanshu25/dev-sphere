@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaThumbsUp, FaChevronDown, FaChevronUp, FaRegComment, FaShareAlt } from "react-icons/fa";
 import { BiDotsVerticalRounded, BiDownload } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { setUserId } from "../../Slices/postSlice.js";
 import "./Post.css";
 
@@ -15,7 +15,7 @@ function Post({ postData, onLike }) {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [showOptions, setShowOptions] = useState(false); // State to toggle options menu
-
+  const {token}=useSelector((state)=>state.user)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

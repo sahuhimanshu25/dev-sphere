@@ -7,6 +7,7 @@ import { FaPen } from "react-icons/fa";
 import "./UserProfile.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader"
+import { useSelector } from "react-redux";
 
 const UserProfile = () => {
   const [avatar, setAvatar] = useState("");
@@ -22,6 +23,7 @@ const UserProfile = () => {
   const [loadingAvatar, setLoadingAvatar] = useState(false); // State for loader visibility
 
   const navigate = useNavigate();
+  const {token}=useSelector((state)=>state.user)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -85,6 +87,7 @@ const UserProfile = () => {
       axios.patch(`https://devsphere-server.onrender.com/user/updateAvatar`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {

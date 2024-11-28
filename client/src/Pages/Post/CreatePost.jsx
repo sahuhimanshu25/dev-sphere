@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./CreatePost.css";
-
+import { useSelector } from "react-redux";
 function CreatePost({ onPostCreated }) {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
@@ -9,7 +9,7 @@ function CreatePost({ onPostCreated }) {
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const {token}=useSelector((state)=>state.user)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -41,12 +41,8 @@ function CreatePost({ onPostCreated }) {
         `${import.meta.env.VITE_BACKEND_BASEURL}/post/post`,
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
-        }, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      }
+          headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}` }
+        }
       );
 
       // Notify parent component and reset inputs
