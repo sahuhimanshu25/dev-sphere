@@ -7,8 +7,7 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 export const isAuthenticated = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
-    
+    const  token  = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
     console.log("AUTH .JS ",token);
 
     if (!token) {

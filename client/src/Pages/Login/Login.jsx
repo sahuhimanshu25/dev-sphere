@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Show button loader during request
+    setIsSubmitting(true); 
 
     try {
       const result = await dispatch(login({ email, password })).unwrap();
