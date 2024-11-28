@@ -42,7 +42,11 @@ function CreatePost({ onPostCreated }) {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        }, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
 
       // Notify parent component and reset inputs

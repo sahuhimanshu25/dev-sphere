@@ -26,7 +26,11 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
         const userData = response.data.data;
         setAvatar(userData.avatar || "");
         setUserName(userData.username || "");
@@ -49,7 +53,11 @@ const UserProfile = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postId}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
       setShowOptions(null);
     } catch (error) {

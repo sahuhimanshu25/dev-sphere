@@ -20,7 +20,11 @@ const AddFriend = () => {
 
   const fetchUserFollowers = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`);
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       const followers = data.data.followers; // Array of follower objects with `_id` and `username`
 
       // Map to extract relevant fields for display
@@ -41,7 +45,11 @@ const AddFriend = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setSearchResults(data.data); // Update user search results
       } catch (error) {
@@ -55,7 +63,11 @@ const AddFriend = () => {
     if (groupSearchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setGroupSearchResults(data.data); // Update group search results
       } catch (error) {
@@ -68,10 +80,18 @@ const AddFriend = () => {
   // Handle following a user
   const handleFollow = async (userId) => {
     try {
-      await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`);
+      await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,{}, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, {
         receiverId: userId,
-      });
+      }, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       toast.success("User followed successfully!");
     } catch (error) {
       console.error("Error following user:", error);
@@ -82,7 +102,11 @@ const AddFriend = () => {
   // Handle joining a group
   const handleJoinGroup = async (groupId) => {
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/group/join`, { groupId });
+      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/group/join`, { groupId }, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       toast.success("Successfully joined the group!");
     } catch (error) {
       console.error("Error joining group:", error);
@@ -102,7 +126,11 @@ const AddFriend = () => {
         name: groupName,
         description: groupDescription,
         members: selectedMembers, // Send selected members only; backend adds the current user
-      });
+      }, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       toast.success("Group created successfully!");
       // Clear form fields after successful group creation
       setGroupName("");

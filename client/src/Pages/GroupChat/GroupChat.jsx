@@ -19,7 +19,11 @@ const GroupChat = () => {
     const fetchGroups = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/getUserGroups`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/getUserGroups`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setGroups(response.data.data);
         console.log(groups);
@@ -40,7 +44,11 @@ const GroupChat = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${searchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${searchTerm}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setSearchResults(data);
       } catch (error) {

@@ -61,7 +61,7 @@ function Feed() {
         try {
             await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,{}, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Send token in the request header
+                    'Authorization': `Bearer ${token}`
                 }
             });
             await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, { receiverId: userId }, {

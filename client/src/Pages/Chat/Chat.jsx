@@ -49,7 +49,11 @@ const Chat = () => {
       if (userData && userData._id) {
         try {
           setLoading(true); // Set loading to true before fetching
-          const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`);
+          const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
           setChats(data);
         } catch (error) {
           console.error("Error fetching chats:", error);
@@ -80,7 +84,11 @@ const Chat = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setSearchResults(data.data);
       } catch (error) {
@@ -96,7 +104,11 @@ const Chat = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
         {
           receiverId: user._id,
-        }
+        }, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
       setChats((prevChats) => [...prevChats, chat]);
       setCurrentChat(chat);

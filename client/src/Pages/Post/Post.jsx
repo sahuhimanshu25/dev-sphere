@@ -30,7 +30,11 @@ function Post({ postData, onLike }) {
   const fetchComments = async () => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comments`
+        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comments`, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
       setComments(data.data);
     } catch (error) {
@@ -41,7 +45,11 @@ function Post({ postData, onLike }) {
   const handleLike = async () => {
     try {
       const { data } = await axios.put(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/like/${postData._id}`
+        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/like/${postData._id}`,{}, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
       setLiked(!liked);
       onLike(postData._id, data.data.likes);
@@ -57,7 +65,11 @@ function Post({ postData, onLike }) {
         `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comment`,
         {
           content: newComment,
-        }
+        }, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
       setComments([...comments, data.data]);
       setNewComment("");

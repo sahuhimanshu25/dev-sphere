@@ -53,7 +53,11 @@ const RegisterPage = () => {
     completeData.append("avatar", avatar);
 
     try {
-      const result = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/user/register`, completeData);
+      const result = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/user/register`, completeData, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       if (result.data.success) {
         toast.success("Verification code sent to your email.");
         setStep(2);
@@ -70,7 +74,11 @@ const RegisterPage = () => {
     try {
       const result = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`, {
         verificationCode
-      });
+      }, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       if (result.data.success) {
         toast.success("Registration successful. Please log in.");
         navigate("/login");

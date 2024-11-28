@@ -39,7 +39,11 @@ const GroupChatBox = ({ group }) => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setMessages(res.data.message); // Initialize messages
       } catch (err) {
@@ -71,7 +75,11 @@ const GroupChatBox = ({ group }) => {
           text: newMessage,
           chatId: group.data._id,
           isGroup: true,
-        });
+        }, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
 
         // Replace the temporary ID with the actual ID from the backend
         setMessages((prevMessages) =>
