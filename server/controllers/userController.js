@@ -39,7 +39,7 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
     username,
     email,
     password,
-    avatar,
+    avatar: { url: avatar.url, publicId: avatar.public_id },
     verificationCode,
   };
 
