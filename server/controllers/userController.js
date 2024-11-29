@@ -7,6 +7,9 @@ import { uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
 import { sendMail } from "../nodemailer/sendMail.js";
 import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
+
+const verificationStore = {};
+
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -31,7 +34,9 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
   }
 
   const verificationCode = await sendMail(email);
-  req.session.verificationData = {
+
+  // Save verification data in the global variable
+  verificationData[email] = {
     username,
     email,
     password,
@@ -44,37 +49,41 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
     message: "Verification code sent to your email. Please verify to complete registration.",
   });
 });
+
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
 
-  const verificationData = req.session.verificationData;
-  if (!verificationData) {
-    throw new ErrorHandler("No registration process found. Please register again.", 400);
+  if (!verificationCode) {
+    throw new ErrorHandler("Verification code is required", 400);
   }
 
-  if (verificationData.verificationCode !== Number(verificationCode)) {
+  // Find the user associated with the verification code
+  const userEmail = Object.keys(verificationData).find(
+    (email) => verificationData[email].verificationCode === Number(verificationCode)
+  );
 
-    if (verificationData.avatar.publicId) {
-      await deleteAvatarFromCloudinary(verificationData.avatar.publicId);
-    }
-    throw new ErrorHandler("Invalid verification code", 400);
+  if (!userEmail) {
+    throw new ErrorHandler("Invalid or expired verification code", 400);
   }
 
-  const { username, email, password, avatar } = verificationData;
+  const { username, email, password, avatar } = verificationData[userEmail];
+
+  // Create the user in the database
   const user = await User.create({
     username,
     email,
     password,
-    avatar: avatar.url,
-    avatarPublicId: avatar.publicId,
+    avatar,
   });
 
-  req.session.verificationData = null;
+  // Clean up the verification data
+  delete verificationData[userEmail];
 
-  const message = "Your email has been successfully verified! Welcome to DevSphere!";
-  await sendMessage(email, message);
-
-  sendToken(user, 200, res);
+  res.status(201).json({
+    success: true,
+    message: "User verified and registered successfully",
+    user,
+  });
 });
 
 
