@@ -26,14 +26,14 @@ app.get("/",(req,res)=>{
 
 
 app.use(session({
-  secret: 'Mushraf123',
+  secret: 'Mushraf123', // Replace with a strong secret key
   resave: false,
   saveUninitialized: false,
   cookie: {
-      secure: true,    // Ensures cookies are sent only over HTTPS
-      httpOnly: true,  // Protects against XSS
-      sameSite: 'strict', 
-  }
+    secure: true, // Only works over HTTPS
+    httpOnly: true, // Prevents client-side access
+    sameSite: 'none', // Allows cross-origin cookies
+  },
 }));
 
 app.use('/auth',expressRouter);
