@@ -5,7 +5,8 @@ import { app } from './app.js';
 import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -29,7 +30,6 @@ const io = new Server(server, {
   },
 });
 
-import jwt from 'jsonwebtoken';
 
 // Token verification middleware
 io.use((socket, next) => {
