@@ -35,12 +35,11 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
 
   const verificationCode = await sendMail(email);
 
-  // Save verification data in the global variable
-  verificationData[email] = {
+  verificationStore[email] = {
     username,
     email,
     password,
-    avatar: { url: avatar.url, publicId: avatar.public_id },
+    avatar,
     verificationCode,
   };
 
@@ -58,15 +57,15 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
   }
 
   // Find the user associated with the verification code
-  const userEmail = Object.keys(verificationData).find(
-    (email) => verificationData[email].verificationCode === Number(verificationCode)
+  const userEmail = Object.keys(verificationStore).find(
+    (email) => verificationStore[email].verificationCode === Number(verificationCode)
   );
 
   if (!userEmail) {
     throw new ErrorHandler("Invalid or expired verification code", 400);
   }
 
-  const { username, email, password, avatar } = verificationData[userEmail];
+  const { username, email, password, avatar } = verificationStore[userEmail];
 
   // Create the user in the database
   const user = await User.create({
@@ -77,7 +76,7 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
   });
 
   // Clean up the verification data
-  delete verificationData[userEmail];
+  delete verificationStore[userEmail];
 
   res.status(201).json({
     success: true,
