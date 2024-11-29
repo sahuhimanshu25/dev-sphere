@@ -33,8 +33,15 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
 
   const verificationCode = await sendMail(email);
 
-  // Save verification data to session
-  req.session.verificationData = { username, email, password, avatar, verificationCode };
+  // Save verification data in the session
+  req.session.verification = {
+    username,
+    email,
+    password,
+    avatar,
+    verificationCode,
+  };
+  console.log("Session Data After Registration:", req.session); // Debugging log
 
   res.status(200).json({
     success: true,
@@ -42,26 +49,20 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
   });
 });
 
-export const verifyUser = AsyncHandler(async (req, res, next) => {
-  const { verificationCode } = req.body;
 
-  const verificationData = req.session.verificationData;
-  console.log("Session Data:", req.session);
-  console.log("Cookies:", req.cookies);
-  
-  if (!verificationData) {
+export const verifyUser = AsyncHandler(async (req, res, next) => {
+  console.log("req.session.verification:", req.session.verification); // Debugging log
+
+  if (!req.session.verification) {
     throw new ErrorHandler("No registration process found. Please register again.", 400);
   }
 
-  if (verificationData.verificationCode !== verificationCode) {
-    if (verificationData.avatar.publicId) {
-      await deleteAvatarFromCloudinary(verificationData.avatar.publicId);
-    }
+  const { verificationCode } = req.body;
+  if (req.session.verification.verificationCode !== Number(verificationCode)) {
     throw new ErrorHandler("Invalid verification code", 400);
   }
 
-  const { username, email, password, avatar } = verificationData;
-
+  const { username, email, password, avatar } = req.session.verification;
   const user = await User.create({
     username,
     email,
@@ -70,14 +71,14 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
     avatarPublicId: avatar.publicId,
   });
 
-  // Clear session after successful verification
-  req.session.verificationData = null;
+  req.session.verification = null;
 
   const message = "Your email has been successfully verified! Welcome to DevSphere!";
   await sendMessage(email, message);
 
   sendToken(user, 200, res);
 });
+
 
 
 //LOGIN

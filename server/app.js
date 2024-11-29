@@ -11,6 +11,7 @@ import { chatRouter } from './routes/chatRoutes.js';
 import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
+import MongoStore from 'connect-mongo';
 app.use(cors({
     origin: `https://devsphereclient.onrender.com`, // allow requests from your frontend
     credentials: true, // if you're using cookies or HTTP authentication
@@ -23,15 +24,17 @@ app.get("/",(req,res)=>{
 })
 
 
-app.use(session({
-  secret: 'Mushraf123',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: true,
-    sameSite: 'none'
-  },
-}));
+app.use(
+  session({
+    secret: 'Mushraf123',
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+    }),
+    cookie: { secure: true }
+  })
+);
 
 
 app.use('/auth',expressRouter);
