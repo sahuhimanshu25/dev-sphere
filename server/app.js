@@ -27,7 +27,7 @@ app.use(session({
   secret: 'Mushraf123',  // Using your custom secret key
   resave: false,
   saveUninitialized: true,
-  // cookie: { secure: true }  // Set to true if using HTTPS in production
+  cookie: { secure: true }  // Set to true if using HTTPS in production
 }));
 
 app.use('/auth',expressRouter);
