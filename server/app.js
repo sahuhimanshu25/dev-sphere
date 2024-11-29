@@ -30,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true, // Only works over HTTPS
+    secure: false, // Only works over HTTPS
     // httpOnly: true, // Prevents client-side access
     // sameSite: 'none', // Allows cross-origin cookies
   },
