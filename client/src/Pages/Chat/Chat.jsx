@@ -26,7 +26,13 @@ const Chat = () => {
   // Initialize socket connection and setup listeners
   useEffect(() => {
     if (userData && userData._id) {
-      socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`);
+      socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+        transports: ["websocket"], // Explicitly specify the transport method
+      });
+      
       socket.current.emit("new-user-add", userData._id);
 
       socket.current.on("get-users", (users) => {
@@ -55,6 +61,8 @@ const Chat = () => {
             }
         });
           setChats(data);
+          console.log(chats);
+          
         } catch (error) {
           console.error("Error fetching chats:", error);
         } finally {

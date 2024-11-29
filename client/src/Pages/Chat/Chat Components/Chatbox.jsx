@@ -6,7 +6,7 @@ import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { IoSend } from "react-icons/io5";
 import Loader from "../../../components/Loader/Loader";
-
+import { useSelector } from "react-redux";
 const ChatBox = ({
   chat,
   currentUser,
@@ -21,6 +21,7 @@ const ChatBox = ({
   const [loading, setLoading] = useState(true); // Loader state
   const [sending, setSending] = useState(false); // Sending state
   const messagesEndRef = useRef(null); // Ref for auto-scrolling
+  const {token}=useSelector((state)=>state.user)
 
   // Fetch user data for the chat participant
   useEffect(() => {
@@ -31,7 +32,11 @@ const ChatBox = ({
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setUserData(data.data);
         setIsOnline(onlineUsers.some((user) => user.userId === userId));
@@ -58,7 +63,11 @@ const ChatBox = ({
         setLoading(true);
         if (chat?._id) {
           const { data } = await axios.get(
-            `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`
+            `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`, {
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          }
           );
           setMessages(data.message);
         }
@@ -89,7 +98,11 @@ const ChatBox = ({
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
-        message
+        message, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
             // Add the message from the server response, if it's not already in the list
             setMessages((prevMessages) => {
