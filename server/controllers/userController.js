@@ -47,7 +47,8 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
   console.log("req.body:",req.body);
-  const verificationData = req.session.verificationData;
+  const {verificationData} = req.session;
+  console.log("req.session.verificationData:",req.session)
   console.log("req.session.verificationData:",req.session.verificationData)
   if (!verificationData) {
     throw new ErrorHandler("No registration process found. Please register again.", 400);
