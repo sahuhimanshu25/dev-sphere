@@ -25,35 +25,33 @@ const Chat = () => {
 
   // Initialize socket connection and setup listeners
   useEffect(() => {
-    if (userData && userData._id) {
+    console.log("chat.jsx 28",token,userData);
+    
+    if (userData && userData._id && token) {
       socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
+        auth: {
+          token: `Bearer ${token}`,
         },
-        transports: ["websocket"], // Explicitly specify the transport method
+        transports: ["websocket"], // Specify WebSocket transport
       });
-
-      
+  
       socket.current.emit("new-user-add", userData._id);
-      console.log("chat.jsx 37",userData,socket.current);
-      
-      
+  
       socket.current.on("get-users", (users) => {
         setOnlineUsers(users);
-        console.log("chat.jsx 42",onlineUsers);
-
       });
-
+  
       socket.current.on("receive-message", (data) => {
         setReceiveMessage(data);
       });
-
+  
       return () => {
         socket.current.disconnect();
       };
     }
-  }, [userData]);
-
+  }, [userData, token]);
+  
+  
   // Fetch chats for the current user
   useEffect(() => {
     const getChats = async () => {
