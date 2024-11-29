@@ -3,7 +3,10 @@ import ErrorHandler from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { sendToken } from "../middlewares/jwtToken.js";
-import { uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
+import {
+  uploadOnCloudinary,
+  deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 import { sendMail } from "../nodemailer/sendMail.js";
 import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
@@ -52,7 +55,8 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
   // Respond with a success message
   res.status(200).json({
     success: true,
-    message: "Verification code sent to your email. Please verify to complete registration.",
+    message:
+      "Verification code sent to your email. Please verify to complete registration.",
   });
 });
 
@@ -60,25 +64,21 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
 
-  // Validate verification code
   if (!verificationCode) {
     throw new ErrorHandler("Verification code is required", 400);
   }
 
-  // Find the user by the verification code
   const userEmail = Object.keys(verificationStore).find(
-    (email) => verificationStore[email].verificationCode === Number(verificationCode)
+    (email) =>
+      verificationStore[email].verificationCode === Number(verificationCode)
   );
 
-  // Check if the verification code is valid
   if (!userEmail) {
     throw new ErrorHandler("Invalid or expired verification code", 400);
   }
 
-  // Retrieve user data from the verification store
   const { username, email, password, avatar } = verificationStore[userEmail];
 
-  // Save the user to the database
   const user = await User.create({
     username,
     email,
@@ -86,7 +86,8 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
     avatar, // Save only the avatar URL
   });
 
-  // Clean up the verification data
+  const message ="Your email has been successfully verified! Welcome to DevSphere!";
+  await sendMessage(email, message);
   delete verificationStore[userEmail];
 
   // Respond with a success message
@@ -96,8 +97,6 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
     user,
   });
 });
-
-
 
 //LOGIN
 // LOGIN
@@ -164,8 +163,6 @@ export const searchUser = AsyncHandler(async (req, res, next) => {
         .json(new ApiResponse(400, [], "Please provide a username to search"));
     }
 
-    
-
     // Perform the search
     const users = await User.find(keyword);
     if (!users.length) {
@@ -227,7 +224,7 @@ export const getMyDetails = AsyncHandler(async (req, res, next) => {
   }
 
   const user = userDetails[0];
-  
+
   res
     .status(200)
     .json(
@@ -493,7 +490,7 @@ export const updateUserAvatar = AsyncHandler(async (req, res, next) => {
   const oldAvatar = user.avatar;
 
   if (oldAvatar) {
-    const imagePublicId = oldAvatar.split('/').pop().split('.')[0];
+    const imagePublicId = oldAvatar.split("/").pop().split(".")[0];
     const deleteResult = await deleteFromCloudinary(imagePublicId);
 
     if (!deleteResult?.success) {
@@ -501,8 +498,10 @@ export const updateUserAvatar = AsyncHandler(async (req, res, next) => {
     }
   }
 
-  user.avatar = avatar.url; 
+  user.avatar = avatar.url;
   await user.save();
 
-  res.status(200).json(new ApiResponse(200, {avatar}, "User avatar updated successfully"));
+  res
+    .status(200)
+    .json(new ApiResponse(200, { avatar }, "User avatar updated successfully"));
 });
