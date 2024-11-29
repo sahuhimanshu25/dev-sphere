@@ -26,10 +26,14 @@ app.get("/",(req,res)=>{
 
 
 app.use(session({
-  secret: 'Mushraf123',  // Using your custom secret key
+  secret: 'Mushraf123',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }  // Set to true if using HTTPS in production
+  saveUninitialized: false,
+  cookie: {
+      secure: true,    // Ensures cookies are sent only over HTTPS
+      httpOnly: true,  // Protects against XSS
+      sameSite: 'strict', 
+  }
 }));
 
 app.use('/auth',expressRouter);
