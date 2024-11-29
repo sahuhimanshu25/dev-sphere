@@ -5,6 +5,7 @@ import { app } from './app.js';
 import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -25,10 +26,38 @@ const io = new Server(server, {
     origin: 'https://devsphereclient.onrender.com',
     methods: ['GET', 'POST', 'PUT'],
     credentials: true,
+    allowedHeaders: ["Authorization"],
   },
 });
 
+
+// Token verification middleware
+io.use((socket, next) => {
+  const token = socket.handshake.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+  if (!token) {
+    console.log('No token provided');
+    return next(new Error('Authentication error: No token'));
+  }
+
+  // Verify the token
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log('Invalid token:', err.message);
+      return next(new Error('Authentication error: Invalid token'));
+    }
+
+    // Attach decoded user information to the socket
+    socket.user = decoded;
+    console.log('User authenticated:', decoded);
+    next(); // Allow the connection
+  });
+});
+
+
 let activeUsers = [];
+io.on('connection_error', (err) => {
+  console.log('Connection error:', err.message);
+});
 
 io.on('connection', (socket) => {
   // Handle individual user connections
@@ -40,6 +69,7 @@ io.on('connection', (socket) => {
     io.emit('get-users', activeUsers);
   });
 
+  
   // Handle sending a direct message
   socket.on('send-message', (data) => {
     const { receiverId } = data;
