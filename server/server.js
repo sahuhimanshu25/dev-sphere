@@ -33,9 +33,9 @@ const io = new Server(server, {
 
 // Token verification middleware
 io.use((socket, next) => {
-  console.log("Socket headers:", socket.handshake.headers);
-
-  const token = socket.handshake.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+  console.log(socket.handshake.auth?.token);
+  
+  const token = socket.handshake.auth?.token; // Extract the token from the `auth` object
   if (!token) {
     console.log('No token provided');
     return next(new Error('Authentication error: No token'));
