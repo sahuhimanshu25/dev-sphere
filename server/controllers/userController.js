@@ -10,80 +10,93 @@ import mongoose from "mongoose";
 
 const verificationStore = {};
 
-//REGISTER
+// REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
 
+  // Validate required fields
   if (!username || !email || !password) {
     throw new ErrorHandler("All fields are required", 400);
   }
 
+  // Check if the user already exists
   const existedUser = await User.findOne({ $or: [{ username }, { email }] });
   if (existedUser) {
     throw new ErrorHandler("Username or email already exists", 409);
   }
 
+  // Check if avatar file is provided
   const avatarFile = req.files?.avatar?.[0];
   if (!avatarFile) {
     throw new ErrorHandler("Avatar file is required", 400);
   }
 
-  const avatar = await uploadOnCloudinary(avatarFile.path);
-  if (!avatar) {
+  // Upload avatar to Cloudinary
+  const uploadedAvatar = await uploadOnCloudinary(avatarFile.path);
+  if (!uploadedAvatar || !uploadedAvatar.url) {
     throw new ErrorHandler("Error uploading avatar file", 500);
   }
 
+  // Send verification email
   const verificationCode = await sendMail(email);
 
+  // Store user data temporarily in the verification store
   verificationStore[email] = {
     username,
     email,
     password,
-    avatar: { url: avatar.url, publicId: avatar.public_id },
+    avatar: uploadedAvatar.url, // Store only the URL for the avatar
     verificationCode,
   };
 
+  // Respond with a success message
   res.status(200).json({
     success: true,
     message: "Verification code sent to your email. Please verify to complete registration.",
   });
 });
 
+// VERIFY
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
 
+  // Validate verification code
   if (!verificationCode) {
     throw new ErrorHandler("Verification code is required", 400);
   }
 
-  // Find the user associated with the verification code
+  // Find the user by the verification code
   const userEmail = Object.keys(verificationStore).find(
     (email) => verificationStore[email].verificationCode === Number(verificationCode)
   );
 
+  // Check if the verification code is valid
   if (!userEmail) {
     throw new ErrorHandler("Invalid or expired verification code", 400);
   }
 
+  // Retrieve user data from the verification store
   const { username, email, password, avatar } = verificationStore[userEmail];
 
-  // Create the user in the database
+  // Save the user to the database
   const user = await User.create({
     username,
     email,
     password,
-    avatar,
+    avatar, // Save only the avatar URL
   });
 
   // Clean up the verification data
   delete verificationStore[userEmail];
 
+  // Respond with a success message
   res.status(201).json({
     success: true,
     message: "User verified and registered successfully",
     user,
   });
 });
+
 
 
 //LOGIN
