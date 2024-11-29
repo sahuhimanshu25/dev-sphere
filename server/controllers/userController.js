@@ -38,7 +38,7 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
     avatar: { url: avatar.url, publicId: avatar.public_id },
     verificationCode,
   };
-
+  console.log("reg req.session:",req.session.verificationData)
   res.status(200).json({
     success: true,
     message: "Verification code sent to your email. Please verify to complete registration.",
