@@ -11,12 +11,11 @@ import { chatRouter } from './routes/chatRoutes.js';
 import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
+import MongoStore from 'connect-mongo';
 app.use(cors({
-  origin: 'https://devsphereclient.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
-
+    origin: `https://devsphereclient.onrender.com`, // allow requests from your frontend
+    credentials: true, // if you're using cookies or HTTP authentication
+  }));
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.static("public"))
@@ -26,11 +25,14 @@ app.get("/",(req,res)=>{
 
 
 app.use(session({
-  secret: 'Mushraf123',  // Using your custom secret key
+  secret: 'Mushraf123',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }  // Set to true if using HTTPS in production
+  cookie: {
+    secure: true
+  },
 }));
+
 
 app.use('/auth',expressRouter);
 app.use('/post',postRouter)

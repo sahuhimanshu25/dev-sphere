@@ -3,80 +3,100 @@ import ErrorHandler from "../utils/errorHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { sendToken } from "../middlewares/jwtToken.js";
-import { uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
+import {
+  uploadOnCloudinary,
+  deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 import { sendMail } from "../nodemailer/sendMail.js";
 import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
-//REGISTER
+
+const verificationStore = {};
+
+// REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
 
+  // Validate required fields
   if (!username || !email || !password) {
     throw new ErrorHandler("All fields are required", 400);
   }
 
+  // Check if the user already exists
   const existedUser = await User.findOne({ $or: [{ username }, { email }] });
   if (existedUser) {
     throw new ErrorHandler("Username or email already exists", 409);
   }
 
+  // Check if avatar file is provided
   const avatarFile = req.files?.avatar?.[0];
   if (!avatarFile) {
     throw new ErrorHandler("Avatar file is required", 400);
   }
 
-  const avatar = await uploadOnCloudinary(avatarFile.path);
-  if (!avatar) {
+  // Upload avatar to Cloudinary
+  const uploadedAvatar = await uploadOnCloudinary(avatarFile.path);
+  if (!uploadedAvatar || !uploadedAvatar.url) {
     throw new ErrorHandler("Error uploading avatar file", 500);
   }
 
+  // Send verification email
   const verificationCode = await sendMail(email);
-  req.session.verificationData = {
+
+  // Store user data temporarily in the verification store
+  verificationStore[email] = {
     username,
     email,
     password,
-    avatar: { url: avatar.url, publicId: avatar.public_id },
+    avatar: uploadedAvatar.url, // Store only the URL for the avatar
     verificationCode,
   };
 
+  // Respond with a success message
   res.status(200).json({
     success: true,
-    message: "Verification code sent to your email. Please verify to complete registration.",
+    message:
+      "Verification code sent to your email. Please verify to complete registration.",
   });
 });
+
+// VERIFY
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
 
-  const verificationData = req.session.verificationData;
-  if (!verificationData) {
-    throw new ErrorHandler("No registration process found. Please register again.", 400);
+  if (!verificationCode) {
+    throw new ErrorHandler("Verification code is required", 400);
   }
 
-  if (verificationData.verificationCode !== Number(verificationCode)) {
+  const userEmail = Object.keys(verificationStore).find(
+    (email) =>
+      verificationStore[email].verificationCode === Number(verificationCode)
+  );
 
-    if (verificationData.avatar.publicId) {
-      await deleteAvatarFromCloudinary(verificationData.avatar.publicId);
-    }
-    throw new ErrorHandler("Invalid verification code", 400);
+  if (!userEmail) {
+    throw new ErrorHandler("Invalid or expired verification code", 400);
   }
 
-  const { username, email, password, avatar } = verificationData;
+  const { username, email, password, avatar } = verificationStore[userEmail];
+
   const user = await User.create({
     username,
     email,
     password,
-    avatar: avatar.url,
-    avatarPublicId: avatar.publicId,
+    avatar, // Save only the avatar URL
   });
 
-  req.session.verificationData = null;
-
-  const message = "Your email has been successfully verified! Welcome to DevSphere!";
+  const message ="Your email has been successfully verified! Welcome to DevSphere!";
   await sendMessage(email, message);
+  delete verificationStore[userEmail];
 
-  sendToken(user, 200, res);
+  // Respond with a success message
+  res.status(201).json({
+    success: true,
+    message: "User verified and registered successfully",
+    user,
+  });
 });
-
 
 //LOGIN
 // LOGIN
@@ -143,8 +163,6 @@ export const searchUser = AsyncHandler(async (req, res, next) => {
         .json(new ApiResponse(400, [], "Please provide a username to search"));
     }
 
-    
-
     // Perform the search
     const users = await User.find(keyword);
     if (!users.length) {
@@ -206,7 +224,7 @@ export const getMyDetails = AsyncHandler(async (req, res, next) => {
   }
 
   const user = userDetails[0];
-  
+
   res
     .status(200)
     .json(
@@ -472,7 +490,7 @@ export const updateUserAvatar = AsyncHandler(async (req, res, next) => {
   const oldAvatar = user.avatar;
 
   if (oldAvatar) {
-    const imagePublicId = oldAvatar.split('/').pop().split('.')[0];
+    const imagePublicId = oldAvatar.split("/").pop().split(".")[0];
     const deleteResult = await deleteFromCloudinary(imagePublicId);
 
     if (!deleteResult?.success) {
@@ -480,8 +498,10 @@ export const updateUserAvatar = AsyncHandler(async (req, res, next) => {
     }
   }
 
-  user.avatar = avatar.url; 
+  user.avatar = avatar.url;
   await user.save();
 
-  res.status(200).json(new ApiResponse(200, {avatar}, "User avatar updated successfully"));
+  res
+    .status(200)
+    .json(new ApiResponse(200, { avatar }, "User avatar updated successfully"));
 });

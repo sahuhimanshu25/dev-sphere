@@ -55,7 +55,7 @@ const RegisterPage = () => {
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,
-        completeData
+        completeData,{ withCredentials: true } 
       );
       if (result.data.success) {
         toast.success("Verification code sent to your email.");
@@ -75,8 +75,9 @@ const RegisterPage = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`,
         {
           verificationCode,
-        }
+        },{ withCredentials: true } 
       );
+      console.log(result.data)
       if (result.data.success) {
         toast.success("Registration successful. Please log in.");
         navigate("/login");
