@@ -32,25 +32,28 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
   }
 
   const verificationCode = await sendMail(email);
-  req.session.verification=verificationCode
-  console.log("reg req.session:",req.session.verificationData)
+
+  // Save verification data to session
+  req.session.verificationData = { username, email, password, avatar, verificationCode };
+
   res.status(200).json({
     success: true,
     message: "Verification code sent to your email. Please verify to complete registration.",
   });
 });
+
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
-  console.log("req.body:",req.body);
-  const verificationData =req.session.verification;
-  console.log("req.session:",req.session)
-  console.log("req.session.verificationData:",req.session.verificationData)
+
+  const verificationData = req.session.verificationData;
+  console.log("Session Data:", req.session);
+  console.log("Cookies:", req.cookies);
+  
   if (!verificationData) {
     throw new ErrorHandler("No registration process found. Please register again.", 400);
   }
 
-  if (verificationData.verificationCode !== Number(verificationCode)) {
-
+  if (verificationData.verificationCode !== verificationCode) {
     if (verificationData.avatar.publicId) {
       await deleteAvatarFromCloudinary(verificationData.avatar.publicId);
     }
@@ -58,6 +61,7 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
   }
 
   const { username, email, password, avatar } = verificationData;
+
   const user = await User.create({
     username,
     email,
@@ -66,6 +70,7 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
     avatarPublicId: avatar.publicId,
   });
 
+  // Clear session after successful verification
   req.session.verificationData = null;
 
   const message = "Your email has been successfully verified! Welcome to DevSphere!";
