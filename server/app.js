@@ -12,11 +12,9 @@ import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
 app.use(cors({
-  origin: 'https://devsphereclient.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
-
+    origin: `https://devsphereclient.onrender.com`, // allow requests from your frontend
+    credentials: true, // if you're using cookies or HTTP authentication
+  }));
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.static("public"))
@@ -26,14 +24,10 @@ app.get("/",(req,res)=>{
 
 
 app.use(session({
-  secret: 'Mushraf123', // Replace with a strong secret key
+  secret: 'Mushraf123',  // Using your custom secret key
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: true, // Only works over HTTPS
-    // httpOnly: true, // Prevents client-side access
-    sameSite: 'none', // Allows cross-origin cookies
-  },
+  saveUninitialized: true,
+  // cookie: { secure: true }  // Set to true if using HTTPS in production
 }));
 
 app.use('/auth',expressRouter);
