@@ -31,8 +31,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     secure: true, // Only works over HTTPS
-    httpOnly: true, // Prevents client-side access
-    sameSite: 'none', // Allows cross-origin cookies
+    // httpOnly: true, // Prevents client-side access
+    // sameSite: 'none', // Allows cross-origin cookies
   },
 }));
 
