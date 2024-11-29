@@ -7,6 +7,7 @@ import { uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
 import { sendMail } from "../nodemailer/sendMail.js";
 import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
+import session from 'express-session';
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -31,13 +32,7 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
   }
 
   const verificationCode = await sendMail(email);
-  req.session.verificationData = {
-    username,
-    email,
-    password,
-    avatar: { url: avatar.url, publicId: avatar.public_id },
-    verificationCode,
-  };
+  req.session.verification=verificationCode
   console.log("reg req.session:",req.session.verificationData)
   res.status(200).json({
     success: true,
@@ -47,8 +42,8 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
 export const verifyUser = AsyncHandler(async (req, res, next) => {
   const { verificationCode } = req.body;
   console.log("req.body:",req.body);
-  const {verificationData} = req.session;
-  console.log("req.session.verificationData:",req.session)
+  const verificationData =req.session.verification;
+  console.log("req.session:",req.session)
   console.log("req.session.verificationData:",req.session.verificationData)
   if (!verificationData) {
     throw new ErrorHandler("No registration process found. Please register again.", 400);
