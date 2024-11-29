@@ -55,20 +55,22 @@ io.use((socket, next) => {
 
 
 let activeUsers = [];
-io.on('connection_error', (err) => {
-  console.log('Connection error:', err.message);
-});
 
 io.on('connection', (socket) => {
   // Handle individual user connections
   socket.on('new-user-add', (newUserId) => {
+    console.log("---- server.js 62",newUserId);
+    
     if (!activeUsers.some((user) => user.userId === newUserId)) {
       activeUsers.push({ userId: newUserId, socketId: socket.id });
     }
     console.log('Connected users:', activeUsers);
     io.emit('get-users', activeUsers);
   });
-
+  
+  io.on('connection_error', (err) => {
+    console.log('Connection error:', err.message);
+  });
   
   // Handle sending a direct message
   socket.on('send-message', (data) => {

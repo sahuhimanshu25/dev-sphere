@@ -32,11 +32,16 @@ const Chat = () => {
         },
         transports: ["websocket"], // Explicitly specify the transport method
       });
+
       
       socket.current.emit("new-user-add", userData._id);
-
+      console.log("chat.jsx 37",userData,socket.current);
+      
+      
       socket.current.on("get-users", (users) => {
         setOnlineUsers(users);
+        console.log("chat.jsx 42",onlineUsers);
+
       });
 
       socket.current.on("receive-message", (data) => {
@@ -61,7 +66,7 @@ const Chat = () => {
             }
         });
           setChats(data);
-          console.log(chats);
+          console.log("chat.sjx 69 ",chats);
           
         } catch (error) {
           console.error("Error fetching chats:", error);
