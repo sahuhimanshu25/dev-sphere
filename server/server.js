@@ -32,28 +32,28 @@ const io = new Server(server, {
 
 
 // Token verification middleware
-// io.use((socket, next) => {
-//   console.log(socket.handshake.auth?.token);
+io.use((socket, next) => {
+  console.log(socket.handshake.auth?.token);
   
-//   const token = socket.handshake.auth?.token; // Extract the token from the `auth` object
-//   if (!token) {
-//     console.log('No token provided');
-//     return next(new Error('Authentication error: No token'));
-//   }
+  const token = socket.handshake.auth?.token; // Extract the token from the `auth` object
+  if (!token) {
+    console.log('No token provided');
+    return next(new Error('Authentication error: No token'));
+  }
 
-//   // Verify the token
-//   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-//     if (err) {
-//       console.log('Invalid token:', err.message);
-//       return next(new Error('Authentication error: Invalid token'));
-//     }
+  // Verify the token
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log('Invalid token:', err.message);
+      return next(new Error('Authentication error: Invalid token'));
+    }
 
-//     // Attach decoded user information to the socket
-//     socket.user = decoded;
-//     console.log('User authenticated:', decoded);
-//     next(); // Allow the connection
-//   });
-// });
+    // Attach decoded user information to the socket
+    socket.user = decoded;
+    console.log('User authenticated:', decoded);
+    next(); // Allow the connection
+  });
+});
 
 
 let activeUsers = [];
