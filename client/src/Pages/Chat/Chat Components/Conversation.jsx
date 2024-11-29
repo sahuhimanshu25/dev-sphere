@@ -3,12 +3,14 @@ import axios from "axios";
 import userimg from "../../../../public/userimg.jpg";
 import Loader from "../../../components/Loader/Loader";
 import "./Conversation.css";
+import { useSelector } from "react-redux";
 
 const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
   const [userData, setUserData] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
   const [selectedChat, setSelectedChat] = useState(null);
+  const {token}=useSelector((state)=>state.user)
 
   useEffect(() => {
     const fetchUserData = async () => {
