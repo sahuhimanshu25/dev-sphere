@@ -26,7 +26,7 @@ const Chat = () => {
   // Initialize socket connection and setup listeners
   useEffect(() => {
     if (userData && userData._id) {
-      socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`, {
+      socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },

@@ -23,7 +23,7 @@ const LoginPage = () => {
       const result = await dispatch(login({ email, password })).unwrap();
       if (result) {
         toast.success("Login Successful");
-        console.log(result);
+        console.log(result,"latest update 7.00");
         
         navigate('/post'); // Navigate only after successful login
       }

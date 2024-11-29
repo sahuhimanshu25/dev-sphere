@@ -33,6 +33,8 @@ const io = new Server(server, {
 
 // Token verification middleware
 io.use((socket, next) => {
+  console.log("Socket headers:", socket.handshake.headers);
+
   const token = socket.handshake.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
   if (!token) {
     console.log('No token provided');
