@@ -24,17 +24,14 @@ app.get("/",(req,res)=>{
 })
 
 
-app.use(
-  session({
-    secret: 'Mushraf123',
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
-    }),
-    cookie: { secure: true }
-  })
-);
+app.use(session({
+  secret: 'Mushraf123',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: true
+  },
+}));
 
 
 app.use('/auth',expressRouter);

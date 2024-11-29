@@ -7,7 +7,6 @@ import { uploadOnCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
 import { sendMail } from "../nodemailer/sendMail.js";
 import { sendMessage } from "../nodemailer/mailMessage.js";
 import mongoose from "mongoose";
-import session from 'express-session';
 //REGISTER
 export const registerUser = AsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -32,37 +31,36 @@ export const registerUser = AsyncHandler(async (req, res, next) => {
   }
 
   const verificationCode = await sendMail(email);
-
-  // Save verification data in the session
-  req.session.verification = {
+  req.session.verificationData = {
     username,
     email,
     password,
-    avatar,
+    avatar: { url: avatar.url, publicId: avatar.public_id },
     verificationCode,
   };
-  console.log("Session Data After Registration:", req.session); // Debugging log
 
   res.status(200).json({
     success: true,
     message: "Verification code sent to your email. Please verify to complete registration.",
   });
 });
-
-
 export const verifyUser = AsyncHandler(async (req, res, next) => {
-  console.log("req.session.verification:", req.session.verification); // Debugging log
+  const { verificationCode } = req.body;
 
-  if (!req.session.verification) {
+  const verificationData = req.session.verificationData;
+  if (!verificationData) {
     throw new ErrorHandler("No registration process found. Please register again.", 400);
   }
 
-  const { verificationCode } = req.body;
-  if (req.session.verification.verificationCode !== Number(verificationCode)) {
+  if (verificationData.verificationCode !== Number(verificationCode)) {
+
+    if (verificationData.avatar.publicId) {
+      await deleteAvatarFromCloudinary(verificationData.avatar.publicId);
+    }
     throw new ErrorHandler("Invalid verification code", 400);
   }
 
-  const { username, email, password, avatar } = req.session.verification;
+  const { username, email, password, avatar } = verificationData;
   const user = await User.create({
     username,
     email,
@@ -71,14 +69,13 @@ export const verifyUser = AsyncHandler(async (req, res, next) => {
     avatarPublicId: avatar.publicId,
   });
 
-  req.session.verification = null;
+  req.session.verificationData = null;
 
   const message = "Your email has been successfully verified! Welcome to DevSphere!";
   await sendMessage(email, message);
 
   sendToken(user, 200, res);
 });
-
 
 
 //LOGIN
