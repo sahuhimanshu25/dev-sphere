@@ -35,7 +35,9 @@ const io = new Server(server, {
 io.use((socket, next) => {
   console.log("server.js 36",socket.handshake.auth?.token);
   
-  const token = socket.handshake.auth?.token; // Extract the token from the `auth` object
+  const rawToken = socket.handshake.query?.token; 
+const token = rawToken?.split(" ")[1]; // Remove "Bearer" prefix
+
   if (!token) {
     console.log('No token provided');
     return next(new Error('Authentication error: No token'));
@@ -48,7 +50,7 @@ io.use((socket, next) => {
     console.log(decoded);
     
     if (err) {
-      console.log('Invalid token:', err.message);
+      console.log('Invalid token:', err);
       return next(new Error('Authentication error: Invalid token'));
     }
 
