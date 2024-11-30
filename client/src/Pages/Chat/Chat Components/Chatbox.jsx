@@ -33,9 +33,9 @@ const ChatBox = ({
         setLoading(true);
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
-            auth: {
-              token: `Bearer ${token}`,
-            },
+            headers: {
+              'Authorization': `Bearer ${token}`
+          }
         }
         );
         setUserData(data.data);
