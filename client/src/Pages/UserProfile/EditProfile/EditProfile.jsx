@@ -11,7 +11,7 @@ const EditProfile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  const [bio, setBio] = useState(""); // Added state for bio
+  const [bio, setBio] = useState("");
   const [isVerificationRequired, setIsVerificationRequired] = useState(false);
   const [serverCode, setServerCode] = useState("");
   const [message, setMessage] = useState("");
@@ -25,7 +25,7 @@ const EditProfile = () => {
       ...(username && { username }),
       ...(email && { email }),
       ...(oldPassword && newPassword && { oldPassword, newPassword }),
-      ...(bio && { bio }), // Add bio to the formData
+      ...(bio && { bio }), 
     };
 
     if (email) {
