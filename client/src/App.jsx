@@ -12,11 +12,11 @@ import Login from "./Pages/Login/Login";
 import axios from "axios";
 import UserProfile from "./Pages/UserProfile/UserProfile.jsx";
 import Home from "./screens/Home";
-// import Playground from "./screens/Playground";
+import Playground from "./screens/Playground";
 import Error404 from "./screens/Error404";
 import { GlobalStyle } from "./styles/global.js";
-// import ModalProvider from "./context/ModalContext";
-// import PlaygroundProvider from "./context/PlaygroundContext";
+import ModalProvider from "./context/ModalContext";
+import PlaygroundProvider from "./context/PlaygroundContext";
 import MainHome from "./components/MainHome.jsx";
 import Post from "./Pages/Post/Post.jsx";
 import Feed from "./Pages/Post/Feed.jsx";
@@ -53,34 +53,27 @@ function App() {
       <GlobalStyle />
       <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
       <Routes>
-        {/* <Route
+        <Route
           path="/compile"
           element={
-            userData ? (
-              <PlaygroundProvider>
-                <ModalProvider>
-                  <Home />
-                </ModalProvider>
-              </PlaygroundProvider>
-            ) : (
-              <Navigate to={"/login"} />
-            )
+            userData?
+            <PlaygroundProvider>
+              <ModalProvider>
+                <Home />
+              </ModalProvider>
+            </PlaygroundProvider>:<Navigate to={'/login'} />
           }
         />
         <Route
           path="/playground/:folderId/:playgroundId"
           element={
-            userData ? (
-              <PlaygroundProvider>
-                <ModalProvider>
-                  <Playground />
-                </ModalProvider>
-              </PlaygroundProvider>
-            ) : (
-              <Navigate to={"/login"} />
-            )
+            userData?<PlaygroundProvider>
+            <ModalProvider>
+              <Playground />
+            </ModalProvider>
+          </PlaygroundProvider>:<Navigate to={'/login'} />
           }
-        /> */}
+        />
         {/* <ToastContainer /> */}
         <Route path="/" element={<MainHome />} />
         <Route path="/login" element={<Login />} />
