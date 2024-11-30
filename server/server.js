@@ -33,14 +33,20 @@ const io = new Server(server, {
 
 // Token verification middleware
 io.use((socket, next) => {
-  const token = socket.handshake.headers.authorization?.split(' ')[1]; // Extract the token from the Authorization header
+  console.log("server.js 36",socket.handshake.auth?.token);
+  
+  const token = socket.handshake.auth?.token; // Extract the token from the `auth` object
   if (!token) {
     console.log('No token provided');
     return next(new Error('Authentication error: No token'));
   }
 
   // Verify the token
+  console.log("SERVER.JS 45",process.env.JWT_SECRET);
+  
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    console.log(decoded);
+    
     if (err) {
       console.log('Invalid token:', err.message);
       return next(new Error('Authentication error: Invalid token'));
@@ -55,20 +61,22 @@ io.use((socket, next) => {
 
 
 let activeUsers = [];
-io.on('connection_error', (err) => {
-  console.log('Connection error:', err.message);
-});
 
 io.on('connection', (socket) => {
   // Handle individual user connections
   socket.on('new-user-add', (newUserId) => {
+    console.log("---- server.js 62",newUserId);
+    
     if (!activeUsers.some((user) => user.userId === newUserId)) {
       activeUsers.push({ userId: newUserId, socketId: socket.id });
     }
     console.log('Connected users:', activeUsers);
     io.emit('get-users', activeUsers);
   });
-
+  
+  io.on('connection_error', (err) => {
+    console.log('Connection error:', err.message);
+  });
   
   // Handle sending a direct message
   socket.on('send-message', (data) => {

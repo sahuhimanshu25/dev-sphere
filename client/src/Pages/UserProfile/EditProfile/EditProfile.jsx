@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./EditProfile.css";
 import { FcCdLogo } from "react-icons/fc";
+import { useSelector } from "react-redux";
 
 const EditProfile = () => {
   const [username, setUsername] = useState("");
@@ -16,6 +17,7 @@ const EditProfile = () => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sCode, setsCode] = useState("");
+  const {token}=useSelector((state)=>state.user)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +33,11 @@ const EditProfile = () => {
     }
     try {
       setIsLoading(true);
-      const response = await axios.post("https://devsphere-server.onrender.com/user/updateAccount", formData);
+      const response = await axios.post("https://devsphere-server.onrender.com/user/updateAccount", formData, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       const { data } = response;
       console.log(response.data.data.user.verificationCode);
       if (email) {
@@ -61,7 +67,11 @@ const EditProfile = () => {
       try {
         const response = await axios.post(
           "https://devsphere-server.onrender.com/user/verification",
-          { verificationCode, newEmail }
+          { verificationCode, newEmail }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
   
         const { data } = response;
