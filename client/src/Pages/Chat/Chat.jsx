@@ -9,6 +9,7 @@ import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -19,9 +20,21 @@ const Chat = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
+  const [mobileView,setMobileView]=useState("list")
   const navigate = useNavigate();
   const socket = useRef();
   const { userData,token } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setMobileView("list");
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Initialize socket connection and setup listeners
   useEffect(() => {
@@ -81,6 +94,7 @@ const Chat = () => {
   // Handle conversation click
   const handleConversationClick = (chat) => {
     setCurrentChat(chat);
+    setMobileView("chat");
   };
 
   // Emit message when sendMessage is updated
@@ -138,7 +152,7 @@ const Chat = () => {
     <div className="Chat">
       {userData ? (
         <div className="main-chat">
-          <div className="Left-side-chat">
+          <div className={`Left-side-chat ${mobileView==="list"?"show":""}`}>
             <div className="Chat-container">
               <div className="left-side-chat-top">
                 <div className="head-chat-l">
@@ -216,7 +230,13 @@ const Chat = () => {
             </div>
           </div>
 
-          <div className="Right-side-chat">
+          <div className={`Right-side-chat ${mobileView==="chat"?"show":""} `}>
+
+          <div className="chat-header">
+              <button className="back-button" onClick={() => setMobileView("list")}>
+                <FaArrowLeft /> Back
+              </button>
+            </div>
             {currentChat ? (
               <ChatBox
                 chat={currentChat}
