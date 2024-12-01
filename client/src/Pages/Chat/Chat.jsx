@@ -151,7 +151,7 @@ const Chat = () => {
   return (
     <div className="Chat">
       {userData ? (
-        <div className="main-chat">
+        <div className="main-chat"> 
           <div className={`Left-side-chat ${mobileView==="list"?"show":""}`}>
             <div className="Chat-container">
               <div className="left-side-chat-top">
