@@ -285,9 +285,6 @@
 
   .posts,
   .Search-user {
-    width: 100%; /* Full width for smaller screens */
-    margin-right: 0;
-    max-width: none; /* Remove fixed width constraints */
   }
 }
 
