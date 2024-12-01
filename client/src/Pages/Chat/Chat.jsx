@@ -5,7 +5,7 @@ import axios from "axios";
 import ChatBox from "./Chat Components/Chatbox";
 import Conversation from "./Chat Components/Conversation";
 import { io } from "socket.io-client";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus,FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
@@ -19,6 +19,7 @@ const Chat = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth<=768);
   const navigate = useNavigate();
   const socket = useRef();
   const { userData,token } = useSelector((state) => state.user);
@@ -83,6 +84,13 @@ const Chat = () => {
     setCurrentChat(chat);
   };
 
+  useEffect(() => {
+    console.log("p------- current chat", currentChat);
+  }, [currentChat]);
+
+  const handleBackToConversatoin = () => {
+    setCurrentChat(null);
+  };
   // Emit message when sendMessage is updated
   useEffect(() => {
     if (sendMessage && socket.current) {
@@ -138,7 +146,13 @@ const Chat = () => {
     <div className="Chat">
       {userData ? (
         <div className="main-chat">
-          <div className="Left-side-chat">
+          <div className={`Left-side-chat ${
+              isMobileView
+                ? currentChat
+                  ? "mobile-left-notsel"
+                  : "mobile-left"
+                : ""
+            } `}>
             <div className="Chat-container">
               <div className="left-side-chat-top">
                 <div className="head-chat-l">
@@ -216,7 +230,13 @@ const Chat = () => {
             </div>
           </div>
 
-          <div className="Right-side-chat">
+          <div className={`Right-side-chat ${
+              isMobileView
+                ? currentChat
+                  ? "mobile-right"
+                  : "mobile-right-notsel"
+                : ""
+            } `}>
             {currentChat ? (
               <ChatBox
                 chat={currentChat}
@@ -233,6 +253,7 @@ const Chat = () => {
           </div>
         </div>
       ) : null}
+      <FaArrowLeft color="white" onClick={handleBackToConversatoin} />
     </div>
   );
 };

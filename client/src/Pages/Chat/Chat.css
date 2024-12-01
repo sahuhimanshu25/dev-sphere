@@ -376,3 +376,24 @@
     width: 90vw;
   }
 } */
+
+.mobile-left {
+  display: block;
+  flex: 1;
+}
+
+/* For mobile view when a chat is selected */
+.mobile-left-notsel {
+  display: none;
+}
+
+/* For the right panel when a chat is selected */
+.mobile-right {
+  width: 100%; /* Show full right panel */
+  visibility: visible;
+}
+
+/* For mobile view when no chat is selected */
+.mobile-right-notsel {
+  display: none;
+}
