@@ -377,25 +377,35 @@
   }
 } */
 
-@media (max-width: 768px) {
-  /* Mobile View: Only show the conversation list */
+
+
+@media screen and (max-width: 768px) {
   .Chat {
-    flex-direction: column;
+    flex-direction: column; /* Stack items on mobile */
   }
 
   .main-chat {
-    width: 100%;
+    width: 100%; /* Take full width on mobile */
     flex-direction: column;
+    gap: 15px;
   }
 
-  .Left-side-chat,
+  .Left-side-chat {
+    width: 100%; /* Full width for mobile */
+  }
+
   .Right-side-chat {
-    width: 100%;
-    display: none;
+    width: 100%; /* Full width for chatbox */
+    display: none; /* Hidden until chat is active */
   }
 
-  .Left-side-chat .show,
-  .Right-side-chat .show {
-    display: flex;
+  .Right-side-chat.show {
+    display: block; /* Show when chat is active */
+  }
+
+  .chat-header .back-button {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
   }
 }
