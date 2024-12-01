@@ -1,10 +1,71 @@
-.playGround{
-    width: 90vw;
-    margin-left: 5rem;
-    height: 100vh;
+.playGround {
+  width: 90vw;
+  margin-left: 5rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.console{
-    /* border: 1px solid red; */
-    margin-left: 1rem;
-    height: 90vh;
+
+.console {
+  margin-left: 1rem;
+  height: 90vh;
+}
+
+@media (max-width: 1024px) {
+  .playGround {
+    width: 100vw; /* Full width for tablet screens */
+    margin-left: 0; /* Remove left margin */
+  }
+
+  .console {
+    margin-left: 0; /* Remove margin for consoles */
+    height: 70vh; /* Reduce console height */
+  }
+}
+
+@media (max-width: 768px) {
+  .playGround {
+    width: 100vw;
+    margin-left: 0;
+  }
+
+  .console {
+    margin-left: 0;
+    height: 60vh; /* Further reduce console height */
+  }
+}
+
+@media (max-width: 480px) {
+  .playGround {
+    width: 100vw;
+    margin-left: 0; /* Full-width layout */
+    /* padding: 0 1rem; Add padding for better spacing */
+  }
+
+  .console {
+    margin-left: 0;
+    height: 50vh; /* Reduce console height even further */
+  }
+
+  .playGround .console {
+    margin-bottom: 1rem; /* Add space between console and editor */
+  }
+}
+
+@media (max-width: 768px) {
+  .playGround {
+    display: block; /* Stack elements vertically on smaller screens */
+    /* padding: 0 1rem; */
+  }
+
+  .console {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .editor-container,
+  .console {
+    width: 100%; 
+    margin-bottom: 1rem;
+  }
 }

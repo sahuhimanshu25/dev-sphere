@@ -158,3 +158,166 @@
   display: flex;
   gap: 5px;
 }
+
+
+
+.right-container {
+  flex: 2;
+  padding: 20px;
+  background-color: #20232a00;
+  color: #ffffff;
+  border-radius: 18px;
+}
+
+.right-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: sticky;
+  top: 0;
+}
+
+.right-title {
+  font-size: 1.5rem;
+  color: #7c78eb;
+  font-weight: 550;
+  letter-spacing: 1px;
+}
+
+.right-title span:nth-child(1) {
+  color: rgba(255, 255, 255, 0.631);
+}
+
+.right-add-folder-button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 20px;
+}
+
+.folder-cont-main {
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.folder-container {
+  margin-bottom: 20px;
+}
+
+.folder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.folder-title {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  letter-spacing: 1px;
+}
+
+.folder-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.folder-create-button {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 20px;
+}
+
+.playground-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.playground-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #333740;
+  border-radius: 5px;
+  padding: 10px;
+  width: calc(50% - 10px);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.playground-item:hover {
+  background-color: #444b54;
+}
+
+.playground-content {
+  display: flex;
+  align-items: center;
+}
+
+.playground-logo {
+  width: 40px;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .right-title {
+    font-size: 1.2rem;
+  }
+
+  .right-add-folder-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .folder-title {
+    font-size: 1rem;
+  }
+
+  .folder-create-button {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+
+  .playground-item {
+    width: calc(100% - 10px);
+  }
+}
+
+@media (max-width: 500px) {
+  .right-container{
+    overflow: auto;
+    width: 100%;
+  }
+  .folder-cont-main{
+    height: fit-content;
+  }
+  .right-title {
+    font-size: 1rem;
+  }
+
+  .right-add-folder-button {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
+
+  .folder-title {
+    font-size: 0.9rem;
+  }
+
+  .folder-create-button {
+    padding: 3px 6px;
+    font-size: 0.6rem;
+  }
+
+  .playground-logo {
+    width: 30px;
+  }
+
+  .playground-item {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
