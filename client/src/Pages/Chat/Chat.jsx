@@ -27,15 +27,16 @@ const Chat = () => {
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
   useEffect(() => {
+    const isMobileView = window.innerWidth <= 768;
+    setMobileView(isMobileView ? "list" : "chat");
+  
     const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setMobileView("list");
-      }
+      setMobileView(window.innerWidth <= 768 ? "list" : "chat");
     };
     window.addEventListener("resize", handleResize);
-    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
 
   // Initialize socket connection and setup listeners
   useEffect(() => {
