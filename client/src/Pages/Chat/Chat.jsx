@@ -5,10 +5,11 @@ import axios from "axios";
 import ChatBox from "./Chat Components/Chatbox";
 import Conversation from "./Chat Components/Conversation";
 import { io } from "socket.io-client";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus ,FaArrowLeft} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
+
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
