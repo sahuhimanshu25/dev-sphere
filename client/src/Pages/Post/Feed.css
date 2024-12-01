@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   transition: margin-left 0.3s ease, background-color 0.3s ease;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .posts {
@@ -19,7 +19,7 @@
   overflow-y: auto;
   flex-shrink: 0;
   margin-right: 20px;
-  flex: 6;
+  flex: 1;
 }
 
 .Search-user {
@@ -203,56 +203,6 @@
 
 
 
-@media (max-width: 768px) {
-  .feed {
-    padding: 15px;
-    margin-left: 0;
-    width: 100vw;
-    height:100vh;
-    flex-direction: column;
-    overflow-y: auto;
-  }
-
-  .posts {
-    width: 100%;
-    padding-right: 0;
-    max-height: none;
-  }
-
-  .Search-user {
-    width: 100%; /* Full width for small screens */
-    padding-left: 0;
-    position: relative;
-    height: auto;
-  }
-
-  .create-post {
-    font-size: 1rem;
-    padding: 12px 15px;
-  }
-
-  .post {
-    padding: 14px;
-    width: 90%;
-  }
-
-  .post-header {
-    font-size: 1.1rem;
-  }
-
-  .post-content {
-    font-size: 0.95rem;
-  }
-
-  .like-button {
-    font-size: 1rem;
-  }
-}
-
-.recommended-users {
-  margin-top: -20px;
-}
-
 .recommended-user-item {
   display: flex;
   align-items: center;
@@ -317,5 +267,8 @@
 
   .rec-top h2 {
     font-size: 18px;
+  }
+  .recommended-users {
+    margin-top: -20px;
   }
 }
