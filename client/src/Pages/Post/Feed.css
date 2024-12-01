@@ -19,7 +19,7 @@
   overflow-y: auto;
   flex-shrink: 0;
   margin-right: 20px;
-  /* flex: 1; */
+  flex: 6;
 }
 
 .Search-user {
@@ -250,7 +250,7 @@
 }
 
 .recommended-users {
-  margin-top: 20px;
+  margin-top: -20px;
 }
 
 .recommended-user-item {
@@ -313,12 +313,10 @@
   }
 
   .recommended-user-item {
-    flex-direction: column; /* Stack avatars and names */
-    align-items: flex-start;
   }
 
   .recommended-user-item span {
-    font-size: 14px; /* Adjust font size for user names */
+    font-size: 17px; /* Adjust font size for user names */
   }
 
   .recommended-user-item .user-avatar {
