@@ -6,7 +6,6 @@ import "./Register.css";
 import DefaultAvatar from "../../../public/userimg.jpg";
 import axios from "axios";
 import Loader from "../../components/Loader/Loader";
-
 const RegisterPage = () => {
   const navigate = useNavigate();
 
@@ -19,7 +18,7 @@ const RegisterPage = () => {
   const [avatarPreview, setAvatarPreview] = useState(DefaultAvatar);
   const [step, setStep] = useState(1); 
   const [verificationCode, setVerificationCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isloading, setIsLoading]=useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +41,7 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+    
     if (!avatar) {
       toast.error("Please upload an avatar.");
       return;
@@ -54,52 +53,49 @@ const RegisterPage = () => {
     completeData.append("password", formData.password);
     completeData.append("avatar", avatar);
 
-    setIsLoading(true); // Show loader
     try {
+      setIsLoading(true);
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,
-        completeData,
-        { withCredentials: true }
+        completeData,{ withCredentials: true } 
       );
       if (result.data.success) {
+        setIsLoading(false);
         toast.success("Verification code sent to your email.");
         setStep(2);
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed.");
       console.error("REGISTER ERROR: ", err);
-    } finally {
-      setIsLoading(false); // Hide loader
     }
   };
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true); // Show loader
     try {
+      setIsLoading(true);
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`,
         {
           verificationCode,
-        },
-        { withCredentials: true }
+        },{ withCredentials: true } 
       );
+      console.log(result.data)
       if (result.data.success) {
+        setIsLoading(false);
         toast.success("Registration successful. Please log in.");
         navigate("/login");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Verification failed.");
       console.error("VERIFICATION ERROR: ", err);
-    } finally {
-      setIsLoading(false); // Hide loader
     }
   };
 
   return (
     <div className="register">
-      {isLoading && <Loader />}
+     {isloading ? <Loader style={{ zIndex: 10000 }} /> : ""}
       {step === 1 && (
         <div className="reg-main-reg-cont">
           <div className="reg-avatar-section">
