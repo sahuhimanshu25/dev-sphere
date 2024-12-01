@@ -13,12 +13,11 @@
 
 @media (max-width: 1024px) {
   .playGround {
-    width: 100vw; 
-    margin-left: 0;
+    width: 100vw;
+    margin-left:-1rem;
   }
-
   .console {
-    margin-left: 0; 
+    margin-left: 0;
     height: 70vh;
   }
 }
@@ -37,8 +36,8 @@
 
 @media (max-width: 480px) {
   .playGround {
-    margin-left: 0; 
-    padding: 0 1rem; 
+    margin-left: 0;
+    padding: 0 1rem;
   }
 
   .console {
@@ -47,13 +46,13 @@
   }
 
   .playGround .console {
-    margin-bottom: 1rem; 
+    margin-bottom: 1rem;
   }
 }
 
 @media (max-width: 768px) {
   .playGround {
-    display: block; 
+    display: block;
     padding: 0 1rem;
   }
 
