@@ -19,7 +19,7 @@
   overflow-y: auto;
   flex-shrink: 0;
   margin-right: 20px;
-  flex: 1;
+  /* flex: 1; */
 }
 
 .Search-user {
@@ -298,7 +298,7 @@
 
   .posts,
   .Search-user {
-    padding: 0 10px;
+    /* padding: 0 10px; */
   }
 
   .rec-top h2 {
