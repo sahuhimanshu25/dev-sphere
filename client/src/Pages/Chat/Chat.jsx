@@ -29,10 +29,10 @@ const Chat = () => {
     
     if (userData && userData._id && token) {
       socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
-        auth: {
+        query: {
           token: `Bearer ${token}`,
         },
-        transports: ["websocket"], // Specify WebSocket transport
+        
       });
   
       socket.current.emit("new-user-add", userData._id);
