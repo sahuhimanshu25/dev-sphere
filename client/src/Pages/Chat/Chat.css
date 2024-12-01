@@ -376,36 +376,3 @@
     width: 90vw;
   }
 } */
-
-
-
-@media screen and (max-width: 768px) {
-  .Chat {
-    flex-direction: column; /* Stack items on mobile */
-  }
-
-  .main-chat {
-    width: 100%; /* Take full width on mobile */
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .Left-side-chat {
-    width: 100%; /* Full width for mobile */
-  }
-
-  .Right-side-chat {
-    width: 100%; /* Full width for chatbox */
-    display: none; /* Hidden until chat is active */
-  }
-
-  .Right-side-chat.show {
-    display: block; /* Show when chat is active */
-  }
-
-  .chat-header .back-button {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-}

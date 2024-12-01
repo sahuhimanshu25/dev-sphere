@@ -9,7 +9,6 @@ import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
-import { FaArrowLeft } from "react-icons/fa";
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -20,67 +19,55 @@ const Chat = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
-  const [mobileView, setMobileView] = useState("list");
   const navigate = useNavigate();
   const socket = useRef();
-  const { userData, token } = useSelector((state) => state.user);
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-  useEffect(() => {
-    const isMobileView = window.innerWidth <= 768;
-    setMobileView(isMobileView ? "list" : "chat");
-  
-    const handleResize = () => {
-      setMobileView(window.innerWidth <= 768 ? "list" : "chat");
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-  
+  const { userData,token } = useSelector((state) => state.user);
 
   // Initialize socket connection and setup listeners
   useEffect(() => {
-    console.log("chat.jsx 28", token, userData);
-
+    console.log("chat.jsx 28",token,userData);
+    console.log("latest update 11.38");
+    
+    
     if (userData && userData._id && token) {
       socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
-        query: {
+        auth: {
           token: `Bearer ${token}`,
         },
+        transports: ["websocket"], // Specify WebSocket transport
       });
-
+  
       socket.current.emit("new-user-add", userData._id);
-
+  
       socket.current.on("get-users", (users) => {
         setOnlineUsers(users);
       });
-
+  
       socket.current.on("receive-message", (data) => {
         setReceiveMessage(data);
       });
-
+  
       return () => {
         socket.current.disconnect();
       };
     }
   }, [userData, token]);
-
+  
+  
   // Fetch chats for the current user
   useEffect(() => {
     const getChats = async () => {
       if (userData && userData._id) {
         try {
           setLoading(true); // Set loading to true before fetching
-          const { data } = await axios.get(
-            `${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+          const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-          );
+        });
           setChats(data);
-          console.log("chat.sjx 69 ", chats);
+          console.log("chat.sjx 69 ",chats);
+          
         } catch (error) {
           console.error("Error fetching chats:", error);
         } finally {
@@ -96,7 +83,6 @@ const Chat = () => {
   // Handle conversation click
   const handleConversationClick = (chat) => {
     setCurrentChat(chat);
-    setMobileView("chat");
   };
 
   // Emit message when sendMessage is updated
@@ -111,14 +97,11 @@ const Chat = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${
-            import.meta.env.VITE_BACKEND_BASEURL
-          }/following/search?username=${searchTerm}`,
-          {
+          `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`, {
             headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+                'Authorization': `Bearer ${token}`
+            }
+        }
         );
         setSearchResults(data.data);
       } catch (error) {
@@ -134,12 +117,11 @@ const Chat = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
         {
           receiverId: user._id,
-        },
-        {
+        }, {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+              'Authorization': `Bearer ${token}`
+          }
+      }
       );
       setChats((prevChats) => [...prevChats, chat]);
       setCurrentChat(chat);
@@ -158,101 +140,85 @@ const Chat = () => {
     <div className="Chat">
       {userData ? (
         <div className="main-chat">
-          {(!isMobile || !currentChat) && (
-            <div
-              className={`Left-side-chat`}
-            >
-              <div className="Chat-container">
-                <div className="left-side-chat-top">
-                  <div className="head-chat-l">
-                    <h2>
-                      <span>C</span>
-                      <span>h</span>
-                      <span>a</span>
-                      <span>t</span>
-                      <span>s</span>
-                    </h2>
-                  </div>
-                  <div className="User-search">
-                    <input
-                      type="text"
-                      placeholder="Search people you follow"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <button onClick={handleSearch}>Search</button>
-                  </div>
-                  {searchResults.length > 0 && (
-                    <div className="Search-results">
-                      {searchResults.map((user) => (
-                        <div
-                          key={user._id}
-                          className="Search-result-item"
-                          onClick={() => handleNewChat(user)}
-                        >
-                          {user.username} <FaPlus className="Add-icon" />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <div className="sep-chat"></div>
+          <div className="Left-side-chat">
+            <div className="Chat-container">
+              <div className="left-side-chat-top">
+                <div className="head-chat-l">
+                  <h2>
+                    <span>C</span>
+                    <span>h</span>
+                    <span>a</span>
+                    <span>t</span>
+                    <span>s</span>
+                  </h2>
                 </div>
-
-                <div className="Chat-list">
-                  {chats.map((chat) => (
-                    <div
-                      key={chat._id}
-                      className={`Chat-list-in ${
-                        currentChat?._id === chat._id ? "active-chat" : ""
-                      }`}
-                      onClick={() => handleConversationClick(chat)}
-                      aria-selected={currentChat?._id === chat._id}
-                    >
-                      <Conversation
-                        data={chat}
-                        currentUserId={userData._id}
-                        onlineUsers={onlineUsers}
-                      />
-                    </div>
-                  ))}
+                <div className="User-search">
+                  <input
+                    type="text"
+                    placeholder="Search people you follow"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <button onClick={handleSearch}>Search</button>
                 </div>
+                {searchResults.length > 0 && (
+                  <div className="Search-results">
+                    {searchResults.map((user) => (
+                      <div
+                        key={user._id}
+                        className="Search-result-item"
+                        onClick={() => handleNewChat(user)}
+                      >
+                        {user.username} <FaPlus className="Add-icon" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="sep-chat"></div>
               </div>
-              <div className="left-side-chat-footer">
-                <div
-                  onClick={() => navigate("/community")}
-                  className="community group"
-                >
-                  <div className="icon-container">
-                    <HiUserGroup color="#7C78EB" />
-                  </div>
-                  <div className="hover-label">Communities</div>
-                </div>
-                <div className="group">
+
+              <div className="Chat-list">
+                {chats.map((chat) => (
                   <div
-                    className="icon-container "
-                    onClick={() => navigate("/addChat")}
+                    key={chat._id}
+                    className={`Chat-list-in ${
+                      currentChat?._id === chat._id ? "active-chat" : ""
+                    }`}
+                    onClick={() => handleConversationClick(chat)}
+                    aria-selected={currentChat?._id === chat._id}
                   >
-                    <FaPlus color="#7C78EB" />
+                    <Conversation
+                      data={chat}
+                      currentUserId={userData._id}
+                      onlineUsers={onlineUsers}
+                    />
                   </div>
-                  <div className="hover-label">Add Chat</div>
-                </div>
+                ))}
               </div>
             </div>
-          )}
-
-          <div
-            className={`Right-side-chat ${
-              mobileView === "chat" ? "show" : ""
-            } `}
-          >
-            <div className="chat-header">
-              <button
-                className="back-button"
-                onClick={() => setCurrentChat(null)}
+            <div className="left-side-chat-footer">
+              <div
+                onClick={() => navigate("/community")}
+                className="community group"
               >
-                <FaArrowLeft /> Back
-              </button>
+                <div className="icon-container">
+                  <HiUserGroup color="#7C78EB" />
+                </div>
+                <div className="hover-label">Communities</div>
+              </div>
+              <div className="group">
+                <div
+                  className="icon-container "
+                  onClick={() => navigate("/addChat")}
+                >
+                  <FaPlus color="#7C78EB" />
+                </div>
+                <div className="hover-label">Add Chat</div>
+              </div>
             </div>
+          </div>
+
+          <div className="Right-side-chat">
             {currentChat ? (
               <ChatBox
                 chat={currentChat}
