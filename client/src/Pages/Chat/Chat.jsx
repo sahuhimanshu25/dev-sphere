@@ -5,11 +5,11 @@ import axios from "axios";
 import ChatBox from "./Chat Components/Chatbox";
 import Conversation from "./Chat Components/Conversation";
 import { io } from "socket.io-client";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus ,FaArrowLeft} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
-import { FaArrowLeft } from "react-icons/fa";
+
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -20,33 +20,29 @@ const Chat = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
-  const [mobileView, setMobileView] = useState("list");
+  const [isMobileView, setIsMobileView] = useState(false);
   const navigate = useNavigate();
   const socket = useRef();
   const { userData, token } = useSelector((state) => state.user);
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
   useEffect(() => {
-    const isMobileView = window.innerWidth <= 768;
-    setMobileView(isMobileView ? "list" : "chat");
-  
-    const handleResize = () => {
-      setMobileView(window.innerWidth <= 768 ? "list" : "chat");
-    };
+    const handleResize = () => setIsMobileView(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
 
   // Initialize socket connection and setup listeners
   useEffect(() => {
     console.log("chat.jsx 28", token, userData);
+    console.log("latest update 11.58");
 
     if (userData && userData._id && token) {
       socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
-        query: {
+        auth: {
           token: `Bearer ${token}`,
         },
+        transports: ["websocket"], // Specify WebSocket transport
       });
 
       socket.current.emit("new-user-add", userData._id);
@@ -96,7 +92,6 @@ const Chat = () => {
   // Handle conversation click
   const handleConversationClick = (chat) => {
     setCurrentChat(chat);
-    setMobileView("chat");
   };
 
   // Emit message when sendMessage is updated
@@ -154,14 +149,13 @@ const Chat = () => {
     return <Loader />; // Render Loader while loading
   }
 
+  const handleBackToConversations = () => setCurrentChat(null);
   return (
-    <div className="Chat">
+    <div className={`Chat ${isMobileView ? "mobile-view" : ""} `}>
       {userData ? (
         <div className="main-chat">
-          {(!isMobile || !currentChat) && (
-            <div
-              className={`Left-side-chat`}
-            >
+          {(!currentChat || !isMobileView) && (
+            <div className="Left-side-chat">
               <div className="Chat-container">
                 <div className="left-side-chat-top">
                   <div className="head-chat-l">
@@ -240,20 +234,16 @@ const Chat = () => {
             </div>
           )}
 
-          <div
-            className={`Right-side-chat ${
-              mobileView === "chat" ? "show" : ""
-            } `}
-          >
-            <div className="chat-header">
-              <button
-                className="back-button"
-                onClick={() => setCurrentChat(null)}
-              >
-                <FaArrowLeft /> Back
-              </button>
-            </div>
-            {currentChat ? (
+          {currentChat && (
+            <div className="Right-side-chat">
+              {isMobileView && (
+                <div
+                  className="mobile-back-button"
+                  onClick={handleBackToConversations}
+                >
+                  <FaArrowLeft /> Back
+                </div>
+              )}
               <ChatBox
                 chat={currentChat}
                 currentUser={userData?._id}
@@ -261,12 +251,13 @@ const Chat = () => {
                 receiveMessage={receiveMessage}
                 onlineUsers={onlineUsers}
               />
-            ) : (
-              <div className="No-group-selected">
-                Select a group to start chatting
-              </div>
-            )}
-          </div>
+            </div>
+          )}
+          {!isMobileView && (
+            <div className="No-group-selected">
+              Select a group to start chatting
+            </div>
+          )}
         </div>
       ) : null}
     </div>
