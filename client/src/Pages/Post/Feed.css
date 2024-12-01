@@ -276,3 +276,61 @@
   margin-left: 8px;
   color: white;
 }
+@media (max-width: 1024px) {
+  .feed {
+    flex-direction: column; /* Stack posts and search users vertically */
+    gap: 20px;
+  }
+
+  .posts,
+  .Search-user {
+    width: 100%; /* Full width for smaller screens */
+    margin-right: 0;
+    max-width: none; /* Remove fixed width constraints */
+  }
+}
+
+@media (max-width: 768px) {
+  .feed {
+    padding: 10px;
+  }
+
+  .posts,
+  .Search-user {
+    padding: 0 10px;
+  }
+
+  .rec-top h2 {
+    font-size: 20px; /* Adjust font size for titles */
+  }
+}
+
+@media (max-width: 480px) {
+  .create-post {
+    font-size: 1rem;
+    padding: 10px 12px; /* Compact padding for small screens */
+  }
+
+  .recommended-user-item {
+    flex-direction: column; /* Stack avatars and names */
+    align-items: flex-start;
+  }
+
+  .recommended-user-item span {
+    font-size: 14px; /* Adjust font size for user names */
+  }
+
+  .recommended-user-item .user-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .post {
+    padding: 10px;
+    width: 100%; /* Full width for smaller screens */
+  }
+
+  .rec-top h2 {
+    font-size: 18px;
+  }
+}
