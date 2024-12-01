@@ -54,29 +54,29 @@ const RegisterPage = () => {
     completeData.append("password", formData.password);
     completeData.append("avatar", avatar);
 
-    setIsLoading(true); // Start loader
+    setIsLoading(true); // Show loader
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,
         completeData,
         { withCredentials: true }
       );
-      setIsLoading(false); // Stop loader
       if (result.data.success) {
         toast.success("Verification code sent to your email.");
         setStep(2);
       }
     } catch (err) {
-      setIsLoading(false); // Stop loader
       toast.error(err.response?.data?.message || "Registration failed.");
       console.error("REGISTER ERROR: ", err);
+    } finally {
+      setIsLoading(false); // Hide loader
     }
   };
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true); // Start loader
+    setIsLoading(true); // Show loader
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`,
@@ -85,21 +85,21 @@ const RegisterPage = () => {
         },
         { withCredentials: true }
       );
-      setIsLoading(false); // Stop loader
       if (result.data.success) {
         toast.success("Registration successful. Please log in.");
         navigate("/login");
       }
     } catch (err) {
-      setIsLoading(false); // Stop loader
       toast.error(err.response?.data?.message || "Verification failed.");
       console.error("VERIFICATION ERROR: ", err);
+    } finally {
+      setIsLoading(false); // Hide loader
     }
   };
 
   return (
     <div className="register">
-      {isLoading && <Loader />} {/* Show loader when loading */}
+      {isLoading && <Loader />}
       {step === 1 && (
         <div className="reg-main-reg-cont">
           <div className="reg-avatar-section">
