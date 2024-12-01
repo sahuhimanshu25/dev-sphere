@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   transition: margin-left 0.3s ease, background-color 0.3s ease;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .posts {
@@ -19,7 +19,7 @@
   overflow-y: auto;
   flex-shrink: 0;
   margin-right: 20px;
-  flex: 1;
+  flex: 6;
 }
 
 .Search-user {
@@ -203,6 +203,56 @@
 
 
 
+@media (max-width: 768px) {
+  .feed {
+    padding: 15px;
+    margin-left: 0;
+    width: 100vw;
+    height:100vh;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .posts {
+    width: 100%;
+    padding-right: 0;
+    max-height: none;
+  }
+
+  .Search-user {
+    width: 100%; /* Full width for small screens */
+    padding-left: 0;
+    position: relative;
+    height: auto;
+  }
+
+  .create-post {
+    font-size: 1rem;
+    padding: 12px 15px;
+  }
+
+  .post {
+    padding: 14px;
+    width: 90%;
+  }
+
+  .post-header {
+    font-size: 1.1rem;
+  }
+
+  .post-content {
+    font-size: 0.95rem;
+  }
+
+  .like-button {
+    font-size: 1rem;
+  }
+}
+
+.recommended-users {
+  margin-top: -20px;
+}
+
 .recommended-user-item {
   display: flex;
   align-items: center;
@@ -227,6 +277,20 @@
   margin-left: 8px;
   color: white;
 }
+@media (max-width: 1024px) {
+  .feed {
+    flex-direction: column; /* Stack posts and search users vertically */
+    gap: 20px;
+  }
+
+  .posts,
+  .Search-user {
+    width: 100%; /* Full width for smaller screens */
+    margin-right: 0;
+    max-width: none; /* Remove fixed width constraints */
+  }
+}
+
 @media (max-width: 768px) {
   .feed {
     padding: 10px;
@@ -267,8 +331,5 @@
 
   .rec-top h2 {
     font-size: 18px;
-  }
-  .recommended-users {
-    margin-top: -20px;
   }
 }
