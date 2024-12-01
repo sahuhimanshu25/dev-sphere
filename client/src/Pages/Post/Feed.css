@@ -9,6 +9,7 @@
   display: flex;
   justify-content: space-between;
   transition: margin-left 0.3s ease, background-color 0.3s ease;
+  overflow: hidden;
 }
 
 .posts {
@@ -18,7 +19,6 @@
   overflow-y: auto;
   flex-shrink: 0;
   margin-right: 20px;
-  flex: 6;
 }
 
 .Search-user {
@@ -215,6 +215,7 @@
     width: 100%;
     padding-right: 0;
     max-height: none;
+    flex: 6;
   }
 
   .Search-user {
@@ -281,9 +282,8 @@
     padding: 10px;
   }
 
-  .posts,
-  .Search-user {
-    /* padding: 0 10px; */
+  .posts{
+      flex: 6;
   }
 
   .rec-top h2 {
@@ -316,5 +316,8 @@
 
   .rec-top h2 {
     font-size: 18px;
+  }
+  .posts {
+    flex: 6;
   }
 }
