@@ -218,3 +218,47 @@ textarea:focus {
     font-size: 1.6rem;
   }
 }
+
+
+
+@media (max-width: 768px) {
+  .edit-profile-container {
+    width: 90%; 
+    padding: 20px;
+  }
+
+  .edit-profile-container h2 {
+    font-size: 1.5rem; 
+    gap: 10px;
+  }
+
+  .form-group label {
+    font-size: 16px; 
+  }
+
+  .edit-profile-container input,
+  textarea {
+    font-size: 0.85rem;
+  }
+
+  .edit-profile-container button {
+    font-size: 0.9rem; 
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-profile-container {
+    width: 100%; 
+    border-radius: 0; 
+    box-shadow: none;
+  }
+
+  .edit-profile-container h2 {
+    font-size: 1.2rem; 
+  }
+
+  .edit-profile-container button {
+    font-size: 0.85rem; 
+  }
+}
+
