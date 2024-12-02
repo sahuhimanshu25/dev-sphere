@@ -95,7 +95,7 @@ const RegisterPage = () => {
 
   return (
     <div className="register">
-     {isloading ? <Loader style={{ zIndex: 10000 }} /> : ""}
+     {isloading ? <div className="ld-reg"><Loader /></div>: ""}
       {step === 1 && (
         <div className="reg-main-reg-cont">
           <div className="reg-avatar-section">
