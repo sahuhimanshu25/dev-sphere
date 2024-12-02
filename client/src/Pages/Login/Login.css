@@ -188,21 +188,21 @@ body {
   }
 
   .login-title {
-    font-size: 1.8rem;
+    /* font-size: 1.8rem; */
   }
 
   .login-input {
-    font-size: 0.9rem;
+    /* font-size: 0.9rem; */
     padding: 8px;
   }
 
   .login-button {
-    font-size: 0.9rem;
+    /* font-size: 0.9rem; */
     padding: 8px;
   }
 
   .form-group label {
-    font-size: 0.8rem;
+    /* font-size: 0.8rem; */
   }
 }
 
@@ -213,25 +213,25 @@ body {
   }
 
   .login-title {
-    font-size: 2rem;
+    /* font-size: 2rem; */
    
   }
   .login-input {
-    padding: 8px;
+    /* padding: 8px; */
     outline: none;
     background: rgba(124, 120, 235, 0.2);
     color: white;
-    font-size: 1rem;
+    /* font-size: 1rem; */
     transition: all 0.3s ease;
     border: 1px solid #7c78eb8e;
     transition: box-shadow 0.3s ease-in-out;
-    letter-spacing: 0.5px;
+    /* letter-spacing: 0.5px; */
   }
   .login-button {
     width: 100%;
-    padding: 8px;
-    font-size: 20px;
-    font-weight: 550;
-    letter-spacing: 0.5px;
+    /* padding: 8px; */
+    /* font-size: 20px; */
+    /* font-weight: 550; */
+    /* letter-spacing: 0.5px; */
   }
 }
