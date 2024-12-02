@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Slices/authSlice.js"; // import the login async thunk
-import './Login.css';
+import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../components/Loader/Loader.jsx"; // A simple loader component
@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // Local loader state for button-specific loading
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,9 +24,8 @@ const LoginPage = () => {
       const result = await dispatch(login({ email, password })).unwrap();
       if (result) {
         toast.success("Login Successful");
-        console.log(result,"latest update 10.09");
-        
-        navigate('/post'); // Navigate only after successful login
+        console.log(result, "latest update 10.09");
+        navigate("/post"); // Navigate only after successful login
       }
     } catch (err) {
       toast.error(err || "Login failed. Please check your credentials.");
@@ -63,19 +63,27 @@ const LoginPage = () => {
               <span className="icon">🔒</span>
               <span className="icon-t">Password</span>
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              className="login-input"
-            />
+            <div className="password-container">
+              <input
+                type={showPassword ? "none" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+                className="login-input"
+              />
+              <span
+                className="toggle-password"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
           </div>
           <button
             type="submit"
             className="login-button"
-            disabled={isSubmitting || loading} // Disable button during submission or global loading
+            disabled={isSubmitting || loading} 
           >
             {isSubmitting || loading ? "Logging in..." : "Login"}
           </button>
@@ -85,7 +93,6 @@ const LoginPage = () => {
             <Link to="/register">Register</Link>
           </div>
         </form>
-        {/* {error && <p className="error-msg">Error: {error}</p>} Display API error */}
       </div>
     </div>
   );

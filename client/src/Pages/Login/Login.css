@@ -181,6 +181,7 @@ body {
 .reg :nth-child(2) {
   font-size: 17px;
 }
+
 @media (max-width: 768px) {
   .login-container {
     width: 300px;
@@ -234,4 +235,50 @@ body {
     /* font-weight: 550; */
     /* letter-spacing: 0.5px; */
   }
+}
+
+
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.login-input {
+  transition: background 0.3s ease, border-color 0.3s ease;/
+}
+
+/* Password text that will appear when 'showPassword' is true */
+.password-text {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* Ensuring no change when the input is focused */
+.login-input:focus {
+  background: rgba(124, 120, 235, 0.2);
+  border-color: #ccc;
+}
+
+/* Eye icon toggle */
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+/* Change icon color on hover */
+.toggle-password:hover {
+  color: #7c78eb;
 }
