@@ -7,13 +7,19 @@
   overflow: hidden;
   background-color: transparent;
 }
-.ld-reg{
-  width: 100vw;
-  height: 100vh;
+.loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional, for a dimmed background effect */
+  z-index: 1000;
 }
+
 .reg-main-reg-cont{
   display: flex;
   justify-content: center;
