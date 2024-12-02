@@ -189,18 +189,18 @@ textarea:focus {
   }
 
   .edit-profile-container h2 {
-    font-size: 1.8rem;
+    /* font-size: 1.8rem; */
   }
 
   .edit-profile-container input,
   textarea {
     /* font-size: 0.9rem; */
-    padding: 8px;
+    /* padding: 8px; */
   }
 
   .edit-profile-container button {
-    font-size: 0.9rem;
-    padding: 8px;
+    /* font-size: 0.9rem; */
+    /* padding: 8px; */
   }
 
   .form-group label {
