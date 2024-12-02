@@ -197,3 +197,8 @@
     margin-top: 80rem;
   }
 }
+@media (max-width: 400px) {
+  .main-cont-hpq {
+    margin-top: 96rem;
+  }
+}
