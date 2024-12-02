@@ -19,7 +19,7 @@ const RegisterPage = () => {
   const [step, setStep] = useState(1); 
   const [verificationCode, setVerificationCode] = useState("");
   const [isloading, setIsLoading]=useState(false);
-
+  const [showPassword, setShowPassword] = useState(false); 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -152,13 +152,14 @@ const RegisterPage = () => {
                   className="reg-register-input"
                 />
               </div>
-              <div className="reg-form-group">
+              <div className="reg-form-group ">
                 <label>
                   <span className="icon">🔒</span>
                   <span className="icon-t">Password</span>
                 </label>
+                <div className="password-container-reg">
                 <input
-                  type="password"
+                  type={showPassword ? "none" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
@@ -166,6 +167,13 @@ const RegisterPage = () => {
                   required
                   className="reg-register-input"
                 />
+                <span
+                className="toggle-password"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </span>
+              </div>
               </div>
               <button type="submit" className="reg-register-button">
                 Register

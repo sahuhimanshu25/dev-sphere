@@ -263,3 +263,316 @@
     /* padding: 10px; */
   }
 }
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  overflow: hidden;
+  background-color: transparent;
+}
+.reg-main-reg-cont{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height:90vh;
+  width: 100vw;
+}
+/* Avatar preview styling */
+.reg-avatar-section {
+  position: relative;
+  z-index: 10;
+}
+.reg-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 90px;
+  height: 90px;
+}
+.reg-avatar-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #7c78eb;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+.reg-avatar-pencil {
+  font-size: 18px;
+  color: #7C78EB;
+  background-color: transparent;
+  transform: scaleX(-1);
+}
+.reg-avatar-input {
+  display: none;
+}
+.reg-avatar-upload-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  transition: background 0.3s ease;
+}
+
+
+.reg-register-container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(124, 120, 235, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  margin-top: -2.5rem;
+}
+.reg-register-container-1{
+  height: 5vh;
+  width: 100%;
+  margin-bottom: -1.5rem;
+}
+
+.reg-register-title {
+  font-size: 2rem;
+  color: white;
+  
+}
+
+.reg-register-title :nth-child(1) {
+  color: #7C78EB;
+}
+
+.reg-register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.reg-form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.reg-form-group label {
+  display: flex;
+  align-items: center;
+  color: #7C78EB;
+  margin-bottom: 8px;
+  gap: 5px;
+}
+
+.reg-icon-t {
+  margin-top: 7px;
+  letter-spacing: 1px;
+  font-size: 20px;
+  font-weight: 550;
+}
+
+.reg-form-group label .icon {
+  font-size: 24px;
+}
+.reg-register-input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  background: rgba(124, 120, 235, 0.2);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid #7c78eb8e;
+  transition: box-shadow 0.3s ease-in-out;
+  letter-spacing: 0.5px;
+}
+
+.reg-register-input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.reg-register-input:focus {
+  background: rgba(124, 120, 235, 0.3);
+  border: 1px solid #7C78EB;
+}
+
+.reg-register-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  color: white;
+  background: #7C78EB;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0.5em 0.5em 0.5em rgba(0, 0, 0, 0.3);
+  padding: 0.5em 1em;
+  font-size: 20px;
+  font-weight: 550;
+  letter-spacing: 0.5px;
+}
+
+.reg-register-button::before {
+  position: absolute;
+  content: '';
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(33, 33, 33, 0.741) 0%, rgba(33, 33, 33, 0.671) 50%, rgba(150,4,31,1) 50%, rgba(191,4,38,1) 60%);
+  border-radius: 0 0 0.5em 0;
+  box-shadow: 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+}
+
+.reg-register-button:hover::before {
+  width: 1.6em;
+  height: 1.6em;
+}
+
+.reg-register-button:active {
+  box-shadow: 0.2em 0.2em 0.3em rgba(0, 0, 0, 0.3);
+  transform: translate(0.1em, 0.1em);
+}
+
+.reg-register-button:hover {
+  background: #605dd3; 
+}
+
+.reg-register-button:disabled {
+  background-color: rgba(124, 120, 235, 0.5); 
+  cursor: not-allowed;
+}
+
+
+.reg-error-msg {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.reg-register-form a {
+  color: #7C78EB;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: inline-block;
+}
+.reg-register-form a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .reg-register-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 30px;
+    margin-top: -2.5rem;
+  }
+
+  .reg-register-title {
+    /* font-size: 1.8rem; */
+  }
+
+  .reg-register-input {
+    /* padding: 10px; */
+  }
+
+  .reg-register-button {
+    /* padding: 10px; */
+  }
+}
+
+@media (max-width: 480px) {
+  .register {
+    max-height: 100vh;
+    padding:0px;
+  }
+  .reg-main-reg-cont{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    height:100vh;
+    width: 100vw;
+    padding: 0px;
+    margin-top: -4rem;
+  }
+  .reg-register-container {
+    width: 400px;
+    border-radius: 15px;
+    padding:40px 15px;
+    text-align: center;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    margin-top: -2.5rem;
+  }
+
+  .reg-register-title {
+    /* font-size: 1.6rem; */
+  }
+
+  .reg-register-input {
+    /* padding: 10px; */
+  }
+
+  .reg-register-button {
+    /* padding: 10px; */
+  }
+}
+
+
+
+
+.password-container-reg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  /* flex-direction: column; */
+}
+
+.reg-register-input {
+  transition: background 0.3s ease, border-color 0.3s ease;/
+}
+
+/* Password text that will appear when 'showPassword' is true */
+.password-text {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* Ensuring no change when the input is focused */
+.login-input:focus {
+  background: rgba(124, 120, 235, 0.2);
+  border-color: #ccc;
+}
+
+/* Eye icon toggle */
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+/* Change icon color on hover */
+.toggle-password:hover {
+  color: #7c78eb;
+}
