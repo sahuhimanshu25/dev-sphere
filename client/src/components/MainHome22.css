@@ -139,7 +139,7 @@
     width: 100%;
     margin-left: 0;
     padding: 0.5rem;
-    margin-top: 66rem;
+    margin-top: 80rem;
   }
 
   .homeslider-container {
@@ -165,12 +165,12 @@
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 550px) {
   .main-cont-hpq {
     width: 100%;
     margin-left: 0;
     padding: 0.5rem;
-    margin-top: 58rem;
+    margin-top: 98rem;
   }
   .text {
     font-size: 1.8rem;
@@ -195,5 +195,10 @@
 @media (max-width: 450px) {
   .main-cont-hpq {
     margin-top: 80rem;
+  }
+}
+@media (max-width: 375px) {
+  .main-cont-hpq {
+    margin-top: 96rem;
   }
 }

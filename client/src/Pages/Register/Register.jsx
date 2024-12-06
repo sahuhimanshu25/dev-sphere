@@ -16,10 +16,10 @@ const RegisterPage = () => {
   });
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(DefaultAvatar);
-  const [step, setStep] = useState(1); 
+  const [step, setStep] = useState(1);
   const [verificationCode, setVerificationCode] = useState("");
-  const [isloading, setIsLoading]=useState(false);
-
+  const [isloading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -41,7 +41,7 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     if (!avatar) {
       toast.error("Please upload an avatar.");
       return;
@@ -57,7 +57,8 @@ const RegisterPage = () => {
       setIsLoading(true);
       const result = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,
-        completeData,{ withCredentials: true } 
+        completeData,
+        { withCredentials: true }
       );
       if (result.data.success) {
         setIsLoading(false);
@@ -79,9 +80,10 @@ const RegisterPage = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`,
         {
           verificationCode,
-        },{ withCredentials: true } 
+        },
+        { withCredentials: true }
       );
-      console.log(result.data)
+      console.log(result.data);
       if (result.data.success) {
         setIsLoading(false);
         toast.success("Registration successful. Please log in.");
@@ -95,7 +97,11 @@ const RegisterPage = () => {
 
   return (
     <div className="register">
-     {isloading ? <Loader style={{ zIndex: 10000 }} /> : ""}
+      {isloading && (
+        <div className="loader-container">
+          <Loader />
+        </div>
+      )}
       {step === 1 && (
         <div className="reg-main-reg-cont">
           <div className="reg-avatar-section">
@@ -152,20 +158,28 @@ const RegisterPage = () => {
                   className="reg-register-input"
                 />
               </div>
-              <div className="reg-form-group">
+              <div className="reg-form-group ">
                 <label>
                   <span className="icon">🔒</span>
                   <span className="icon-t">Password</span>
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Enter your password"
-                  required
-                  className="reg-register-input"
-                />
+                <div className="password-container-reg">
+                  <input
+                    type={showPassword ? "none" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Enter your password"
+                    required
+                    className="reg-register-input"
+                  />
+                  <span
+                    className="toggle-password"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? "🙈" : "👁️"}
+                  </span>
+                </div>
               </div>
               <button type="submit" className="reg-register-button">
                 Register
