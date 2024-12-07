@@ -117,7 +117,14 @@ const UserProfile = () => {
 
   return (
     <>
-      {(isLoading || loadingAvatar) && <Loader />}
+      <div>
+        {isLoading && (
+          <div className="loader-container-userProf">
+            <Loader />
+          </div>
+        )}
+      </div>
+
       <div className="user-profile" id="user-profile">
         <div className="p-top">
           <div className="profile-header">
