@@ -241,3 +241,20 @@
   transform: translateX(-50%) translateY(0); 
   opacity: 1;
 }
+
+
+.group-left{
+  display: block;
+  flex: 1;
+}
+.group-left-notsel{
+  display: none;
+}
+.group-right{
+  width: 100%; /* Show full right panel */
+  visibility: visible;
+}
+
+.group-right-notsel{
+  display: none;
+}

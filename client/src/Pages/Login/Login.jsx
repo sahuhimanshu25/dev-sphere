@@ -24,8 +24,12 @@ const LoginPage = () => {
       const result = await dispatch(login({ email, password })).unwrap();
       if (result) {
         toast.success("Login Successful");
-        console.log(result, "latest update 10.09");
-        navigate("/post"); // Navigate only after successful login
+
+        console.log(result,"latest update 6.50");
+        
+        navigate('/post'); // Navigate only after successful login
+
+
       }
     } catch (err) {
       toast.error(err || "Login failed. Please check your credentials.");

@@ -12,9 +12,12 @@ const GroupChat = () => {
   const [currentGroup, setCurrentGroup] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth<=768);
   const navigate = useNavigate();
   const { userData ,token} = useSelector((state) => state.user);
-
+  const handleBackToConversatoin = () => {
+    setCurrentChat(null);
+  };
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -62,7 +65,7 @@ const GroupChat = () => {
       <div className="GCB-GroupChat">
         {userData ? (
           <>
-            <div className="GCB-LeftSideChat">
+            <div className={`GCB-LeftSideChat ${isMobileView?currentGroup?"group-left-notsel":"group-left":""}`}>
               <div className="GCB-Container">
                 <div className="GCB-LeftSideChat-top">
                   <h2>
@@ -118,7 +121,7 @@ const GroupChat = () => {
               </div> 
             </div>
 
-            <div className="GCB-RightSideChat">
+            <div className={`GCB-RightSideChat ${isMobileView?currentGroup?"group-right":"group-right-notsel":""} `}>
               {currentGroup ? (
                 <GroupChatBox group={currentGroup} />
               ) : (
