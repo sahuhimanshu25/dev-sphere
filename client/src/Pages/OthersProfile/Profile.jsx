@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import Loader from "../../components/Loader/Loader";
 
 const Profile = () => {
-  const userId = useSelector((state) => state.post.userId); // Replace `state.post.userId` if userId is stored elsewhere
+  const userId = useSelector((state) => state.post.userId); 
   console.log("User ID:", userId);
   const {token}=useSelector((state)=>state.user)
   const [avatar, setAvatar] = useState("");
@@ -28,7 +28,7 @@ const Profile = () => {
 
     const fetchUserData = async () => {
       setLoading(true);
-      setError(null); // Reset error before fetching data
+      setError(null);
 
       try {
         const response = await axios.get(
