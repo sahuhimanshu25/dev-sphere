@@ -37,13 +37,13 @@ const LoginPage = () => {
     }
   };
 
-  const handleDemoLogin = (e) => {
-    const demoCredentials = {
-      email: import.meta.env.EMAIL,
-      password: import.meta.env.PASSWORD
-    };
-    handleLogin(e, demoCredentials);
+const handleDemoLogin = (e) => {
+  const demoCredentials = {
+    email: import.meta.env.VITE_EMAIL,
+    password: import.meta.env.VITE_PASSWORD
   };
+  handleLogin(e, demoCredentials);
+};
 
   return (
     <div className="log">
