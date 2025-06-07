@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../Slices/authSlice.js"; // import the login async thunk
+import { login } from "../../Slices/authSlice.js";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import Loader from "../../components/Loader/Loader.jsx"; // A simple loader component
+import Loader from "../../components/Loader/Loader.jsx";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -13,30 +13,36 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); // Local loader state for button-specific loading
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e, demoCredentials = null) => {
     e.preventDefault();
-    setIsSubmitting(true); // Show button loader during request
+    setIsSubmitting(true);
+
+    const credentials = demoCredentials || { email, password };
 
     try {
-      const result = await dispatch(login({ email, password })).unwrap();
+      const result = await dispatch(login(credentials)).unwrap();
       if (result) {
         toast.success("Login Successful");
-
-        console.log(result,"latest update 6.50");
-        
-        navigate('/post'); // Navigate only after successful login
-
-
+        console.log(result, "latest update 6.50");
+        navigate('/post');
       }
     } catch (err) {
       toast.error(err || "Login failed. Please check your credentials.");
       console.error("LOGIN.JSX ERROR: ", err);
     } finally {
-      setIsSubmitting(false); // Hide button loader after request
+      setIsSubmitting(false);
     }
+  };
+
+  const handleDemoLogin = (e) => {
+    const demoCredentials = {
+      email: import.meta.env.EMAIL,
+      password: import.meta.env.PASSWORD
+    };
+    handleLogin(e, demoCredentials);
   };
 
   return (
@@ -46,7 +52,7 @@ const LoginPage = () => {
           <span>Log</span>
           <span>in</span>
         </h2>
-        {loading && <Loader />} {/* Show global loader if `loading` is true */}
+        {loading && <Loader />}
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
             <label>
@@ -69,7 +75,7 @@ const LoginPage = () => {
             </label>
             <div className="password-container">
               <input
-                type={showPassword ? "none" : "password"}
+                type={showPassword ? "text" : "password"} // Fixed type from "none" to "text"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
@@ -87,9 +93,19 @@ const LoginPage = () => {
           <button
             type="submit"
             className="login-button"
-            disabled={isSubmitting || loading} 
+            disabled={isSubmitting || loading}
           >
             {isSubmitting || loading ? "Logging in..." : "Login"}
+          </button>
+          
+          {/* Demo User Button */}
+          <button
+            type="button"
+            className="login-button demo-button" // Add custom class for styling if needed
+            onClick={handleDemoLogin}
+            disabled={isSubmitting || loading}
+          >
+            {isSubmitting || loading ? "Logging in..." : "Login as Demo User"}
           </button>
 
           <div className="reg">
