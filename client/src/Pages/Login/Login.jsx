@@ -20,6 +20,21 @@ const LoginPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Add toast for server wakeup
+    toast(
+      <div className="custom-toast">
+        <span className="toast-icon">⏳</span>
+        <div>
+          <strong>Waking up the server...</strong>
+          <p>This may take up to 40 seconds. Thanks for your patience!</p>
+        </div>
+      </div>,
+      {
+        duration: 6000,
+        position: 'top-center',
+      }
+    );
+
     const credentials = demoCredentials || { email, password };
 
     try {
