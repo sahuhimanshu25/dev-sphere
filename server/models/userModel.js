@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please enter your password'],
-        // minlength: 6,
+        minlength: [6, 'Password must be at least 6 characters'],
         select: false
     },
     followers: [
@@ -62,9 +62,13 @@ userSchema.pre("save",async function(next){
 
 
 //JWT TOKEN
-const JWT_SECRET=process.env.JWT_SECRET
-console.log("jwt usermodel",JWT_SECRET);
-
+if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined in environment variables");
+}
+const JWT_SECRET = process.env.JWT_SECRET;
+if (process.env.NODE_ENV !== 'production') {
+    console.log("JWT Secret loaded");
+}
 userSchema.methods.getJWT=function(){
     return jwt.sign({id:this._id},JWT_SECRET,{
         expiresIn:"5d"
@@ -75,6 +79,15 @@ userSchema.methods.getJWT=function(){
 userSchema.methods.comparePassword=async function(entered){
     return await bcrypt.compare(entered,this.password)
 }
+userSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+        delete ret.password;
+        delete ret.__v;
+        delete ret.verificationCode;
+        delete ret.avatarPublicId; // optional, if you don’t want to expose it
+        return ret;
+    }
+});
 
 
 export const User=new mongoose.model('User',userSchema);

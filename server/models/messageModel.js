@@ -10,6 +10,8 @@ const MessageSchema = new mongoose.Schema(
     },
     text: {
       type: String,
+      required: [true, "Message text cannot be empty"],
+      trim: true
     },
     isGroup:{
       type:Boolean,
@@ -20,5 +22,11 @@ const MessageSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+MessageSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    delete ret.__v;
+    return ret;
+  }
+});
 
 export const Message = mongoose.model("Message", MessageSchema);
