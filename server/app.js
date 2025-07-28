@@ -11,7 +11,6 @@ import { chatRouter } from './routes/chatRoutes.js';
 import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
-
 app.use(cors({
     origin: `https://devsphereclient.onrender.com`, // allow requests from your frontend
     credentials: true, // if you're using cookies or HTTP authentication
