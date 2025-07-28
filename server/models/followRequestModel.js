@@ -17,5 +17,11 @@ const followRequestSchema = new mongoose.Schema({
         default: 'pending'
     },
 },{timestamps:true});
+followRequestSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    delete ret.__v;
+    return ret;
+  }
+});
 
 export const FollowRequest = mongoose.model('FollowRequest', followRequestSchema);
