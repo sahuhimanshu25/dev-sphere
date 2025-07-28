@@ -6,8 +6,8 @@ export const sendMessage = async (ReceiverMail, message) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'devchatapplication@gmail.com' || process.env.TEAM_EMAIL,
-        pass: 'lrlp wbvm lhlx rmxc' || process.env.PASSWORD
+        user:process.env.TEAM_EMAIL,
+        pass:process.env.PASSWORD
       }
     });
 
