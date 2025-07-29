@@ -1,34 +1,5 @@
 "use client"
 
-<<<<<<< HEAD
-import { useState } from "react"
-import Layout from "../components/Layout"
-import ChatSidebar from "../components/ChatSidebar"
-import ChatWindow from "../components/ChatWindow"
-import { chatUsers } from "../lib/dummyData"
-
-export default function ChatPage() {
-  const [selectedUser, setSelectedUser] = useState(chatUsers[0])
-  const [searchQuery, setSearchQuery] = useState("")
-
-  const filteredUsers = chatUsers.filter((user) => user.username.toLowerCase().includes(searchQuery.toLowerCase()))
-
-  return (
-    <Layout>
-      <div className="h-[calc(100vh-4rem)] flex">
-        <ChatSidebar
-          users={filteredUsers}
-          selectedUser={selectedUser}
-          onSelectUser={setSelectedUser}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
-        <ChatWindow user={selectedUser} />
-      </div>
-    </Layout>
-  )
-}
-=======
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useSelector, useDispatch } from "react-redux"
@@ -155,4 +126,3 @@ const ChatPage = () => {
 }
 
 export default ChatPage
->>>>>>> 09c7f749f77f35c97009f99a04ac2d17a917f862

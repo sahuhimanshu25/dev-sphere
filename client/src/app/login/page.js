@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { useDispatch, useSelector } from "react-redux"
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi"
-import { login, clearError, loginUser } from "@/store/slices/authSlice"
+import { login, clearError } from "@/store/slices/authSlice"
 import toast from "react-hot-toast"
 import Link from "next/link"
 import Loader from "@/components/ui/Loader"
@@ -16,7 +16,6 @@ const LoginPage = () => {
     password: "",
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -44,20 +43,16 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsLoading(true)
-
     try {
-      await dispatch(loginUser(formData)).unwrap()
+      await dispatch(login(formData)).unwrap()
       toast.success("Login successful!")
       router.push("/")
     } catch (error) {
       toast.error(error || "Login failed")
-    } finally {
-      setIsLoading(false)
     }
   }
 
-  if (loading || isLoading) {
+  if (loading) {
     return <Loader fullScreen text="Signing you in..." />
   }
 
@@ -137,15 +132,15 @@ const LoginPage = () => {
 
             <motion.button
               type="submit"
-              disabled={loading || isLoading}
+              disabled={loading}
               className="w-full btn-futuristic py-3 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              whileHover={{ scale: loading || isLoading ? 1 : 1.02 }}
-              whileTap={{ scale: loading || isLoading ? 1 : 0.98 }}
+              whileHover={{ scale: loading ? 1 : 1.02 }}
+              whileTap={{ scale: loading ? 1 : 0.98 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              {loading || isLoading ? (
+              {loading ? (
                 <div className="loading-dots">
                   <div></div>
                   <div></div>

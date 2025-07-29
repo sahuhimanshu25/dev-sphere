@@ -25,6 +25,8 @@ export const store = configureStore({
         ignoredActions: ["persist/PERSIST"],
       },
     }),
+
+    devTools:true
 });
 
 // For JavaScript usage, you can access the types like this:

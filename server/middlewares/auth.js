@@ -26,7 +26,6 @@ export const isAuthenticated = async (req, res, next) => {
     if (!req.user) {
       return next(new ErrorHandler("User not found", 401));
     }
-    sendMessage("himpreetak@gmail.com","this is a test message")
 
     next();
   } catch (error) {
