@@ -1,33 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-<<<<<<< HEAD
-const defaultConfig = require("shadcn/ui/tailwind.config")
-
-module.exports = {
-  ...defaultConfig,
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}", // if you keep files in `src/app`
-    "./**/*.{js,ts,jsx,tsx,mdx}",      // fallback - scans all
-  ],
-  theme: {
-    ...defaultConfig.theme,
-    extend: {
-      ...defaultConfig.theme.extend,
-      colors: {
-        ...defaultConfig.theme.extend.colors,
-        gray: {
-          750: "#374151",
-        },
-      },
-      animation: {
-        "slide-up": "slideUp 0.3s ease-out",
-      },
-      keyframes: {
-        slideUp: {
-          "0%": { transform: "translateY(100%)" },
-          "100%": { transform: "translateY(0)" },
-        },
-=======
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -152,7 +123,6 @@ module.exports = {
       },
       backdropBlur: {
         xs: "2px",
->>>>>>> 09c7f749f77f35c97009f99a04ac2d17a917f862
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -161,14 +131,9 @@ module.exports = {
       },
     },
   },
-<<<<<<< HEAD
-  plugins: [...defaultConfig.plugins, require("tailwindcss-animate")],
-}
-=======
   plugins: [
     require("tailwindcss-animate"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
   ],
 };
->>>>>>> 09c7f749f77f35c97009f99a04ac2d17a917f862
