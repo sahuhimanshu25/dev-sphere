@@ -1,3 +1,4 @@
+"use client"
 import { FaBars, FaHome, FaUser, FaCog, FaSearch } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
