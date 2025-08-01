@@ -20,7 +20,7 @@
   transform: translateY(0);
   transition: all 0.3s ease;
   z-index: 100;
-  margin: 0;
+  /* margin: 0; */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -323,7 +323,7 @@
     transform: translateY(0);
     transition: all 0.3s ease;
     z-index: 100;
-    margin: 0;
+    /* margin: 0; */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -333,7 +333,7 @@
   }
 
   .main-container {
-    margin-left: 0;
+    /* margin-left: 0; */
   }
 
   .search input {
@@ -374,7 +374,7 @@
   }
 
   .main-container {
-    margin-left: 0;
+    /* margin-left: 0; */
   }
 
   .menu_item {

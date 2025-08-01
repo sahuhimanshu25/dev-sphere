@@ -1,192 +1,168 @@
-import React, { useContext, useState } from 'react';
-import EditorContainer from './EditorContainer';
-import InputConsole from './InputConsole';
-import OutputConsole from './OutputConsole';
-import Navbar from './Navbar';
-import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
-import { languageMap, PlaygroundContext } from '../../context/PlaygroundContext';
-import { ModalContext } from '../../context/ModalContext';
-import Modal from '../../components/Modal';
-import { Buffer } from 'buffer';
-import axios from 'axios';
-import "./indexK.css"
-const MainContainer = styled.div`
-  display: grid;
-  grid-template-columns: ${({ isFullScreen }) => (isFullScreen ? '1fr' : '2fr 1fr')};
-  min-height: ${({ isFullScreen }) => (isFullScreen ? '100vh' : 'calc(100vh - 4.5rem)')};
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
+"use client"
 
-const Consoles = styled.div`
-  display: grid;
-  width: 100%;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr;
-`;
+import { useContext, useState } from "react"
+import EditorContainer from "./EditorContainer"
+import Navbar from "./Navbar"
+import { useParams } from "react-router-dom"
+import { languageMap, PlaygroundContext } from "../../context/PlaygroundContext"
+import { ModalContext } from "../../context/ModalContext"
+import Modal from "../../components/Modal"
+import { Buffer } from "buffer"
+import axios from "axios"
+import "./indexK.css"
 
 const Playground = () => {
-  const { folderId, playgroundId } = useParams();
-  const { folders, savePlayground } = useContext(PlaygroundContext);
-  const { isOpenModal, openModal, closeModal } = useContext(ModalContext);
-  const { title, language, code } = folders[folderId].playgrounds[playgroundId];
-
-  const [currentLanguage, setCurrentLanguage] = useState(language);
-  const [currentCode, setCurrentCode] = useState(code);
-  const [currentInput, setCurrentInput] = useState('');
-  const [currentOutput, setCurrentOutput] = useState('');
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const { folderId, playgroundId } = useParams()
+  const { folders, savePlayground } = useContext(PlaygroundContext)
+  const { isOpenModal, openModal, closeModal } = useContext(ModalContext)
+  const { title, language, code } = folders[folderId].playgrounds[playgroundId]
+  const [currentLanguage, setCurrentLanguage] = useState(language)
+  const [currentCode, setCurrentCode] = useState(code)
+  const [currentInput, setCurrentInput] = useState("")
+  const [currentOutput, setCurrentOutput] = useState("")
+  const [isFullScreen, setIsFullScreen] = useState(false)
+  const [isRunning, setIsRunning] = useState(false)
 
   // all logic of the playground
   const saveCode = () => {
-    savePlayground(folderId, playgroundId, currentCode, currentLanguage);
-  };
+    savePlayground(folderId, playgroundId, currentCode, currentLanguage)
+  }
 
   const encode = (str) => {
-    return Buffer.from(str, 'binary').toString('base64');
-  };
+    return Buffer.from(str, "binary").toString("base64")
+  }
 
   const decode = (str) => {
-    return Buffer.from(str, 'base64').toString();
-  };
+    return Buffer.from(str, "base64").toString()
+  }
 
   const postSubmission = async (language_id, source_code, stdin) => {
     const options = {
-      method: 'POST',
-      url: 'https://judge0-ce.p.rapidapi.com/submissions',
-      params: { base64_encoded: 'true', fields: '*' },
+      method: "POST",
+      url: "https://judge0-ce.p.rapidapi.com/submissions",
+      params: { base64_encoded: "true", fields: "*" },
       headers: {
-        'content-type': 'application/json',
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': '37620f3bafmsh88a20277a71d6ebp121411jsn8ae11b833a27',
-        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+        "content-type": "application/json",
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": "37620f3bafmsh88a20277a71d6ebp121411jsn8ae11b833a27",
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
       },
       data: JSON.stringify({
         language_id: language_id,
         source_code: source_code,
         stdin: stdin,
       }),
-    };
-
-    const res = await axios.request(options);
-    return res.data.token;
-  };
+    }
+    const res = await axios.request(options)
+    return res.data.token
+  }
 
   const getOutput = async (token) => {
     try {
       const options = {
-        method: 'GET',
+        method: "GET",
         url: `https://judge0-ce.p.rapidapi.com/submissions/${token}`,
-        params: { base64_encoded: 'true', fields: '*' },
+        params: { base64_encoded: "true", fields: "*" },
         headers: {
-          'X-RapidAPI-Key': '37620f3bafmsh88a20277a71d6ebp121411jsn8ae11b833a27',
-          'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+          "X-RapidAPI-Key": "37620f3bafmsh88a20277a71d6ebp121411jsn8ae11b833a27",
+          "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
         },
-      };
-
+      }
       // Call the API
-      const res = await axios.request(options);
-
+      const res = await axios.request(options)
       // Check if the response data is valid
       if (!res || !res.data) {
-        throw new Error('No data returned from the API.');
+        throw new Error("No data returned from the API.")
       }
-
       // Check the status_id to determine the response
       if (res.data.status_id <= 2) {
         // If the status is still processing, recursively get output
-        const res2 = await getOutput(token);
-        return res2;
+        const res2 = await getOutput(token)
+        return res2
       }
-
-      return res.data;
+      return res.data
     } catch (error) {
-      console.error('Error fetching output:', error);
+      console.error("Error fetching output:", error)
       // Handle the error accordingly (e.g., set an error message in the state)
-      return { error: error.message }; // Return error message for further handling
+      return { error: error.message } // Return error message for further handling
     }
-  };
+  }
 
   const runCode = async () => {
+    setIsRunning(true)
     openModal({
       show: true,
       modalType: 6,
       identifiers: {
-        folderId: '',
-        cardId: '',
+        folderId: "",
+        cardId: "",
       },
-    });
-
-    const language_id = languageMap[currentLanguage].id;
-    const source_code = encode(currentCode);
-    const stdin = encode(currentInput);
-
+    })
+    const language_id = languageMap[currentLanguage].id
+    const source_code = encode(currentCode)
+    const stdin = encode(currentInput)
     try {
       // Pass these things to Create Submissions
-      const token = await postSubmission(language_id, source_code, stdin);
-
+      const token = await postSubmission(language_id, source_code, stdin)
       // Get the output
-      const res = await getOutput(token);
+      const res = await getOutput(token)
       if (res.error) {
-        setCurrentOutput(`Error: ${res.error}`);
-        return;
+        setCurrentOutput(`Error: ${res.error}`)
+        return
       }
-
-      const status_name = res.status.description;
-      const decoded_output = decode(res.stdout ? res.stdout : '');
-      const decoded_compile_output = decode(res.compile_output ? res.compile_output : '');
-      const decoded_error = decode(res.stderr ? res.stderr : '');
-
-      let final_output = '';
+      const status_name = res.status.description
+      const decoded_output = decode(res.stdout ? res.stdout : "")
+      const decoded_compile_output = decode(res.compile_output ? res.compile_output : "")
+      const decoded_error = decode(res.stderr ? res.stderr : "")
+      let final_output = ""
       if (res.status_id !== 3) {
         // Our code has some error
-        if (decoded_compile_output === '') {
-          final_output = decoded_error;
+        if (decoded_compile_output === "") {
+          final_output = decoded_error
         } else {
-          final_output = decoded_compile_output;
+          final_output = decoded_compile_output
         }
       } else {
-        final_output = decoded_output;
+        final_output = decoded_output
       }
-      setCurrentOutput(`${status_name}\n\n${final_output}`);
+      setCurrentOutput(`${status_name}\n\n${final_output}`)
     } catch (error) {
-      console.error('Error running code:', error);
-      setCurrentOutput(`Error: ${error.message}`);
+      console.error("Error running code:", error)
+      setCurrentOutput(`Error: ${error.message}`)
     } finally {
-      closeModal();
+      setIsRunning(false)
+      closeModal()
     }
-  };
+  }
 
   const getFile = (e, setState) => {
-    const input = e.target;
-    if ('files' in input && input.files.length > 0) {
-      placeFileContent(input.files[0], setState);
+    const input = e.target
+    if ("files" in input && input.files.length > 0) {
+      placeFileContent(input.files[0], setState)
     }
-  };
+  }
 
   const placeFileContent = (file, setState) => {
     readFileContent(file)
       .then((content) => {
-        setState(content);
+        setState(content)
       })
-      .catch((error) => console.log(error));
-  };
+      .catch((error) => console.log(error))
+  }
 
   function readFileContent(file) {
-    const reader = new FileReader();
+    const reader = new FileReader()
     return new Promise((resolve, reject) => {
-      reader.onload = (event) => resolve(event.target.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsText(file);
-    });
+      reader.onload = (event) => resolve(event.target.result)
+      reader.onerror = (error) => reject(error)
+      reader.readAsText(file)
+    })
   }
 
   return (
-    <div className='playGround'>
+    <div className="playGround">
       <Navbar isFullScreen={isFullScreen} />
-      <MainContainer isFullScreen={isFullScreen}>
+      <div className={`code-main-container ${isFullScreen ? "fullscreen" : ""}`}>
         <EditorContainer
           title={title}
           currentLanguage={currentLanguage}
@@ -198,21 +174,17 @@ const Playground = () => {
           saveCode={saveCode}
           runCode={runCode}
           getFile={getFile}
+          currentInput={currentInput}
+          setCurrentInput={setCurrentInput}
+          currentOutput={currentOutput}
+          isRunning={isRunning}
           isFullScreen={isFullScreen}
           setIsFullScreen={setIsFullScreen}
         />
-        <Consoles className='console'>
-          <InputConsole
-            currentInput={currentInput}
-            setCurrentInput={setCurrentInput}
-            getFile={getFile}
-          />
-          <OutputConsole currentOutput={currentOutput} />
-        </Consoles>
-      </MainContainer>
+      </div>
       {isOpenModal.show && <Modal />}
     </div>
-  );
-};
+  )
+}
 
-export default Playground;
+export default Playground

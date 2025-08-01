@@ -1,0 +1,11 @@
+/* NewFolder Component Styles - Inherits from App.css variables */
+
+.new-folder-wrapper {
+  /* Remove the inline styles and use modern design */
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  padding: 16px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px var(--shadow-primary);
+}

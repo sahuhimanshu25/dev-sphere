@@ -204,7 +204,7 @@
 @media (max-width: 768px) {
   .feed {
     padding: 15px;
-    margin-left: 0;
+    /* margin-left: 0; */
     width: 100vw;
     height:100vh;
     flex-direction: column;

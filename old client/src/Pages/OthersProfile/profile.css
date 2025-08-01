@@ -44,7 +44,7 @@
 
 /* User Name */
 .user-profile-info h2 {
-  margin: 0;
+  /* margin: 0; */
   font-size: 1.8rem;
   color: white;
   font-weight: bold;

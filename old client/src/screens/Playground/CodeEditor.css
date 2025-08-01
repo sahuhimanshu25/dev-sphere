@@ -1,0 +1,612 @@
+/* Ultra Modern Code Editor - VS Code Inspired Design */
+
+.ultra-modern-editor {
+  height: 100%;
+  width: 100%;
+  background: #0d1117;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(240, 246, 252, 0.1), 0 16px 32px rgba(1, 4, 9, 0.85);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+}
+
+/* Editor Main Area */
+.editor-main-area {
+  display: flex;
+  flex-direction: column;
+  background: #0d1117;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Editor Header */
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+  height: 48px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 100;
+}
+
+.editor-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #58a6ff, transparent);
+  opacity: 0.5;
+}
+
+.editor-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  color: #f0f6fc;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  min-width: 120px;
+}
+
+.editor-tab.active {
+  background: #0d1117;
+  border-color: #58a6ff;
+  color: #58a6ff;
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
+}
+
+.editor-tab:hover:not(.active) {
+  background: #21262d;
+  border-color: #30363d;
+}
+
+.tab-icon {
+  font-size: 14px;
+  color: #58a6ff;
+  flex-shrink: 0;
+}
+
+.tab-close {
+  font-size: 16px;
+  color: #7d8590;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.tab-close:hover {
+  background: #30363d;
+  color: #f85149;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #f0f6fc;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+  position: relative;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: #21262d;
+  border-color: #58a6ff;
+  color: #58a6ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+}
+
+.action-btn:active:not(:disabled) {
+  background: #0969da;
+  border-color: #0969da;
+  color: white;
+  transform: translateY(0);
+}
+
+.action-btn.running {
+  background: linear-gradient(135deg, #238636, #2ea043);
+  border-color: #238636;
+  color: white;
+  cursor: not-allowed;
+  animation: pulse-green 2s infinite;
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-green {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(35, 134, 54, 0);
+  }
+}
+
+/* Code Editor Area - VS Code Style */
+.code-editor-area {
+  flex: 1;
+  background: #0d1117;
+  overflow: hidden;
+  position: relative;
+}
+
+.code-editor-area .cm-editor {
+  height: 100% !important;
+  background: transparent !important;
+  font-size: 14px !important;
+}
+
+.code-editor-area .cm-focused {
+  outline: none !important;
+}
+
+.code-editor-area .cm-scroller {
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  padding: 20px !important;
+  scroll-behavior: smooth !important;
+  overflow: auto !important;
+}
+
+.code-editor-area .cm-content {
+  padding: 0 !important;
+  min-height: 100% !important;
+}
+
+.code-editor-area .cm-gutters {
+  background: #0d1117 !important;
+  border-right: 1px solid #21262d !important;
+  padding-right: 12px !important;
+  padding-left: 8px !important;
+}
+
+.code-editor-area .cm-lineNumbers .cm-gutterElement {
+  color: #7d8590 !important;
+  font-size: 12px !important;
+  min-width: 40px !important;
+  text-align: right !important;
+  padding-right: 12px !important;
+  font-weight: 400 !important;
+}
+
+.code-editor-area .cm-activeLineGutter {
+  background: rgba(88, 166, 255, 0.1) !important;
+  color: #58a6ff !important;
+  font-weight: 600 !important;
+}
+
+.code-editor-area .cm-activeLine {
+  background: rgba(88, 166, 255, 0.05) !important;
+}
+
+.code-editor-area .cm-selectionBackground {
+  background: rgba(88, 166, 255, 0.25) !important;
+}
+
+.code-editor-area .cm-cursor {
+  border-left: 2px solid #58a6ff !important;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Enhanced Scrollbar - VS Code Style */
+.code-editor-area .cm-scroller::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.code-editor-area .cm-scroller::-webkit-scrollbar-track {
+  background: #0d1117;
+  border-radius: 0;
+}
+
+.code-editor-area .cm-scroller::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 7px;
+  border: 3px solid #0d1117;
+  transition: background 0.2s ease;
+}
+
+.code-editor-area .cm-scroller::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+.code-editor-area .cm-scroller::-webkit-scrollbar-thumb:active {
+  background: #58a6ff;
+}
+
+.code-editor-area .cm-scroller::-webkit-scrollbar-corner {
+  background: #0d1117;
+}
+
+/* Console Dragger - Enhanced */
+.console-dragger {
+  height: 36px;
+  background: linear-gradient(135deg, #161b22, #21262d);
+  border-top: 1px solid #21262d;
+  border-bottom: 1px solid #21262d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  cursor: ns-resize;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 50;
+}
+
+.console-dragger::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #58a6ff, transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.console-dragger:hover {
+  background: linear-gradient(135deg, #21262d, #30363d);
+}
+
+.console-dragger:hover::before {
+  opacity: 1;
+}
+
+.console-dragger.dragging {
+  background: linear-gradient(135deg, #0969da, #1f6feb);
+  border-color: #0969da;
+  box-shadow: 0 0 16px rgba(88, 166, 255, 0.3);
+}
+
+.console-dragger.dragging::before {
+  opacity: 1;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+}
+
+.dragger-handle {
+  display: flex;
+  align-items: center;
+  color: #7d8590;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.console-dragger:hover .dragger-handle {
+  color: #f0f6fc;
+}
+
+.console-dragger.dragging .dragger-handle {
+  color: white;
+  transform: scale(1.1);
+}
+
+.console-tabs {
+  display: flex;
+  gap: 16px;
+}
+
+.console-tab {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7d8590;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+}
+
+.console-tab.active {
+  color: #58a6ff;
+  background: rgba(88, 166, 255, 0.1);
+  border-color: rgba(88, 166, 255, 0.3);
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.2);
+}
+
+.console-tab:hover:not(.active) {
+  color: #f0f6fc;
+  background: rgba(240, 246, 252, 0.05);
+  border-color: rgba(240, 246, 252, 0.1);
+}
+
+.console-tab.has-output {
+  color: #56d364;
+}
+
+.console-tab.has-output.active {
+  color: #58a6ff;
+  background: rgba(88, 166, 255, 0.1);
+}
+
+.output-indicator {
+  width: 8px;
+  height: 8px;
+  background: #56d364;
+  border-radius: 50%;
+  animation: pulse-indicator 2s infinite;
+  box-shadow: 0 0 4px rgba(86, 211, 100, 0.5);
+}
+
+@keyframes pulse-indicator {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+/* Console Panel - Fixed Overflow Issues */
+.console-panel {
+  background: #0d1117;
+  border-top: 1px solid #21262d;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .editor-header {
+    padding: 0 12px;
+  }
+
+  .console-dragger {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-header {
+    padding: 0 8px;
+    height: 44px;
+  }
+
+  .editor-tab {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-width: 100px;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .console-dragger {
+    padding: 0 8px;
+    height: 32px;
+  }
+
+  .console-tabs {
+    gap: 12px;
+  }
+
+  .console-tab {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+
+  .code-editor-area .cm-scroller {
+    font-size: 13px !important;
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .editor-tabs {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .editor-tab span {
+    display: none;
+  }
+
+  .editor-tab {
+    min-width: 60px;
+    justify-content: center;
+  }
+
+  .console-tabs {
+    gap: 8px;
+  }
+
+  .console-tab {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  .code-editor-area .cm-scroller {
+    padding: 12px !important;
+  }
+}
+
+/* Focus States - Enhanced Accessibility */
+.action-btn:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.2);
+}
+
+.console-tab:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+.editor-tab:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .ultra-modern-editor {
+    border: 2px solid #58a6ff;
+  }
+
+  .editor-header,
+  .console-dragger {
+    border-width: 2px;
+  }
+
+  .console-tab.active {
+    background: #58a6ff;
+    color: #0d1117;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .code-editor-area .cm-scroller {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .ultra-modern-editor {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .editor-header,
+  .console-dragger,
+  .console-panel {
+    display: none;
+  }
+
+  .editor-main-area {
+    height: auto !important;
+  }
+}
+
+/* Loading States */
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #7d8590;
+  font-size: 14px;
+}
+
+.editor-loading::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 2px solid #30363d;
+  border-top: 2px solid #58a6ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 12px;
+}
+
+/* Error States */
+.editor-error {
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  color: #f85149;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 16px;
+  font-size: 13px;
+}
+
+/* Success States */
+.editor-success {
+  background: rgba(86, 211, 100, 0.1);
+  border: 1px solid rgba(86, 211, 100, 0.3);
+  color: #56d364;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 16px;
+  font-size: 13px;
+}

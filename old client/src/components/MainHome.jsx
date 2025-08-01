@@ -1,18 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./MainHome22.css";
-import { useTypewriter, Cursor } from "react-simple-typewriter";
-import image from "../../public/bgrLogo.png";
-import image1 from "../../public/ChatAPP.png";
-import image2 from "../../public/Code.jpg";
-import { FaInstagram, FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom"
+import "./MainHome22.css"
+import { useTypewriter, Cursor } from "react-simple-typewriter"
+import image from "../../public/bgrLogo.png"
+import image1 from "../../public/ChatAPP.png"
+import { FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa"
 
 const MainHome = () => {
   const [text] = useTypewriter({
     words: ["Innovative...", "Efficient...", "Cutting-Edge..."],
     loop: true,
     delaySpeed: 2000,
-  });
+  })
 
   return (
     <div className="main-cont-hpq">
@@ -20,18 +18,21 @@ const MainHome = () => {
         <div className="homeslider-container">
           <h1 className="text">
             <span>
-              <span className="highlight" style={{color:"#7c78eb"}}>Dev</span>
-              <span style={{color:"white"}}>Sphere</span>
+              <span className="highlight" style={{ color: "#7c78eb" }}>
+                Dev
+              </span>
+              <span style={{ color: "white" }}>Sphere</span>
             </span>
           </h1>
-          <h2 className="subtext" style={{color:"#7c78eb"}}>
+          <h2 className="subtext" style={{ color: "#7c78eb" }}>
             Revolutionizing Tech with{" "}
-            <span className="highlight" style={{color:"white"}}>{text}</span>
+            <span className="highlight" style={{ color: "white" }}>
+              {text}
+            </span>
             <Cursor />
           </h2>
         </div>
       </div>
-
       <div className="mid-cont-h">
         {[
           {
@@ -58,35 +59,29 @@ const MainHome = () => {
               "Write, compile, and test your code directly within the app. No need for external IDEs, everything you need is integrated.",
           },
         ].map((card, index) => (
-          <div
-            key={index}
-            className={`card-cont ${index % 2 === 0 ? "card-reverse" : ""}`}
-          >
+          <div key={index} className={`card-cont ${index % 2 === 0 ? "card-reverse" : ""}`}>
             <div className="card-info">
               <h3 className="card-title">{card.title}</h3>
               <p className="card-description">{card.description}</p>
             </div>
             {card.imgSrc && (
               <div className="card-image">
-                <img src={card.imgSrc} alt={card.title} />
+                <img src={card.imgSrc || "/placeholder.svg"} alt={card.title} />
               </div>
             )}
           </div>
         ))}
       </div>
-
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-section about">
+      <div className="main-footer">
+        <div className="main-footer-content">
+          <div className="main-footer-section about">
             <h2>WebSphere</h2>
             <p>
-              WebSphere is your ultimate hub for coding enthusiasts. From
-              real-time 1v1 chats to community discussions, posting, and an
-              integrated online compiler, we empower developers with
-              collaborative and innovative tools.
+              WebSphere is your ultimate hub for coding enthusiasts. From real-time 1v1 chats to community discussions,
+              posting, and an integrated online compiler, we empower developers with collaborative and innovative tools.
             </p>
           </div>
-          <div className="footer-section links">
+          <div className="main-footer-section links">
             <h3>Quick Links</h3>
             <ul>
               <li>
@@ -103,42 +98,42 @@ const MainHome = () => {
               </li>
             </ul>
           </div>
-          <div className="footer-section social">
+          <div className="main-footer-section social">
             <h3>Follow Us</h3>
             <div className="social-icons">
-            <a
-              href="https://www.instagram.com/_mushraf_jm/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon instagram"
-            >
-              <FaInstagram />
-            </a>
-            <a
-              href="https://github.com/JM-Mushraf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon github"
-            >
-              <FaGithub />
-            </a>
               <a
-              href="https://www.linkedin.com/in/mushraf-jm-386564306/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon linkedin"
-            >
-              <FaLinkedin />
-            </a>
+                href="https://www.instagram.com/_mushraf_jm/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon instagram"
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://github.com/JM-Mushraf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon github"
+              >
+                <FaGithub />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/mushraf-jm-386564306/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon linkedin"
+              >
+                <FaLinkedin />
+              </a>
             </div>
           </div>
         </div>
-        <div className="footer-bottom">
+        <div className="main-footer-bottom">
           <p>&copy; 2024 WebSphere | Designed for Coders</p>
         </div>
-      </footer>
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default MainHome;
+export default MainHome

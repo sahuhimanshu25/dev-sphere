@@ -15,13 +15,13 @@ import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
-
+console.log(process.env.NODE_ENV);
 // --- CORS ---
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
-
+console.log(process.env.FRONTEND_URL);
 // --- Middleware ---
 app.use(express.json());
 app.use(cookieParser());

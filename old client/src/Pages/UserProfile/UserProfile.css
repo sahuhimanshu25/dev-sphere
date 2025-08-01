@@ -79,7 +79,7 @@
 }
 
 .profile-info h2 {
-  margin: 0;
+  /* margin: 0; */
   font-size: 1.8rem;
   color: #7c78eb;
 }
@@ -415,7 +415,7 @@
 
 .followers-list ul, .following-list ul {
   list-style: none;
-  padding: 0;
+  /* padding: 0; */
 }
 
 .followers-list li, .following-list li {

@@ -1,29 +1,46 @@
-import React from 'react'
-import { Console, Header, TextArea } from './InputConsole'
-import { BiExport } from 'react-icons/bi'
+"use client"
 
-const OutputConsole = ({ currentOutput }) => {
+import { BiExport } from "react-icons/bi"
+import "./OutputConsole.css"
+
+const OutputConsole = ({ currentOutput, isRunning = false, onClear }) => {
   return (
-    <Console style={{height:"99%",backgroundColor:"transparent"}}>
-      <Header style={{backgroundColor: "transparent",border: "",background: "rgba(255, 255, 255, 0.1)",backdropFilter: "blur(10px)",WebkitBackdropFilter: "blur(10px)",boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",color:"whitesmoke"}}>
-        Output:
-
-        <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(currentOutput)}`} download="output.txt">
-          <BiExport style={{color:"whitesmoke",fontSize:"20px"}}/> <span style={{color:"whitesmoke",fontSize:"20px"}}>Export Output</span>
-        </a>
-
-      </Header>
-      <TextArea
-        value={currentOutput}
-        disabled
-        style={{
-          backgroundColor: "transparent",
-          border: "1px solid #7C78EB",
-          background: "transparent",
-          boxShadow: "0 4px 12px rgba(166, 154, 255, 0.3)"
-        }}
-      />
-    </Console>
+    <div className="modern-output-console">
+      <div className="modern-console-header">
+        <span className="modern-console-title">Program Output</span>
+        <div className="modern-console-actions">
+          <a
+            href={`data:text/plain;charset=utf-8,${encodeURIComponent(currentOutput || "")}`}
+            download="output.txt"
+            className="modern-export-link"
+          >
+            <BiExport className="modern-export-icon" />
+            <span>Export Output</span>
+          </a>
+          {onClear && (
+            <button className="modern-clear-btn" onClick={onClear} title="Clear Output Indicator">
+              Clear
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="modern-console-output-area">
+        <pre className="modern-output-content">
+          {isRunning ? (
+            <div className="modern-running-indicator">
+              <div className="modern-loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span>Executing code...</span>
+            </div>
+          ) : (
+            currentOutput || "No output yet. Run your code to see results here."
+          )}
+        </pre>
+      </div>
+    </div>
   )
 }
 

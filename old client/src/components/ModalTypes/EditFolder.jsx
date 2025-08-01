@@ -1,15 +1,17 @@
-import React, { useContext, useState } from 'react'
-import { Header, CloseButton, Input } from '../Modal'
-import { IoCloseSharp } from 'react-icons/io5'
-import { ModalContext } from '../../context/ModalContext'
-import { PlaygroundContext } from '../../context/PlaygroundContext'
+"use client"
+
+import { useContext, useState } from "react"
+import { Header, CloseButton, Input } from "../Modal"
+import { IoCloseSharp } from "react-icons/io5"
+import { ModalContext } from "../../context/ModalContext"
+import { PlaygroundContext } from "../../context/PlaygroundContext"
+import "./EditFolder.css"
 
 const EditFolder = () => {
-  const { closeModal, isOpenModal } = useContext(ModalContext);
-  const { editFolderTitle, folders } = useContext(PlaygroundContext);
-
-  const folderId = isOpenModal.identifiers.folderId;
-  const [folderTitle, setFolderTitle] = useState(folders[folderId].title);
+  const { closeModal, isOpenModal } = useContext(ModalContext)
+  const { editFolderTitle, folders } = useContext(PlaygroundContext)
+  const folderId = isOpenModal.identifiers.folderId
+  const [folderTitle, setFolderTitle] = useState(folders[folderId].title)
 
   return (
     <>
@@ -21,13 +23,17 @@ const EditFolder = () => {
       </Header>
       <Input>
         <input type="text" onChange={(e) => setFolderTitle(e.target.value)} />
-        <button onClick={() => {
-          editFolderTitle(folderId, folderTitle)
-          closeModal()
-        }} >Update Title</button>
+        <button
+          onClick={() => {
+            editFolderTitle(folderId, folderTitle)
+            closeModal()
+          }}
+        >
+          Update Title
+        </button>
       </Input>
     </>
   )
 }
 
-export default EditFolder;
+export default EditFolder
