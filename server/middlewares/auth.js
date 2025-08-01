@@ -7,7 +7,7 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 export const isAuthenticated = async (req, res, next) => {
   try {
-    const  token  = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
+    const  token  = await req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
     console.log("AUTH .JS ",token);
 
     if (!token) {
@@ -17,6 +17,9 @@ export const isAuthenticated = async (req, res, next) => {
     }
     const decodedData = jwt.verify(token, JWT_SECRET);
     req.user = await User.findById(decodedData.id);
+        if (!req.user) {
+      return res.status(401).json(new ApiResponse(401, null, "Invalid user"));
+    }
     next();
   } catch (error) {
     console.log(error);

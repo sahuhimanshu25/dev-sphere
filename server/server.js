@@ -23,7 +23,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://devsphereclient.onrender.com',
+    origin: `${process.env.FRONTEND_URL}`,
     methods: ['GET', 'POST', 'PUT'],
     credentials: true,
     allowedHeaders: ["Authorization"],

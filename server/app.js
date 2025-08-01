@@ -11,9 +11,11 @@ import { chatRouter } from './routes/chatRoutes.js';
 import { error } from './middlewares/error.js';
 import { messageRoute } from './routes/messageRoute.js';
 import { groupRouter } from './routes/groupRoutes.js';
+import dotnev from 'dotenv'
+dotnev.config();
 
 app.use(cors({
-    origin: `https://devsphereclient.onrender.com`, // allow requests from your frontend
+    origin: `${process.env.FRONTEND_URL}`, // allow requests from your frontend
     credentials: true, // if you're using cookies or HTTP authentication
   }));
 app.use(express.json())

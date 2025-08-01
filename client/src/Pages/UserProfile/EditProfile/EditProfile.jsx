@@ -36,7 +36,7 @@ const EditProfile = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "https://devsphere-server.onrender.com/user/updateAccount",
+        `${import.meta.env.VITE_BACKEND_BASEURL}/user/updateAccount`,
         formData,
         {
           headers: {
@@ -72,7 +72,7 @@ const EditProfile = () => {
     if (verificationCode === sCode.toString()) {
       try {
         const response = await axios.post(
-          "https://devsphere-server.onrender.com/user/verification",
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/verification`,
           { verificationCode, newEmail },
           {
             headers: {
