@@ -1,0 +1,24 @@
+/* EditPlaygroundTitle Component Styles - Inherits from App.css variables */
+
+/* This CSS will be applied through the Modal.css parent styles */
+
+.edit-playground-container {
+  width: 100%;
+}
+
+.edit-playground-container .modern-input {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.edit-playground-container .btn-primary {
+  min-width: 140px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .edit-playground-container .btn-primary {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}

@@ -1,0 +1,91 @@
+/* Playground Component Styles - Updated for integrated console */
+
+.playGround {
+  width: 90vw;
+  margin-left: 5rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); */
+  position: relative;
+}
+
+.playGround::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background: radial-gradient(circle at 30% 30%, rgba(124, 120, 235, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(124, 120, 235, 0.03) 0%, transparent 50%); */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.code-main-container {
+  display: flex;
+  min-height: calc(100vh - 4.5rem);
+  gap: 1rem;
+  padding: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.code-main-container.fullscreen {
+  /* padding: 0; */
+}
+
+/* Remove the separate console since it's now integrated */
+.console {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .playGround {
+    width: 100vw;
+    /* margin-left: 0; */
+  }
+}
+
+@media (max-width: 768px) {
+  .playGround {
+    width: 100vw;
+    /* margin-left: 0; */
+  }
+
+  .code-main-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .playGround {
+    width: 100vw;
+    /* margin-left: 0; */
+    /* padding: 0; */
+  }
+
+  .code-main-container {
+    padding: 0.25rem;
+  }
+}
+
+/* Focus styles for accessibility */
+.playGround:focus-within {
+  outline: none;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .code-main-container {
+    gap: 2rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .playGround::before {
+    display: none;
+  }
+}

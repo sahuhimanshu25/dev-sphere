@@ -1,0 +1,36 @@
+/* EditFolder Component Styles - Inherits from App.css variables */
+
+.edit-folder-container {
+  width: 100%;
+}
+
+.modal-title {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  /* margin: 0; */
+  text-shadow: 0 0 10px var(--shadow-primary);
+}
+
+.edit-folder-container .modern-input {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.edit-folder-container .btn-primary {
+  min-width: 140px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .modal-title {
+    font-size: 1.3rem;
+  }
+
+  .edit-folder-container .btn-primary {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+/* This CSS will be applied through the Modal.css parent styles */

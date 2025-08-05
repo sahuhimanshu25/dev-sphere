@@ -1,29 +1,30 @@
-import React from 'react'
-import { Console, Header, TextArea } from './InputConsole'
-import { BiExport } from 'react-icons/bi'
+"use client"
+import { BiExport } from "react-icons/bi"
 
 const OutputConsole = ({ currentOutput }) => {
   return (
-    <Console style={{height:"99%",backgroundColor:"transparent"}}>
-      <Header style={{backgroundColor: "transparent",border: "",background: "rgba(255, 255, 255, 0.1)",backdropFilter: "blur(10px)",WebkitBackdropFilter: "blur(10px)",boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",color:"whitesmoke"}}>
-        Output:
-
-        <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(currentOutput)}`} download="output.txt">
-          <BiExport style={{color:"whitesmoke",fontSize:"20px"}}/> <span style={{color:"whitesmoke",fontSize:"20px"}}>Export Output</span>
+    <div className="bg-transparent flex flex-col h-full">
+      {/* Header */}
+      <div className="glass-effect h-16 shadow-lg px-4 z-20 text-xl font-bold flex items-center justify-between text-white">
+        <span>Output:</span>
+        <a
+          href={`data:text/plain;charset=utf-8,${encodeURIComponent(currentOutput)}`}
+          download="output.txt"
+          className="text-white text-lg hover:text-primary transition-colors flex items-center gap-2 no-underline"
+        >
+          <BiExport className="text-white text-xl" />
+          <span className="text-white text-xl">Export Output</span>
         </a>
+      </div>
 
-      </Header>
-      <TextArea
+      {/* Text Area */}
+      <textarea
         value={currentOutput}
         disabled
-        style={{
-          backgroundColor: "transparent",
-          border: "1px solid #7C78EB",
-          background: "transparent",
-          boxShadow: "0 4px 12px rgba(166, 154, 255, 0.3)"
-        }}
+        className="flex-grow resize-none border-0 outline-none p-1 pt-2 text-lg bg-transparent border border-primary text-white shadow-primary"
+        placeholder="Output will appear here..."
       />
-    </Console>
+    </div>
   )
 }
 

@@ -1,0 +1,307 @@
+/* Modern InputConsole Component Styles - Fixed Overflow Issues */
+
+.modern-input-console {
+  background: #0d1117;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  border-radius: 0 0 8px 8px;
+}
+
+.modern-console-header {
+  background: linear-gradient(135deg, #161b22, #21262d);
+  height: 44px;
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f0f6fc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #21262d;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.modern-console-header::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #58a6ff, transparent);
+  opacity: 0.7;
+}
+
+.modern-console-title {
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  color: #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modern-console-title::before {
+  content: "▶";
+  font-size: 10px;
+  color: #58a6ff;
+}
+
+.modern-console-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.modern-console-header input {
+  display: none;
+}
+
+.modern-import-label {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f0f6fc;
+  cursor: pointer;
+  padding: 6px 12px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  background: transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.modern-import-label:hover {
+  background: #21262d;
+  border-color: #58a6ff;
+  color: #58a6ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(88, 166, 255, 0.2);
+}
+
+.modern-clear-btn {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f0f6fc;
+  cursor: pointer;
+  padding: 6px 12px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  background: transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 11px;
+}
+
+.modern-clear-btn:hover {
+  background: #21262d;
+  border-color: #f85149;
+  color: #f85149;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(248, 81, 73, 0.2);
+}
+
+.modern-import-icon {
+  font-size: 12px;
+}
+
+.modern-console-textarea {
+  flex: 1;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 20px;
+  font-size: 14px;
+  background: #0d1117;
+  color: #f0f6fc;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  line-height: 1.6;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  scroll-behavior: smooth;
+}
+
+.modern-console-textarea::placeholder {
+  color: #7d8590;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.modern-console-textarea:focus {
+  outline: none;
+  background: #0d1117;
+}
+
+/* Enhanced scrollbar for textarea */
+.modern-console-textarea::-webkit-scrollbar {
+  width: 14px;
+}
+
+.modern-console-textarea::-webkit-scrollbar-track {
+  background: #0d1117;
+  border-radius: 0;
+}
+
+.modern-console-textarea::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 7px;
+  border: 3px solid #0d1117;
+  transition: background 0.2s ease;
+}
+
+.modern-console-textarea::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+.modern-console-textarea::-webkit-scrollbar-thumb:active {
+  background: #58a6ff;
+}
+
+.modern-console-textarea::-webkit-scrollbar-corner {
+  background: #0d1117;
+}
+
+/* Input focus indicator */
+.modern-input-console:focus-within .modern-console-header::before {
+  background: linear-gradient(90deg, transparent, #58a6ff, transparent);
+  opacity: 1;
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modern-console-header {
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .modern-import-label,
+  .modern-clear-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .modern-console-textarea {
+    padding: 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-console-header {
+    height: 36px;
+    padding: 0 8px;
+  }
+
+  .modern-console-title {
+    font-size: 10px;
+  }
+
+  .modern-import-label,
+  .modern-clear-btn {
+    padding: 3px 6px;
+    font-size: 9px;
+    gap: 4px;
+  }
+
+  .modern-console-textarea {
+    padding: 12px;
+    font-size: 12px;
+  }
+}
+
+/* Focus styles for accessibility */
+.modern-import-label:focus-visible,
+.modern-clear-btn:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+.modern-console-textarea:focus-visible {
+  box-shadow: inset 0 0 0 2px #58a6ff;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .modern-input-console {
+    border: 2px solid #58a6ff;
+  }
+
+  .modern-console-header {
+    border-bottom-width: 2px;
+  }
+
+  .modern-console-textarea {
+    background: #000;
+    color: #fff;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .modern-import-label,
+  .modern-clear-btn {
+    transition: none;
+  }
+
+  .modern-console-header::before {
+    animation: none;
+  }
+
+  .modern-console-textarea {
+    scroll-behavior: auto;
+  }
+}
+
+/* Dark theme enhancements */
+.modern-input-console {
+  box-shadow: inset 0 1px 0 rgba(240, 246, 252, 0.1);
+}
+
+/* Loading state */
+.modern-input-console.loading .modern-console-textarea {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.modern-input-console.loading .modern-console-header::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #30363d;
+  border-top: 2px solid #58a6ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

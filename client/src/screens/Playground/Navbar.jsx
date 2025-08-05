@@ -1,15 +1,20 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import './Navbar.css'; // Import the CSS file for styling
-import logo from '../../../public/bgrLogo2.png'
+"use client"
+import { useRouter } from "next/navigation"
 
 const Navbar = ({ isFullScreen }) => {
-  const navigate = useNavigate()
+  const router = useRouter()
+
   return (
-    <div className={`navbar-container ${isFullScreen ? 'fullscreen' : ''}`}>
-      <button className="navbar-content" onClick={() => navigate('/')}>
-        <h1 className="main-heading">
-          <span>Dev</span> <span>Sphere</span>
+    <div
+      className={`h-18 flex items-center justify-center transition-all duration-300 ease-in-out glass-effect ${isFullScreen ? "h-0" : ""}`}
+    >
+      <button
+        className="bg-transparent border-none flex items-center justify-center gap-4 cursor-pointer"
+        onClick={() => router.push("/")}
+      >
+        <h1 className="text-3xl font-normal text-primary flex items-center justify-center gap-1">
+          <span className="font-bold ml-2 text-white">Dev</span>
+          <span>Sphere</span>
         </h1>
       </button>
     </div>

@@ -1,0 +1,239 @@
+.coding-tip-card {
+  background: #161525;
+  border-radius: 16px;
+  padding: 0;
+  border: 1px solid rgba(124, 120, 235, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.coding-tip-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #7c78eb, #9b59b6, #e74c3c, #f39c12);
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.coding-tip-card:hover {
+  border-color: rgba(124, 120, 235, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(124, 120, 235, 0.1) 0%, rgba(124, 120, 235, 0.05) 100%);
+  border-bottom: 1px solid rgba(124, 120, 235, 0.1);
+}
+
+.tip-icon {
+  color: #f39c12;
+  font-size: 20px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.tip-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  flex: 1;
+  text-align: center;
+}
+
+.refresh-btn {
+  background: rgba(124, 120, 235, 0.1);
+  border: 1px solid rgba(124, 120, 235, 0.3);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c78eb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 12px;
+}
+
+.refresh-btn:hover {
+  background: rgba(124, 120, 235, 0.2);
+  transform: rotate(180deg);
+}
+
+.tip-content {
+  padding: 20px;
+}
+
+.tip-category {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #7c78eb;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tip-text {
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+  font-style: italic;
+  position: relative;
+  padding-left: 16px;
+}
+
+.tip-text::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  top: -5px;
+  font-size: 24px;
+  color: rgba(124, 120, 235, 0.5);
+  font-family: serif;
+}
+
+.tip-author {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: right;
+  font-style: normal;
+}
+
+.tip-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(124, 120, 235, 0.1);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(124, 120, 235, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: #7c78eb;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background: rgba(124, 120, 235, 0.6);
+  transform: scale(1.1);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .coding-tip-card {
+    border-radius: 12px;
+  }
+
+  .tip-header {
+    padding: 16px;
+  }
+
+  .tip-header h3 {
+    font-size: 15px;
+  }
+
+  .tip-content {
+    padding: 16px;
+  }
+
+  .tip-text {
+    font-size: 14px;
+    padding-left: 14px;
+  }
+
+  .tip-author {
+    font-size: 12px;
+  }
+
+  .tip-indicators {
+    padding: 12px 16px;
+  }
+
+  .refresh-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tip-header {
+    padding: 14px;
+  }
+
+  .tip-header h3 {
+    font-size: 14px;
+  }
+
+  .tip-content {
+    padding: 14px;
+  }
+
+  .tip-text {
+    font-size: 13px;
+    padding-left: 12px;
+  }
+
+  .tip-category {
+    font-size: 13px;
+  }
+
+  .tip-author {
+    font-size: 11px;
+  }
+
+  .tip-indicators {
+    padding: 10px 14px;
+    gap: 6px;
+  }
+
+  .indicator {
+    width: 6px;
+    height: 6px;
+  }
+}

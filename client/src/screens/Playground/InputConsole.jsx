@@ -1,65 +1,36 @@
-import React from 'react'
-import styled from 'styled-components'
-import { BiImport } from 'react-icons/bi'
-export const Console = styled.div`
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-`
+"use client"
+import { BiImport } from "react-icons/bi"
 
-export const Header = styled.div`
-  background: #ededed;
-  height: 4rem;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.16);
-  padding: 0 1rem;
-  z-index: 2;
-  font-size: 1.25rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  input{
-    display: none;
-  }
-  label, a{
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    color: black;
-  }
-`
-
-export const TextArea = styled.textarea`
-  flex-grow: 1;
-  resize: none;
-  border: 0;
-  outline: 0;
-  padding: 0.25rem;
-  padding-top: 0.5rem;
-  font-size: 1.1rem;
-  min-height: 250px;
-`
 const InputConsole = ({ currentInput, setCurrentInput, getFile }) => {
   return (
-    <Console style={{backgroundColor:"transparent"}}>
-      <Header style={{backgroundColor: "transparent",border: "",background: "rgba(255, 255, 255, 0.1)",backdropFilter: "blur(10px)",WebkitBackdropFilter: "blur(10px)",boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",color:"whitesmoke"}}>
-        Input: 
-        <label htmlFor="inputfile" style={{color:"whitesmoke",fontSize:"18px"}}>
-          <input type="file" accept="." id="inputfile" onChange={(e) => getFile(e, setCurrentInput)}/> <BiImport style={{color:"whitesmoke",fontSize:"20px"}}/> Import Input
+    <div className="bg-transparent flex flex-col h-full">
+      {/* Header */}
+      <div className="glass-effect h-16 shadow-lg px-4 z-20 text-xl font-bold flex items-center justify-between text-white">
+        <span>Input:</span>
+        <label
+          htmlFor="inputfile"
+          className="text-white text-lg cursor-pointer hover:text-primary transition-colors flex items-center gap-2"
+        >
+          <input
+            type="file"
+            accept="*"
+            id="inputfile"
+            onChange={(e) => getFile(e, setCurrentInput)}
+            className="hidden"
+          />
+          <BiImport className="text-white text-xl" />
+          Import Input
         </label>
-      </Header>
-      <TextArea
+      </div>
+
+      {/* Text Area */}
+      <textarea
         onChange={(e) => setCurrentInput(e.target.value)}
         value={currentInput}
-        style={{
-          backgroundColor: "transparent",
-          border: "1px solid #7C78EB",
-          background: "transparent",
-          boxShadow: "0 4px 12px rgba(166, 154, 255, 0.3)"
-        }}
-        />
-    </Console>
+        className="flex-grow resize-none border-0 outline-none p-1 pt-2 text-lg min-h-[250px] bg-transparent border border-primary text-white placeholder-gray-400 shadow-primary focus:border-primary focus:ring-1 focus:ring-primary"
+        placeholder="Enter your input here..."
+      />
+    </div>
   )
 }
 

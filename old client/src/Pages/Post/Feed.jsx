@@ -1,0 +1,163 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import axios from "axios"
+import CreatePost from "./CreatePost"
+import Post from "./Post"
+import CodingTip from "./CodingTip"
+import "./Feed.css"
+import { useSelector } from "react-redux"
+import { FaPlus, FaUsers } from "react-icons/fa"
+import toast from "react-hot-toast"
+
+function Feed() {
+  const [posts, setPosts] = useState([])
+  const [postsLoading, setPostsLoading] = useState(true)
+  const [recommendedUsers, setRecommendedUsers] = useState([])
+  const { token, userData, loading: userLoading } = useSelector((state) => state.user)
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        setPosts(data.posts)
+      } catch (error) {
+        console.error("Error fetching posts:", error)
+      } finally {
+        setPostsLoading(false)
+      }
+    }
+
+    const fetchRecommendedUsers = async () => {
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/recommended-users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        setRecommendedUsers(data.data)
+      } catch (error) {
+        console.error("Error fetching recommended users:", error)
+        toast.error("Failed to fetch recommended users.")
+      }
+    }
+
+    fetchPosts()
+    fetchRecommendedUsers()
+  }, [])
+
+  const handlePostCreated = (newPost) => {
+    setPosts([newPost.data, ...posts])
+  }
+
+  const handleLike = (postId, newLikeCount) => {
+    setPosts(posts.map((post) => (post._id === postId ? { ...post, likes: Array(newLikeCount).fill({}) } : post)))
+  }
+
+  const handleFollow = async (userId) => {
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
+        { receiverId: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      toast.success("User followed successfully!")
+    } catch (error) {
+      console.error("Error following user:", error)
+      toast.error(error.response?.data?.error || "Error following user")
+    }
+  }
+
+  if (userLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading user data...</p>
+      </div>
+    )
+  }
+
+  if (!userData) {
+    return (
+      <div className="error-container">
+        <p>Please log in to access this resource.</p>
+      </div>
+    )
+  }
+
+  if (postsLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading posts...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="feed-container">
+      <div className="feed">
+        <div className="main-content">
+          <CreatePost onPostCreated={handlePostCreated} />
+          <div className="posts-grid">
+            {posts.map((post) => (
+              <Post key={post._id} postData={post} onLike={handleLike} />
+            ))}
+          </div>
+        </div>
+
+        <div className="feed-sidebar">
+          <CodingTip />
+
+          <div className="recommended-section">
+            <div className="section-header">
+              <FaUsers className="section-icon" />
+              <h2>Discover People</h2>
+            </div>
+
+            <div className="recommended-users-container">
+              {recommendedUsers.length > 0 ? (
+                <div className="recommended-users">
+                  {recommendedUsers.map((user) => (
+                    <div key={user._id} className="user-card">
+                      <img src={user.avatar || "/placeholder.svg"} alt={user.username} className="user-avatar" />
+                      <div className="user-info">
+                        <span className="username">{user.username}</span>
+                      </div>
+                      <button className="follow-btn" onClick={() => handleFollow(user._id)}>
+                        <FaPlus />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="no-users">
+                  <p>No recommended users found.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Feed

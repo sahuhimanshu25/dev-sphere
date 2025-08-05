@@ -29,5 +29,11 @@ const postSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+postSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    delete ret.__v;
+    return ret;
+  }
+});
 
 export const Post = new mongoose.model("Post", postSchema);
