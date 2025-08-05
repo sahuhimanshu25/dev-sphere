@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import axios from "axios"
 import "./CreatePost.css"
 import { useSelector } from "react-redux"
@@ -15,46 +15,49 @@ function CreatePost({ onPostCreated }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { token } = useSelector((state) => state.user)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
 
-    setError(null)
+      setError(null)
 
-    if (!text.trim() && !image && !video) {
-      setError("Please provide either text, an image, or a video.")
-      return
-    }
+      if (!text.trim() && !image && !video) {
+        setError("Please provide either text, an image, or a video.")
+        return
+      }
 
-    if (image && video) {
-      setError("You can only upload an image or a video, not both.")
-      return
-    }
+      if (image && video) {
+        setError("You can only upload an image or a video, not both.")
+        return
+      }
 
-    const formData = new FormData()
-    if (text.trim()) formData.append("text", text.trim())
-    if (image) formData.append("image", image)
-    if (video) formData.append("video", video)
+      const formData = new FormData()
+      if (text.trim()) formData.append("text", text.trim())
+      if (image) formData.append("image", image)
+      if (video) formData.append("video", video)
 
-    setIsSubmitting(true)
-    try {
-      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post`, formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
-      })
+      setIsSubmitting(true)
+      try {
+        const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post`, formData, {
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        })
 
-      onPostCreated(data)
-      setText("")
-      setImage(null)
-      setVideo(null)
-      setFile(null)
-    } catch (error) {
-      console.error("Error creating post:", error)
-      setError("Failed to create post. Please try again later.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+        onPostCreated(data)
+        setText("")
+        setImage(null)
+        setVideo(null)
+        setFile(null)
+      } catch (error) {
+        console.error("Error creating post:", error)
+        setError("Failed to create post. Please try again later.")
+      } finally {
+        setIsSubmitting(false)
+      }
+    },
+    [text, image, video, token, onPostCreated]
+  )
 
-  const handleFileChange = (e) => {
+  const handleFileChange = useCallback((e) => {
     const selectedFile = e.target.files[0]
     if (selectedFile) {
       if (selectedFile.type.startsWith("image/")) {
@@ -72,7 +75,7 @@ function CreatePost({ onPostCreated }) {
         setVideo(null)
       }
     }
-  }
+  }, [])
 
   return (
     <div className="create-post-container">

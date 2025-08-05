@@ -152,6 +152,7 @@
   gap: 40px;
   margin-bottom: 30px;
   padding: 20px 0;
+  align-items: center;
 }
 
 .modern-stat-item {
@@ -160,6 +161,7 @@
   align-items: center;
   gap: 4px;
   transition: all 0.3s ease;
+  padding: 10px 1rem;
 }
 
 .modern-clickable {
@@ -445,6 +447,7 @@
 
   .modern-stats-container {
     gap: 30px;
+    align-items: center;
   }
 
   .modern-stat-number {
@@ -496,6 +499,7 @@
   .modern-stats-container {
     gap: 20px;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   .modern-stat-number {

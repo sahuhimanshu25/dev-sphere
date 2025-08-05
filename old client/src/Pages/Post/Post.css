@@ -181,20 +181,19 @@
   border: none;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  /* padding: 10px 16px; */
   border-radius: 10px;
   transition: all 0.3s ease;
   font-size: 14px;
   font-weight: 500;
 }
+
 .icon-with-text {
   display: flex;
-  flex-direction: column; /* or "row" if you want icon and text side-by-side */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 5px;
 }
-
 
 .action-btn:hover {
   background: rgba(124, 120, 235, 0.1);
@@ -206,7 +205,15 @@
   color: #ff4757;
 }
 
+.like-btn.liked svg {
+  color: #ff4757;
+}
+
 .like-btn.liked:hover {
+  color: #ff3742;
+}
+
+.like-btn.liked:hover svg {
   color: #ff3742;
 }
 

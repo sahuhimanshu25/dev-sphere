@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import axios from "axios"
 import { FaRegComment, FaShareAlt, FaHeart, FaRegHeart } from "react-icons/fa"
 import { BiDotsVerticalRounded, BiDownload } from "react-icons/bi"
@@ -10,23 +10,16 @@ import { setUserId } from "../../Slices/postSlice.js"
 import "./Post.css"
 
 function Post({ postData, onLike }) {
-  const [liked, setLiked] = useState(postData.likes.some((like) => like.user === postData.user._id))
+  const { token, userData } = useSelector((state) => state.user)
+  const [liked, setLiked] = useState(postData.likes.some((like) => like.user === userData?._id))
   const [comments, setComments] = useState([])
   const [showComments, setShowComments] = useState(false)
   const [newComment, setNewComment] = useState("")
   const [showOptions, setShowOptions] = useState(false)
-  const { token } = useSelector((state) => state.user)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (showComments) {
-      fetchComments()
-      console.log(postData.user.avatar)
-    }
-  }, [showComments])
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comments`, {
         headers: {
@@ -37,9 +30,20 @@ function Post({ postData, onLike }) {
     } catch (error) {
       console.error("Error fetching comments:", error)
     }
-  }
+  }, [postData._id, token])
 
-  const handleLike = async () => {
+  useEffect(() => {
+    if (showComments) {
+      fetchComments()
+      console.log(postData.user.avatar)
+    }
+  }, [showComments, fetchComments])
+
+  const handleLike = useCallback(async () => {
+    const previousLiked = liked
+    const newLiked = !liked
+    setLiked(newLiked) // Optimistic update
+
     try {
       const { data } = await axios.put(
         `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/like/${postData._id}`,
@@ -48,16 +52,18 @@ function Post({ postData, onLike }) {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       )
-      setLiked(!liked)
+      // Confirm the server response
+      setLiked(data.data.liked) // Sync with server
       onLike(postData._id, data.data.likes)
     } catch (error) {
       console.error("Error liking post:", error)
+      setLiked(previousLiked) // Revert on error
     }
-  }
+  }, [postData._id, token, onLike, liked])
 
-  const handleAddComment = async () => {
+  const handleAddComment = useCallback(async () => {
     if (!newComment) return
     try {
       const { data } = await axios.post(
@@ -69,21 +75,21 @@ function Post({ postData, onLike }) {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       )
-      setComments([...comments, data.data])
+      setComments((prev) => [...prev, data.data])
       setNewComment("")
     } catch (error) {
       console.error("Error adding comment:", error)
     }
-  }
+  }, [newComment, postData._id, token])
 
-  const handleHeaderClick = () => {
+  const handleHeaderClick = useCallback(() => {
     dispatch(setUserId(postData.user._id))
     navigate(`/user/user-details`, { state: { user: postData.user } })
-  }
+  }, [dispatch, navigate, postData.user])
 
-  const handlePostData = () => {
+  const handlePostData = useCallback(() => {
     const { type, value } = postData.content
 
     if (type === "text") {
@@ -98,13 +104,13 @@ function Post({ postData, onLike }) {
       )
     }
     return null
-  }
+  }, [postData.content])
 
-  const handleDownload = async () => {
+  const handleDownload = useCallback(async () => {
     console.log(postData)
-  }
+  }, [postData])
 
-  const handleShare = async () => {
+  const handleShare = useCallback(async () => {
     const { type, value } = postData.content
     try {
       if (navigator.share) {
@@ -119,7 +125,21 @@ function Post({ postData, onLike }) {
     } catch (error) {
       console.error("Error sharing:", error)
     }
-  }
+  }, [postData.content])
+
+  const memoizedPostContent = useMemo(() => handlePostData(), [handlePostData])
+
+  const memoizedComments = useMemo(() => {
+    return comments.map((comment) => (
+      <div key={comment._id} className="comment-item">
+        <img src={comment.owner.avatar || "/placeholder.svg"} alt="avatar" className="comment-avatar" />
+        <div className="comment-content">
+          <span className="comment-owner">{comment.owner.username}</span>
+          <p className="comment-text">{comment.content}</p>
+        </div>
+      </div>
+    ))
+  }, [comments])
 
   if (!postData || !postData.user || !postData.user.avatar) {
     return (
@@ -140,7 +160,7 @@ function Post({ postData, onLike }) {
           </div>
         </div>
         <div className="post-options">
-          <button className="options-toggle" onClick={() => setShowOptions(!showOptions)}>
+          <button className="options-toggle" onClick={() => setShowOptions((prev) => !prev)}>
             <BiDotsVerticalRounded />
           </button>
           {showOptions && (
@@ -156,46 +176,32 @@ function Post({ postData, onLike }) {
         </div>
       </div>
 
-      <div className="post-content">{handlePostData()}</div>
+      <div className="post-content">{memoizedPostContent}</div>
 
       <div className="post-actions">
         <button onClick={handleLike} className={`action-btn like-btn ${liked ? "liked" : ""}`}>
-    <div className="icon-with-text">
-      {liked ? <FaHeart size={20}/> : <FaRegHeart size={20} />}
-      <span>{postData.likes.length}</span>
-    </div>
-  </button>
-
-        <button onClick={() => setShowComments(!showComments)} className="action-btn comment-btn">
           <div className="icon-with-text">
-
-          <FaRegComment size={20} />
+            {liked ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+            <span>{postData.likes.length}</span>
           </div>
-          
+        </button>
+
+        <button onClick={() => setShowComments((prev) => !prev)} className="action-btn comment-btn">
+          <div className="icon-with-text">
+            <FaRegComment size={20} />
+          </div>
         </button>
 
         <button onClick={handleShare} className="action-btn share-btn">
           <div className="icon-with-text">
-
-          <FaShareAlt size={20}/>
+            <FaShareAlt size={20} />
           </div>
-          
         </button>
       </div>
 
       {showComments && (
         <div className="comments-section">
-          <div className="comments-list">
-            {comments.map((comment) => (
-              <div key={comment._id} className="comment-item">
-                <img src={comment.owner.avatar || "/placeholder.svg"} alt="avatar" className="comment-avatar" />
-                <div className="comment-content">
-                  <span className="comment-owner">{comment.owner.username}</span>
-                  <p className="comment-text">{comment.content}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="comments-list">{memoizedComments}</div>
 
           <div className="add-comment">
             <input

@@ -1,254 +1,365 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { FaPlus } from "react-icons/fa";
-import "./AddFriend.css";
-import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+"use client"
+
+import { useState, useEffect } from "react"
+import axios from "axios"
+import { FaPlus, FaSearch, FaUsers, FaUserPlus } from "react-icons/fa"
+import "./AddFriend.css"
+import toast from "react-hot-toast"
+import { useSelector } from "react-redux"
 
 const AddFriend = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [groupSearchTerm, setGroupSearchTerm] = useState("");
-  const [groupSearchResults, setGroupSearchResults] = useState([]);
-  const [followersList, setFollowersList] = useState([]); // Followers list from user data
-  const [groupName, setGroupName] = useState("");
-  const [groupDescription, setGroupDescription] = useState("");
-  const [selectedMembers, setSelectedMembers] = useState([]);
-  const {token}=useSelector((state)=>state.user)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [searchResults, setSearchResults] = useState([])
+  const [groupSearchTerm, setGroupSearchTerm] = useState("")
+  const [groupSearchResults, setGroupSearchResults] = useState([])
+  const [followersList, setFollowersList] = useState([])
+  const [groupName, setGroupName] = useState("")
+  const [groupDescription, setGroupDescription] = useState("")
+  const [selectedMembers, setSelectedMembers] = useState([])
+  const { token } = useSelector((state) => state.user)
 
   useEffect(() => {
-    fetchUserFollowers();
-  }, []);
+    fetchUserFollowers()
+  }, [])
 
   const fetchUserFollowers = async () => {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
         headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-      const followers = data.data.followers; // Array of follower objects with `_id` and `username`
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      const followers = data.data.followers
 
-      // Map to extract relevant fields for display
       const followerDetails = followers.map((follower) => ({
         _id: follower._id,
         username: follower.username,
-      }));
+      }))
 
-      setFollowersList(followerDetails);
+      setFollowersList(followerDetails)
     } catch (error) {
-      console.error("Error fetching followers list:", error);
-      toast.error("Failed to fetch followers list.");
+      console.error("Error fetching followers list:", error)
+      toast.error("Failed to fetch followers list.")
     }
-  };
+  }
 
-  // Handle user search
   const handleSearch = async () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`, {
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`,
+          {
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        );
-        setSearchResults(data.data); // Update user search results
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+        setSearchResults(data.data)
       } catch (error) {
-        console.error("Error searching users:", error);
+        console.error("Error searching users:", error)
       }
     }
-  };
+  }
 
-  // Handle group search
   const handleGroupSearch = async () => {
     if (groupSearchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`, {
+          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`,
+          {
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        );
-        setGroupSearchResults(data.data); // Update group search results
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+        setGroupSearchResults(data.data)
       } catch (error) {
-        console.error("Error searching groups:", error);
-        toast.error("Failed to search for groups.");
+        console.error("Error searching groups:", error)
+        toast.error("Failed to search for groups.")
       }
     }
-  };
+  }
 
-  // Handle following a user
   const handleFollow = async (userId) => {
     try {
-      await axios.put(`${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,{}, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`, {
-        receiverId: userId,
-      }, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-      toast.success("User followed successfully!");
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
+        {
+          receiverId: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      toast.success("User followed successfully!")
     } catch (error) {
-      console.error("Error following user:", error);
-      toast.error(error.response?.data?.error || "Error following user");
+      console.error("Error following user:", error)
+      toast.error(error.response?.data?.error || "Error following user")
     }
-  };
+  }
 
-  // Handle joining a group
   const handleJoinGroup = async (groupId) => {
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/group/join`, { groupId }, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-      toast.success("Successfully joined the group!");
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/group/join`,
+        { groupId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      toast.success("Successfully joined the group!")
     } catch (error) {
-      console.error("Error joining group:", error);
-      toast.error(error.response?.data?.message || "Error joining group");
+      console.error("Error joining group:", error)
+      toast.error(error.response?.data?.message || "Error joining group")
     }
-  };
+  }
 
-  // Handle creating a new group
   const handleCreateGroup = async () => {
     if (!groupName || !groupDescription || selectedMembers.length < 1) {
-      toast.error("Please fill all fields and select at least one additional member.");
-      return;
+      toast.error("Please fill all fields and select at least one additional member.")
+      return
     }
-  
+
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/group/create`, {
-        name: groupName,
-        description: groupDescription,
-        members: selectedMembers, // Send selected members only; backend adds the current user
-      }, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-      toast.success("Group created successfully!");
-      // Clear form fields after successful group creation
-      setGroupName("");
-      setGroupDescription("");
-      setSelectedMembers([]);
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/group/create`,
+        {
+          name: groupName,
+          description: groupDescription,
+          members: selectedMembers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      toast.success("Group created successfully!")
+      setGroupName("")
+      setGroupDescription("")
+      setSelectedMembers([])
     } catch (error) {
-      console.error("Error creating group:", error);
-      toast.error(error.response?.data?.message || "Error creating group");
+      console.error("Error creating group:", error)
+      toast.error(error.response?.data?.message || "Error creating group")
     }
-  };
-  
-  // Handle selecting members
+  }
+
   const handleMemberSelect = (memberId) => {
     setSelectedMembers((prevMembers) =>
-      prevMembers.includes(memberId)
-        ? prevMembers.filter((id) => id !== memberId)
-        : [...prevMembers, memberId]
-    );
-  };
+      prevMembers.includes(memberId) ? prevMembers.filter((id) => id !== memberId) : [...prevMembers, memberId],
+    )
+  }
 
   return (
-    <div className="Search-container">
-      {/* Left Column */}
-      <div className="Left-column">
-        {/* User Search */}
-        <div className="User-search">
-          <h3>Search Users</h3>
-          <input
-            type="text"
-            placeholder="Search users by username"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button onClick={handleSearch} className="btn-c">Search Users</button>
-          {searchResults.length > 0 && (
-            <div className="Search-results">
-              {searchResults.map((user) => (
-                <div key={user._id} className="Search-result-item">
-                  <img
-                    src={user.avatar || "default-avatar.png"}
-                    alt={`${user.username}'s avatar`}
-                  />
-                  <span>{user.username}</span>
-                  <FaPlus
-                    onClick={() => handleFollow(user._id)}
-                    className="FaPlus"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-  
-        {/* Group Search */}
-        <div className="Group-search">
-          <h3>Search Groups</h3>
-          <input
-            type="text"
-            placeholder="Search groups by name or description"
-            value={groupSearchTerm}
-            onChange={(e) => setGroupSearchTerm(e.target.value)}
-          />
-          <button onClick={handleGroupSearch} className="btn-c">Search Groups</button>
-          {groupSearchResults.length > 0 && (
-            <div className="Search-results">
-              {groupSearchResults.map((group) => (
-                <div key={group._id} className="Search-result-item">
-                  <span>{group.name}</span>
-                  <FaPlus
-                    onClick={() => handleJoinGroup(group._id)}
-                    className="FaPlus"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+    <div className="add-friend-container">
+      <div className="container-header">
+        <h1 className="page-title">Connect & Create</h1>
+        <p className="page-subtitle">Find friends, join groups, and build your community</p>
       </div>
-  
-      {/* Right Column */}
-      <div className="Right-column">
-        {/* Group Creation */}
-        <h3>Create New Group</h3>
-        <input
-          type="text"
-          placeholder="Group Name"
-          value={groupName}
-          onChange={(e) => setGroupName(e.target.value)}
-        />
-        <textarea
-          placeholder="Group Description"
-          value={groupDescription}
-          onChange={(e) => setGroupDescription(e.target.value)}
-          className="text-area-c"
-        />
-        
-        <div className="Followers-list">
-          <div className="f-list">
-          {followersList.map((follower) => (
-            <div key={follower._id} className="Follower-item">
-              <input
-                type="checkbox"
-                checked={selectedMembers.includes(follower._id)}
-                onChange={() => handleMemberSelect(follower._id)}
-              />
-              <label>{follower.username}</label>
+
+      <div className="content-grid">
+        {/* Left Column - Search Section */}
+        <div className="search-section">
+          {/* User Search Card */}
+          <div className="search-card">
+            <div className="card-header">
+              <div className="header-icon">
+                <FaUserPlus />
+              </div>
+              <div className="header-content">
+                <h3>Find Users</h3>
+                <p>Search and connect with new friends</p>
+              </div>
             </div>
-          ))}
+
+            <div className="search-input-group">
+              <div className="input-wrapper">
+                <FaSearch className="input-icon" />
+                <input
+                  type="text"
+                  placeholder="Enter username to search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+              <button onClick={handleSearch} className="search-btn">
+                Search
+              </button>
+            </div>
+
+            {searchResults.length > 0 && (
+              <div className="results-container">
+                <div className="results-header">
+                  <span className="results-count">{searchResults.length} users found</span>
+                </div>
+                <div className="results-list">
+                  {searchResults.map((user) => (
+                    <div key={user._id} className="result-item">
+                      <div className="user-info">
+                        <div className="avatar-wrapper">
+                          <img
+                            src={user.avatar || "/placeholder.svg?height=40&width=40&query=user avatar"}
+                            alt={`${user.username}'s avatar`}
+                            className="user-avatar"
+                          />
+                        </div>
+                        <div className="user-details">
+                          <span className="username">@{user.username}</span>
+                        </div>
+                      </div>
+                      <button onClick={() => handleFollow(user._id)} className="follow-btn" title="Follow user">
+                        <FaPlus />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Group Search Card */}
+          <div className="search-card">
+            <div className="card-header">
+              <div className="header-icon">
+                <FaUsers />
+              </div>
+              <div className="header-content">
+                <h3>Find Groups</h3>
+                <p>Discover and join communities</p>
+              </div>
+            </div>
+
+            <div className="search-input-group">
+              <div className="input-wrapper">
+                <FaSearch className="input-icon" />
+                <input
+                  type="text"
+                  placeholder="Search groups by name or description..."
+                  value={groupSearchTerm}
+                  onChange={(e) => setGroupSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+              <button onClick={handleGroupSearch} className="search-btn">
+                Search
+              </button>
+            </div>
+
+            {groupSearchResults.length > 0 && (
+              <div className="results-container">
+                <div className="results-header">
+                  <span className="results-count">{groupSearchResults.length} groups found</span>
+                </div>
+                <div className="results-list">
+                  {groupSearchResults.map((group) => (
+                    <div key={group._id} className="result-item group-item">
+                      <div className="group-info">
+                        <div className="group-icon">
+                          <FaUsers />
+                        </div>
+                        <div className="group-details">
+                          <span className="group-name">{group.name}</span>
+                          <span className="group-description">{group.description}</span>
+                        </div>
+                      </div>
+                      <button onClick={() => handleJoinGroup(group._id)} className="join-btn" title="Join group">
+                        <FaPlus />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-  
-        <button onClick={handleCreateGroup} className="btn-c">Create Group</button>
+
+        {/* Right Column - Create Group Section */}
+        <div className="create-section">
+          <div className="create-card">
+            <div className="card-header">
+              <div className="header-icon">
+                <FaUsers />
+              </div>
+              <div className="header-content">
+                <h3>Create New Group</h3>
+                <p>Start your own community</p>
+              </div>
+            </div>
+
+            <div className="form-container">
+              <div className="form-group">
+                <label className="form-label">Group Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter group name..."
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Description</label>
+                <textarea
+                  placeholder="Describe your group's purpose..."
+                  value={groupDescription}
+                  onChange={(e) => setGroupDescription(e.target.value)}
+                  className="form-textarea"
+                  rows="4"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Select Members ({selectedMembers.length} selected)</label>
+                <div className="members-container">
+                  {followersList.length > 0 ? (
+                    <div className="members-list">
+                      {followersList.map((follower) => (
+                        <div key={follower._id} className="member-item">
+                          <label className="member-checkbox">
+                            <input
+                              type="checkbox"
+                              checked={selectedMembers.includes(follower._id)}
+                              onChange={() => handleMemberSelect(follower._id)}
+                            />
+                            <span className="checkmark"></span>
+                            <span className="member-name">@{follower.username}</span>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state">
+                      <p>No followers available to add to the group.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <button onClick={handleCreateGroup} className="create-btn">
+                <FaUsers className="btn-icon" />
+                Create Group
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  );
-  
-};
+  )
+}
 
-export default AddFriend;
+export default AddFriend
