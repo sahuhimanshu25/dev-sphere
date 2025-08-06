@@ -1,130 +1,141 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import axios from "axios"
-import { FaHeart, FaPen } from "react-icons/fa"
-import { SlOptionsVertical } from "react-icons/sl"
-import { RiDeleteBin3Fill } from "react-icons/ri"
-import { BiGridAlt } from "react-icons/bi"
-import "./UserProfile.css"
-import { useNavigate } from "react-router-dom"
-import Loader from "../../components/Loader/Loader"
-import { useSelector } from "react-redux"
-import UserModal from "./UserModal"
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { FaHeart, FaPen } from "react-icons/fa";
+import { SlOptionsVertical } from "react-icons/sl";
+import { RiDeleteBin3Fill } from "react-icons/ri";
+import { BiGridAlt } from "react-icons/bi";
+import "./UserProfile.css";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
+import { useSelector } from "react-redux";
+import UserModal from "./UserModal";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
-  const [avatar, setAvatar] = useState("")
-  const [userName, setUserName] = useState("")
-  const [bio, setBio] = useState("")
-  const [description, setDescription] = useState("This is a detailed description about the user.")
-  const [posts, setPosts] = useState([])
-  const [followers, setFollowers] = useState([])
-  const [following, setFollowing] = useState([])
-  const [showOptions, setShowOptions] = useState(null)
-  const [modalType, setModalType] = useState(null)
-  const [avatarFile, setAvatarFile] = useState(null)
-  const [loadingAvatar, setLoadingAvatar] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
-  const { token } = useSelector((state) => state.user)
+  const [avatar, setAvatar] = useState("");
+  const [userName, setUserName] = useState("");
+  const [bio, setBio] = useState("");
+  const [description, setDescription] = useState("This is a detailed description about the user.");
+  const [posts, setPosts] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [showOptions, setShowOptions] = useState(null);
+  const [modalType, setModalType] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { userData, loading: authLoading } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      setIsLoading(true)
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        const userData = response.data.data
-        setAvatar(userData.avatar || "")
-        setUserName(userData.username || "")
-        setBio(userData.bio || "")
-        setPosts(userData.posts || [])
-        setFollowers(userData.followers || [])
-        setFollowing(userData.following || [])
-        setIsLoading(false)
-      } catch (error) {
-        console.error("Error fetching data:", error)
-        setIsLoading(false)
+      if (!userData || authLoading) {
+        setIsLoading(true);
+        return;
       }
-    }
-    fetchUserData()
-  }, [])
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
+          withCredentials: true,
+        });
+        console.log("UserProfile data:", response.data);
+        const userData = response.data.data;
+        setAvatar(userData.avatar || "");
+        setUserName(userData.username || "");
+        setBio(userData.bio || "");
+        setPosts(userData.posts || []);
+        setFollowers(userData.followers || []);
+        setFollowing(userData.following || []);
+      } catch (error) {
+        console.error("Error fetching data:", error.response?.data || error);
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          toast.error("Session expired, please log in");
+          navigate("/login");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUserData();
+  }, [userData, authLoading, navigate]);
 
   const handleClick = () => {
     navigate(`/user/Edit-profile`, {
       state: { user: { avatar, userName, bio, posts, followers, following } },
-    })
-  }
+    });
+  };
 
   const handleDelete = async (postId) => {
+    if (!userData || authLoading) return;
     try {
       await axios.delete(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId))
-      setShowOptions(null)
+        withCredentials: true,
+      });
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+      setShowOptions(null);
     } catch (error) {
-      console.error("Error deleting post:", error)
+      console.error("Error deleting post:", error.response?.data || error);
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        toast.error("Session expired, please log in");
+        navigate("/login");
+      }
     }
-  }
+  };
 
   const toggleOptions = (postId) => {
-    setShowOptions((prev) => (prev === postId ? null : postId))
-  }
+    setShowOptions((prev) => (prev === postId ? null : postId));
+  };
 
   const openModal = (type) => {
-    setModalType(type)
-  }
+    setModalType(type);
+  };
 
   const closeModal = () => {
-    setModalType(null)
-  }
+    setModalType(null);
+  };
 
   const handleAvatarChange = (e) => {
-    const file = e.target.files[0]
+    if (!userData || authLoading) return;
+    const file = e.target.files[0];
     if (file) {
-      setLoadingAvatar(true)
-      setAvatarFile(file)
-      const formData = new FormData()
-      formData.append("avatar", file)
+      setLoadingAvatar(true);
+      setAvatarFile(file);
+      const formData = new FormData();
+      formData.append("avatar", file);
 
       axios
         .patch(`${import.meta.env.VITE_BACKEND_BASEURL}/user/updateAvatar`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         })
         .then((response) => {
-          setAvatar(response.data.updatedAvatarUrl)
-          setLoadingAvatar(false)
+          console.log("Avatar updated:", response.data);
+          setAvatar(response.data.updatedAvatarUrl);
+          setLoadingAvatar(false);
         })
         .catch((error) => {
-          console.error("Error uploading avatar:", error)
-          setLoadingAvatar(false)
-          alert("Failed to update avatar. Please try again later.")
-        })
+          console.error("Error uploading avatar:", error.response?.data || error);
+          setLoadingAvatar(false);
+          toast.error("Failed to update avatar. Please try again later.");
+          if (error.response?.status === 401 || error.response?.status === 404) {
+            navigate("/login");
+          }
+        });
     }
-  }
+  };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="modern-profile-loader">
         <Loader />
-        <p>Loading profile...</p>
       </div>
-    )
+    );
   }
 
   return (
     <>
       <div className="modern-user-profile">
-        {/* Profile Header Section */}
         <div className="modern-profile-header">
           <div className="modern-profile-cover">
             <div className="modern-avatar-container">
@@ -179,7 +190,6 @@ const UserProfile = () => {
           </div>
         </div>
 
-        {/* Posts Section */}
         <div className="modern-posts-section">
           <div className="modern-posts-header">
             <div className="modern-posts-title">
@@ -217,8 +227,8 @@ const UserProfile = () => {
                     <button
                       className="modern-options-btn"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        toggleOptions(post._id)
+                        e.stopPropagation();
+                        toggleOptions(post._id);
                       }}
                     >
                       <SlOptionsVertical />
@@ -245,12 +255,15 @@ const UserProfile = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {modalType && (
-        <UserModal type={modalType} users={modalType === "followers" ? followers : following} onClose={closeModal} />
+        <UserModal
+          type={modalType}
+          users={modalType === "followers" ? followers : following}
+          onClose={closeModal}
+        />
       )}
     </>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;

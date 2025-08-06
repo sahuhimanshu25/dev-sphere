@@ -9,6 +9,7 @@ import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
+import toast from "react-hot-toast";
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -22,10 +23,8 @@ const Chat = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
   const socket = useRef();
+  const { userData, loading: authLoading } = useSelector((state) => state.user);
 
-  const { userData, token } = useSelector((state) => state.user);
-
-  // Handle window resize to update isMobileView
   useEffect(() => {
     const handleResize = () => {
       setIsMobileView(window.innerWidth <= 768);
@@ -34,115 +33,112 @@ const Chat = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Initialize socket connection and setup listeners
   useEffect(() => {
-    if (userData && userData._id && token) {
-      socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
-        query: {
-          token: `Bearer ${token}`,
-        },
-      });
-
-      socket.current.emit("new-user-add", userData._id);
-
-      socket.current.on("get-users", (users) => {
-        setOnlineUsers(users);
-      });
-
-      socket.current.on("receive-message", (data) => {
-        setReceiveMessage(data);
-      });
-
-      return () => {
-        socket.current.disconnect();
-      };
+    if (!userData || authLoading) {
+      setLoading(true);
+      return;
     }
-  }, [userData, token]);
 
-  // Fetch chats for the current user
+    socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
+      withCredentials: true,
+    });
+
+    socket.current.emit("new-user-add", userData._id);
+
+    socket.current.on("get-users", (users) => {
+      setOnlineUsers(users);
+    });
+
+    socket.current.on("receive-message", (data) => {
+      setReceiveMessage(data);
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [userData, authLoading]);
+
   useEffect(() => {
     const getChats = async () => {
-      if (userData && userData._id) {
-        try {
-          setLoading(true);
-          const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          setChats(data);
-        } catch (error) {
-          console.error("Error fetching chats:", error);
-        } finally {
-          setLoading(false);
+      if (!userData || authLoading) {
+        setLoading(true);
+        return;
+      }
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`, {
+          withCredentials: true,
+        });
+        console.log("Chats fetched:", data);
+        setChats(data);
+      } catch (error) {
+        console.error("Error fetching chats:", error.response?.data || error);
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          toast.error("Session expired, please log in");
+          navigate("/login");
         }
-      } else {
+      } finally {
         setLoading(false);
       }
     };
     getChats();
-  }, [userData, token]);
+  }, [userData, authLoading, navigate]);
 
-  // Handle conversation click
   const handleConversationClick = (chat) => {
     setCurrentChat(chat);
   };
 
-  // Handle back button click
   const handleBackToConversation = () => {
     setCurrentChat(null);
   };
 
-  // Emit message when sendMessage is updated
   useEffect(() => {
     if (sendMessage && socket.current) {
       socket.current.emit("send-message", sendMessage);
     }
   }, [sendMessage]);
 
-  // Handle search for people you follow
   const handleSearch = async () => {
-    if (searchTerm) {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          }
-        );
-        setSearchResults(data.data);
-      } catch (error) {
-        console.error("Error searching followed users:", error);
+    if (!searchTerm || !userData || authLoading) return;
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`,
+        { withCredentials: true }
+      );
+      console.log("Search results:", data);
+      setSearchResults(data.data);
+    } catch (error) {
+      console.error("Error searching followed users:", error.response?.data || error);
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        toast.error("Session expired, please log in");
+        navigate("/login");
       }
     }
   };
 
-  // Initiate a new chat with the selected user
   const handleNewChat = async (user) => {
+    if (!userData || authLoading) return;
     try {
       const { data: chat } = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
-        {
-          receiverId: user._id,
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
+        { receiverId: user._id },
+        { withCredentials: true }
       );
+      console.log("New chat created:", chat);
       setChats((prevChats) => [...prevChats, chat]);
       setCurrentChat(chat);
       setSearchResults([]);
       setSearchTerm("");
     } catch (error) {
-      console.error("Error creating a new chat:", error);
+      console.error("Error creating a new chat:", error.response?.data || error);
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        toast.error("Session expired, please log in");
+        navigate("/login");
+      }
     }
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return <Loader />;
   }
 
@@ -159,11 +155,7 @@ const Chat = () => {
               <div className="left-side-chat-top">
                 <div className="head-chat-l">
                   <h2>
-                    <span>C</span>
-                    <span>h</span>
-                    <span>a</span>
-                    <span>t</span>
-                    <span>s</span>
+                    <span>C</span><span>h</span><span>a</span><span>t</span><span>s</span>
                   </h2>
                 </div>
                 <div className="User-search">
@@ -240,7 +232,7 @@ const Chat = () => {
             {currentChat ? (
               <ChatBox
                 chat={currentChat}
-                currentUser={userData?._id}
+                currentUser={userData._id}
                 setSendMessage={setSendMessage}
                 receiveMessage={receiveMessage}
                 onlineUsers={onlineUsers}
@@ -260,7 +252,12 @@ const Chat = () => {
             )}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="No-user">
+          <p>Please log in to access chats</p>
+          <button onClick={() => navigate("/login")}>Log In</button>
+        </div>
+      )}
     </div>
   );
 };

@@ -175,6 +175,22 @@ export const searchUser = AsyncHandler(async (req, res, next) => {
   }
 });
 
+
+export const getLoginDetails = async (req, res, next) => {
+  try {
+    // `req.user` is set by the `isAuthenticated` middleware
+    if (!req.user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      user: req.user, // Matches the structure of /auth/login response
+    });
+  } catch (error) {
+    return next(new ErrorHandler("Internal Server Error", 500));
+  }
+};
+
 //GET USER DETAILS
 export const getMyDetails = AsyncHandler(async (req, res, next) => {
   if (!req.user || !req.user._id) {

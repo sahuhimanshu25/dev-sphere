@@ -69,11 +69,15 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (process.env.NODE_ENV !== 'production') {
     console.log("JWT Secret loaded");
 }
-userSchema.methods.getJWT=function(){
-    return jwt.sign({id:this._id},JWT_SECRET,{
-        expiresIn:"5d"
-    })
-}
+userSchema.methods.getJWT = function () {
+  const id = this._id.toString();
+  const token = jwt.sign({ id }, JWT_SECRET, {
+    expiresIn: "2d",
+  });
+  console.log("JWT Payload:", { id }); // Debug log
+  return token;
+};
+
 
 
 userSchema.methods.comparePassword=async function(entered){

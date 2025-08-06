@@ -6,13 +6,14 @@ export const sendToken = (user, statusCode, res) => {
 
   const options = {
     expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days
-    httpOnly: true, // Prevents client-side JS access
-    secure: process.env.NODE_ENV === 'production', // Secure in production
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Use 'none' for cross-origin in production
-    path: '/', // Ensure cookie is available for all routes
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
   };
 
-  res.status(statusCode).cookie('token', token, options).json({
+  console.log("Token created:", token); // Debug log
+  res.status(statusCode).cookie("token", token, options).json({
     success: true,
     user,
   });
