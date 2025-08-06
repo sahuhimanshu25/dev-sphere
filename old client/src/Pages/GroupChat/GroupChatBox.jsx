@@ -6,24 +6,21 @@ import "./GroupChatBox.css";
 import userimg from "../../../public/userimg.jpg";
 import { IoSend } from "react-icons/io5";
 import { format } from "timeago.js";
+import { FaArrowLeft } from "react-icons/fa";
 
-
-const GroupChatBox = ({ group }) => {
-  const { userData,token } = useSelector((state) => state.user);
+const GroupChatBox = ({ group, isMobileView, handleBackToConversation }) => {
+  const { userData, token } = useSelector((state) => state.user);
   const socket = useRef();
-  const messagesEndRef = useRef(null); // Ref for auto-scrolling
+  const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const localMessageIds = useRef(new Set()); // Track locally sent messages
+  const localMessageIds = useRef(new Set());
 
   useEffect(() => {
-    // Initialize socket connection
     socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`);
 
-    // Join the group chat room
     socket.current.emit("join-group", group.data._id);
 
-    // Listen for incoming messages for the group
     socket.current.on("receive-group-message", (data) => {
       if (data.groupId === group.data._id && !localMessageIds.current.has(data.message._id)) {
         setMessages((prevMessages) => [...prevMessages, data.message]);
@@ -36,67 +33,67 @@ const GroupChatBox = ({ group }) => {
   }, [group]);
 
   useEffect(() => {
-    // Fetch initial messages for the group
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`, {
+          `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`,
+          {
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setMessages(res.data.message); // Initialize messages
+        setMessages(res.data.message);
       } catch (err) {
         console.log("Error fetching messages:", err);
       }
     };
     fetchMessages();
-  }, [group]);
+  }, [group, token]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
-      const tempMessageId = Date.now(); // Temporary ID for the local message
+      const tempMessageId = Date.now();
       const messageData = {
         text: newMessage,
         chatId: group.data._id,
         isGroup: true,
         senderId: userData._id,
-        _id: tempMessageId, // Add a temporary ID
+        _id: tempMessageId,
         createdAt: new Date().toISOString(),
       };
 
       try {
-        // Add the message to the local state immediately
         setMessages((prev) => [...prev, messageData]);
-        localMessageIds.current.add(tempMessageId); // Track this local message
+        localMessageIds.current.add(tempMessageId);
 
-        // Save the message to the backend
-        const res = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/message`, {
-          text: newMessage,
-          chatId: group.data._id,
-          isGroup: true,
-        }, {
-          headers: {
-              'Authorization': `Bearer ${token}`
+        const res = await axios.post(
+          `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
+          {
+            text: newMessage,
+            chatId: group.data._id,
+            isGroup: true,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-      });
+        );
 
-        // Replace the temporary ID with the actual ID from the backend
         setMessages((prevMessages) =>
           prevMessages.map((msg) =>
             msg._id === tempMessageId ? { ...msg, _id: res.data.data._id } : msg
           )
         );
-        localMessageIds.current.delete(tempMessageId); // Remove the temporary ID from tracking
+        localMessageIds.current.delete(tempMessageId);
 
-        // Emit the message to the group chat via Socket.IO
         socket.current.emit("send-group-message", {
           groupId: group.data._id,
           message: res.data.data,
         });
 
-        setNewMessage(""); // Clear the input field after sending
+        setNewMessage("");
       } catch (err) {
         console.error("Error sending message:", err);
         alert("Failed to send message. Please try again.");
@@ -105,7 +102,6 @@ const GroupChatBox = ({ group }) => {
   };
 
   useEffect(() => {
-    // Scroll to the bottom when messages change
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -114,14 +110,24 @@ const GroupChatBox = ({ group }) => {
   return (
     <div className="group-chat-box">
       <div className="gb-chat-header">
+        <div className="gb-chat-header-in">
         <img src={userimg} alt="" />
         <div className="name">{group.data.name}</div>
+        </div>
+        <div>
+            {isMobileView && (
+          <FaArrowLeft
+            className="chatbox-back-button"
+            onClick={handleBackToConversation}
+          />
+        )}
+        </div>
       </div>
       <div className="gb-messages">
         {Array.isArray(messages) && messages.length > 0 ? (
           messages.map((msg) => (
             <div
-              key={msg._id || `${msg.createdAt}-${Math.random()}`} // Fallback if _id is not available
+              key={msg._id || `${msg.createdAt}-${Math.random()}`}
               className={`gb-message ${
                 msg.senderId === userData._id ? "own" : ""
               }`}
@@ -129,7 +135,7 @@ const GroupChatBox = ({ group }) => {
               <p>{msg.text}</p>
               <div className="message-info">
                 <span className="message-sender">
-                  {msg.senderId === userData._id ? "You" : msg.senderName}{" "}
+                  {msg.senderId === userData._id ? "You" : msg.senderName}
                 </span>
                 <span className="message-time">{format(msg.createdAt)}</span>
               </div>
@@ -138,14 +144,15 @@ const GroupChatBox = ({ group }) => {
         ) : (
           <p>No messages available</p>
         )}
+        <div ref={messagesEndRef} />
       </div>
-      <div ref={messagesEndRef} /> {/* To scroll to the bottom */}
       <div className="gb-message-input">
         <input
           type="text"
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          id="gb-chat-input"
         />
         <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
           <IoSend />

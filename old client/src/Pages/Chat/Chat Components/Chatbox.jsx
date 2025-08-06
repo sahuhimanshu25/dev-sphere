@@ -5,23 +5,27 @@ import axios from "axios";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { IoSend } from "react-icons/io5";
+import { FaArrowLeft } from "react-icons/fa"; // Corrected import
 import Loader from "../../../components/Loader/Loader";
 import { useSelector } from "react-redux";
+
 const ChatBox = ({
   chat,
   currentUser,
   setSendMessage,
   receiveMessage,
   onlineUsers,
+  isMobileView,
+  handleBackToConversation,
 }) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isOnline, setIsOnline] = useState(false);
-  const [loading, setLoading] = useState(true); // Loader state
-  const [sending, setSending] = useState(false); // Sending state
-  const messagesEndRef = useRef(null); // Ref for auto-scrolling
-  const {token}=useSelector((state)=>state.user)
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+  const messagesEndRef = useRef(null);
+  const { token } = useSelector((state) => state.user);
 
   // Fetch user data for the chat participant
   useEffect(() => {
@@ -32,11 +36,12 @@ const ChatBox = ({
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`,
+          {
             headers: {
               'Authorization': `Bearer ${token}`
+            }
           }
-        }
         );
         setUserData(data.data);
         setIsOnline(onlineUsers.some((user) => user.userId === userId));
@@ -47,7 +52,7 @@ const ChatBox = ({
       }
     };
     if (chat) getUserData();
-  }, [chat, currentUser, onlineUsers]);
+  }, [chat, currentUser, onlineUsers, token]);
 
   // Update messages when a new message is received
   useEffect(() => {
@@ -63,11 +68,12 @@ const ChatBox = ({
         setLoading(true);
         if (chat?._id) {
           const { data } = await axios.get(
-            `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`, {
+            `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`,
+            {
               headers: {
-                  'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
               }
-          }
+            }
           );
           setMessages(data.message);
         }
@@ -78,7 +84,7 @@ const ChatBox = ({
       }
     };
     fetchMessages();
-  }, [chat]);
+  }, [chat, token]);
 
   // Handle sending a new message
   const handleSend = async (e) => {
@@ -98,21 +104,21 @@ const ChatBox = ({
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
-        message, {
+        message,
+        {
           headers: {
-              'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
           }
-      }
+        }
       );
-            // Add the message from the server response, if it's not already in the list
-            setMessages((prevMessages) => {
-              const isMessageExist = prevMessages.some((msg) => msg._id === data._id);
-              if (!isMessageExist) {
-                return [...prevMessages, data];
-              }
-              return prevMessages;
-            });
-            setNewMessage(""); // Clear the input field after sending
+      setMessages((prevMessages) => {
+        const isMessageExist = prevMessages.some((msg) => msg._id === data._id);
+        if (!isMessageExist) {
+          return [...prevMessages, data];
+        }
+        return prevMessages;
+      });
+      setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
@@ -137,7 +143,7 @@ const ChatBox = ({
   if (loading) {
     return (
       <div className="ChatBox-container">
-        <Loader /> {/* Show loader while fetching data */}
+        <Loader />
       </div>
     );
   }
@@ -146,6 +152,7 @@ const ChatBox = ({
     <div className="ChatBox-container">
       <div className="chat-header">
         <div className="chat-header-in">
+          <div className="chat-header-in-in">
           <div className="image-container">
             <img
               src={userData?.userdata.avatar || userimg}
@@ -159,6 +166,15 @@ const ChatBox = ({
           <div className="name">
             <span>{userData?.userdata.username || "Unknown User"}</span>
             <span>{isOnline ? "Online" : "Offline"}</span>
+          </div>
+          </div>
+          <div>
+                    {isMobileView && (
+            <FaArrowLeft
+              className="chatbox-back-button"
+              onClick={handleBackToConversation}
+            />
+          )}
           </div>
         </div>
       </div>
