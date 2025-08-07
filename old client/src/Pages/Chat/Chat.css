@@ -3,6 +3,7 @@
   height: 99vh;
   justify-content: center;
   margin-top: 0.2rem;
+  /* border:1px solid red; */
 }
 
 .active-chat {
@@ -14,8 +15,10 @@
   width: 100vw;
   display: flex;
   max-height: 100%;
-  margin-left: 5rem;
+  /* margin-left: 5rem; */
   justify-content: center;
+   /* border:1px solid red; */
+  margin-left: 40px;
 }
 
 .Left-side-chat {
@@ -332,7 +335,6 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  border: 1px solid red;
 }
 
 .add-chat-button {

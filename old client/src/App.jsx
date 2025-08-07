@@ -51,7 +51,7 @@ function Logout() {
 
 function App() {
   const [count, setCount] = useState(0);
-  const { userData, loading, error } = useSelector((state) => state.user);
+  const { userData, loading, error,isAuthorized } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [authChecked, setAuthChecked] = useState(false);
 
@@ -75,8 +75,10 @@ function App() {
 
   return (
     <Router>
+        <Sidebar>
+
+        
       <Suspense fallback={<Loader />}>
-        <Sidebar />
         <GlobalStyle />
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
@@ -109,7 +111,7 @@ function App() {
             }
           />
           <Route path="/" element={<MainHome />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={isAuthorized?<Navigate to="/post" />:<Login/>} />
           <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
           <Route path="/post" element={<Feed />} />
           <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
@@ -123,6 +125,7 @@ function App() {
           <Route path="*" element={<Error404 />} />
         </Routes>
       </Suspense>
+      </Sidebar>
     </Router>
   );
 }

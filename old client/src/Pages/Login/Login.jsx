@@ -7,6 +7,7 @@ import "./Login.css"
 import { Link, useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import Loader from "../../components/Loader/Loader.jsx"
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaRocket, FaUser } from "react-icons/fa"
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -16,11 +17,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [focusedField, setFocusedField] = useState("")
 
   const handleLogin = async (e, demoCredentials = null) => {
     e.preventDefault()
     setIsSubmitting(true)
-
+    
     // Modern toast for server wakeup
     toast(
       <div className="modern-toast">
@@ -41,16 +43,24 @@ const LoginPage = () => {
           background: "transparent",
           boxShadow: "none",
           padding: 0,
-          transform: "translateX(-60px)", // Move toast 60px to the left
+          transform: "translateX(-60px)",
         },
       },
     )
 
-    demoCredentials={
-      email:import.meta.env.VITE_DEMO_EMAIL,
-      password:import.meta.env.VITE_DEMO_PASSWORD
+    demoCredentials = {
+      email: import.meta.env.VITE_DEMO_EMAIL,
+      password: import.meta.env.VITE_DEMO_PASSWORD
     }
-    const credentials = demoCredentials || { email, password }
+    let credentials;
+    if(email && password){
+      credentials={email,password}
+    }
+    else{
+      credentials=demoCredentials
+    }
+    
+    
     try {
       const result = await dispatch(login(credentials)).unwrap()
       if (result) {
@@ -105,62 +115,132 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="log">
+    <div className="login-page">
+      <div className="login-background">
+        
+      </div>
+      
       <div className="login-container">
-        <h2 className="login-title">
-          <span>Log</span>
-          <span>in</span>
-        </h2>
-        {loading && <Loader />}
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="form-group">
-            <label>
-              <span className="icon">📧</span>
-              <span className="icon-t">Email</span>
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="login-input"
-            />
+        <div className="login-header">
+          <div className="logo-section">
+            <div className="logo-icon">
+              <FaRocket />
+            </div>
+            <h1 className="login-title">
+              Welcome <span className="title-accent">Back</span>
+            </h1>
+            <p className="login-subtitle">Sign in to continue your journey</p>
           </div>
-          <div className="form-group">
-            <label>
-              <span className="icon">🔒</span>
-              <span className="icon-t">Password</span>
-            </label>
-            <div className="password-container">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                className="login-input"
-              />
-              <span className="toggle-password" onClick={() => setShowPassword((prev) => !prev)}>
-                {showPassword ? "🙈" : "👁️"}
-              </span>
+        </div>
+
+        {loading && <Loader />}
+
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-container">
+            <div className={`form-group ${focusedField === 'email' ? 'focused' : ''} ${email ? 'filled' : ''}`}>
+              <label className="form-label">
+                <FaEnvelope className="label-icon" />
+                <span>Email Address</span>
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="Enter your email"
+                  required
+                  className="form-input"
+                />
+                <div className="input-border"></div>
+              </div>
+            </div>
+
+            <div className={`form-group ${focusedField === 'password' ? 'focused' : ''} ${password ? 'filled' : ''}`}>
+              <label className="form-label">
+                <FaLock className="label-icon" />
+                <span>Password</span>
+              </label>
+              <div className="input-wrapper password-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setFocusedField('password')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="Enter your password"
+                  required
+                  className="form-input"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex="-1"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                <div className="input-border"></div>
+              </div>
             </div>
           </div>
-          <button type="submit" className="login-button" disabled={isSubmitting || loading}>
-            {isSubmitting || loading ? "Logging in..." : "Login"}
-          </button>
 
-          <button
-            type="button"
-            className="login-button demo-button"
-            onClick={handleDemoLogin}
-            disabled={isSubmitting || loading}
-          >
-            {isSubmitting || loading ? "Logging in..." : "Login as Demo User"}
-          </button>
-          <div className="reg">
-            <span>Don't have an account? </span>
-            <Link to="/register">Register</Link>
+          <div className="button-group">
+            <button 
+              type="submit" 
+              className="login-button primary-button" 
+              disabled={isSubmitting || loading}
+            >
+              <span className="button-content">
+                {isSubmitting || loading ? (
+                  <>
+                    <div className="button-spinner"></div>
+                    <span>Signing In...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaUser className="button-icon" />
+                    <span>Sign In</span>
+                  </>
+                )}
+              </span>
+              <div className="button-glow"></div>
+            </button>
+
+            <button
+              type="button"
+              className="login-button demo-button"
+              onClick={handleDemoLogin}
+              disabled={isSubmitting || loading}
+            >
+              <span className="button-content">
+                {isSubmitting || loading ? (
+                  <>
+                    <div className="button-spinner"></div>
+                    <span>Signing In...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaRocket className="button-icon" />
+                    <span>Try Demo</span>
+                  </>
+                )}
+              </span>
+              <div className="button-glow"></div>
+            </button>
+          </div>
+
+          <div className="form-footer">
+            <div className="divider">
+              <span className="divider-text">New here?</span>
+            </div>
+            <p className="register-text">
+              Don't have an account?{" "}
+              <Link to="/register" className="register-link">
+                Create one now
+              </Link>
+            </p>
           </div>
         </form>
       </div>

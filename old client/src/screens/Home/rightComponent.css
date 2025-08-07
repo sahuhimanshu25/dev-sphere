@@ -325,7 +325,7 @@
   width: 32px; /* Reduced from 36px */
   height: 32px; /* Reduced from 36px */
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  
   border-radius: 6px; /* Reduced from 8px */
   display: flex;
   align-items: center;

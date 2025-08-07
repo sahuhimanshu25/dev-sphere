@@ -35,7 +35,7 @@ const UserModal = ({ type, users, onClose }) => {
                     <span className="modern-user-name">{user.username}</span>
                     <span className="modern-user-bio">{user.bio || "No bio available"}</span>
                   </div>
-                  <button className="modern-user-action">View Profile</button>
+                  
                 </div>
               ))}
             </div>

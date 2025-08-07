@@ -2,6 +2,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Rest of your existing Loader CSS remains the same */
+.three-body {
+  --uib-size: 48px;
+  --uib-speed: 0.9s;
+  --uib-color: #7c78eb;
+  --uib-secondary: #9d99f0;
+  --uib-accent: #b8b5f5;
+  position: relative;
+  display: inline-block;
+  height: var(--uib-size);
+  width: var(--uib-size);
+  animation: spin78236 calc(var(--uib-speed) * 2.5) infinite linear;
+  filter: drop-shadow(0 0 12px rgba(124, 120, 235, 0.3));
+}
+
+/* ... rest of your existing Loader CSS ... */
+.devsphere-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 200px;
   background: transparent;
   border-radius: 16px;
