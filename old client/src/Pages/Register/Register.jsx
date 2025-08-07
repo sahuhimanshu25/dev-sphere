@@ -125,94 +125,85 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="register-page">
-      <div className="register-background">
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-          <div className="shape shape-4"></div>
-        </div>
-      </div>
-
+    <div className="reg-page">
       {isloading && (
-        <div className="loader-container">
+        <div className="reg-loader-container">
           <Loader />
         </div>
       )}
 
-      <div className="register-container">
+      <div className="reg-container">
         {/* Progress Indicator */}
-        <div className="progress-indicator">
-          <div className={`progress-step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
-            <div className="step-circle">
+        <div className="reg-progress-indicator">
+          <div className={`reg-progress-step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
+            <div className="reg-step-circle">
               {step > 1 ? <FaCheckCircle /> : <FaUser />}
             </div>
-            <span className="step-label">Register</span>
+            <span className="reg-step-label">Register</span>
           </div>
-          <div className="progress-line">
-            <div className={`progress-fill ${step > 1 ? 'filled' : ''}`}></div>
+          <div className="reg-progress-line">
+            <div className={`reg-progress-fill ${step > 1 ? 'filled' : ''}`}></div>
           </div>
-          <div className={`progress-step ${step >= 2 ? 'active' : ''}`}>
-            <div className="step-circle">
+          <div className={`reg-progress-step ${step >= 2 ? 'active' : ''}`}>
+            <div className="reg-step-circle">
               <FaKey />
             </div>
-            <span className="step-label">Verify</span>
+            <span className="reg-step-label">Verify</span>
           </div>
         </div>
 
         {step === 1 && (
-          <div className="register-content">
-            <div className="register-header">
-              <h1 className="register-title">
-                Create <span className="title-accent">Account</span>
+          <div className="reg-content">
+            <div className="reg-header">
+              <h1 className="reg-title">
+                Create <span className="reg-title-accent">Account</span>
               </h1>
-              <p className="register-subtitle">Join our community today</p>
+              <p className="reg-subtitle">Join our community today</p>
             </div>
 
             {/* Avatar Upload Section */}
-            <div className="avatar-section">
+            <div className="reg-avatar-section">
               <div 
-                className={`avatar-upload-area ${dragOver ? 'drag-over' : ''} ${avatar ? 'has-image' : ''}`}
+                className={`reg-avatar-upload-area ${dragOver ? 'drag-over' : ''} ${avatar ? 'has-image' : ''}`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
               >
-                <div className="avatar-preview-wrapper">
+                <div className="reg-avatar-preview-wrapper">
                   <img
                     src={avatarPreview || "/placeholder.svg"}
                     alt="Avatar Preview"
-                    className="avatar-preview"
+                    className="reg-avatar-preview"
                   />
-                  <div className="avatar-overlay">
-                    <FaCamera className="camera-icon" />
-                    <span className="upload-text">
+                  <div className="reg-avatar-overlay">
+                    <FaCamera className="reg-camera-icon" />
+                    <span className="reg-upload-text">
                       {avatar ? 'Change Photo' : 'Upload Photo'}
                     </span>
                   </div>
                 </div>
-                <label htmlFor="avatarInput" className="avatar-upload-label">
-                  <FaPencilAlt className="pencil-icon" />
+                <label htmlFor="avatarInput" className="reg-avatar-upload-label">
+                  <FaPencilAlt className="reg-pencil-icon" />
                 </label>
                 <input
                   type="file"
                   id="avatarInput"
                   accept="image/*"
                   onChange={handleAvatarChange}
-                  className="avatar-input"
+                  className="reg-avatar-input"
                 />
               </div>
-              <p className="avatar-hint">Click or drag & drop to upload your profile picture</p>
+              <p className="reg-avatar-hint">Click or drag & drop to upload your profile picture</p>
             </div>
 
-            <form onSubmit={handleRegister} className="register-form">
-              <div className="form-container">
-                <div className={`form-group ${focusedField === 'username' ? 'focused' : ''} ${formData.username ? 'filled' : ''}`}>
-                  <label className="form-label">
-                    <FaUser className="label-icon" />
+            <form onSubmit={handleRegister} className="reg-form">
+              <div className="reg-form-container">
+                <div className={`reg-form-group ${focusedField === 'username' ? 'focused' : ''} ${formData.username ? 'filled' : ''}`}>
+                  <label className="reg-form-label">
+                    <FaUser className="reg-label-icon" />
                     <span>Username</span>
                   </label>
-                  <div className="input-wrapper">
+                  <div className="reg-input-wrapper">
                     <input
                       name="username"
                       value={formData.username}
@@ -221,18 +212,18 @@ const RegisterPage = () => {
                       onBlur={() => setFocusedField('')}
                       placeholder="Choose a unique username"
                       required
-                      className="form-input"
+                      className="reg-form-input"
                     />
-                    <div className="input-border"></div>
+                    <div className="reg-input-border"></div>
                   </div>
                 </div>
 
-                <div className={`form-group ${focusedField === 'email' ? 'focused' : ''} ${formData.email ? 'filled' : ''}`}>
-                  <label className="form-label">
-                    <FaEnvelope className="label-icon" />
+                <div className={`reg-form-group ${focusedField === 'email' ? 'focused' : ''} ${formData.email ? 'filled' : ''}`}>
+                  <label className="reg-form-label">
+                    <FaEnvelope className="reg-label-icon" />
                     <span>Email Address</span>
                   </label>
-                  <div className="input-wrapper">
+                  <div className="reg-input-wrapper">
                     <input
                       type="email"
                       name="email"
@@ -242,18 +233,18 @@ const RegisterPage = () => {
                       onBlur={() => setFocusedField('')}
                       placeholder="Enter your email address"
                       required
-                      className="form-input"
+                      className="reg-form-input"
                     />
-                    <div className="input-border"></div>
+                    <div className="reg-input-border"></div>
                   </div>
                 </div>
 
-                <div className={`form-group ${focusedField === 'password' ? 'focused' : ''} ${formData.password ? 'filled' : ''}`}>
-                  <label className="form-label">
-                    <FaLock className="label-icon" />
+                <div className={`reg-form-group ${focusedField === 'password' ? 'focused' : ''} ${formData.password ? 'filled' : ''}`}>
+                  <label className="reg-form-label">
+                    <FaLock className="reg-label-icon" />
                     <span>Password</span>
                   </label>
-                  <div className="input-wrapper password-wrapper">
+                  <div className="reg-input-wrapper reg-password-wrapper">
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password"
@@ -263,44 +254,44 @@ const RegisterPage = () => {
                       onBlur={() => setFocusedField('')}
                       placeholder="Create a strong password"
                       required
-                      className="form-input"
+                      className="reg-form-input"
                     />
                     <button
                       type="button"
-                      className="password-toggle"
+                      className="reg-password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
                       tabIndex="-1"
                     >
                       {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
-                    <div className="input-border"></div>
+                    <div className="reg-input-border"></div>
                   </div>
                 </div>
               </div>
 
-              <button type="submit" className="register-button" disabled={isloading}>
-                <span className="button-content">
+              <button type="submit" className="reg-button" disabled={isloading}>
+                <span className="reg-button-content">
                   {isloading ? (
                     <>
-                      <div className="button-spinner"></div>
+                      <div className="reg-button-spinner"></div>
                       <span>Creating Account...</span>
                     </>
                   ) : (
                     <>
-                      <FaUser className="button-icon" />
+                      <FaUser className="reg-button-icon" />
                       <span>Create Account</span>
                     </>
                   )}
                 </span>
-                <div className="button-glow"></div>
+                <div className="reg-button-glow"></div>
               </button>
 
-              <div className="form-footer">
-                <div className="divider">
-                  <span className="divider-text">Already have an account?</span>
+              <div className="reg-form-footer">
+                <div className="reg-divider">
+                  <span className="reg-divider-text">Already have an account?</span>
                 </div>
-                <p className="login-text">
-                  <Link to="/login" className="login-link">
+                <p className="reg-login-text">
+                  <Link to="/login" className="reg-login-link">
                     Sign in instead
                   </Link>
                 </p>
@@ -310,26 +301,26 @@ const RegisterPage = () => {
         )}
 
         {step === 2 && (
-          <div className="verification-content">
-            <div className="verification-header">
-              <div className="verification-icon">
+          <div className="reg-verification-content">
+            <div className="reg-verification-header">
+              <div className="reg-verification-icon">
                 <FaKey />
               </div>
-              <h1 className="verification-title">
-                Check Your <span className="title-accent">Email</span>
+              <h1 className="reg-verification-title">
+                Check Your <span className="reg-title-accent">Email</span>
               </h1>
-              <p className="verification-subtitle">
+              <p className="reg-verification-subtitle">
                 We've sent a verification code to <strong>{formData.email}</strong>
               </p>
             </div>
 
-            <form onSubmit={handleVerifyCode} className="verification-form">
-              <div className={`form-group ${focusedField === 'code' ? 'focused' : ''} ${verificationCode ? 'filled' : ''}`}>
-                <label className="form-label">
-                  <FaKey className="label-icon" />
+            <form onSubmit={handleVerifyCode} className="reg-verification-form">
+              <div className={`reg-form-group ${focusedField === 'code' ? 'focused' : ''} ${verificationCode ? 'filled' : ''}`}>
+                <label className="reg-form-label">
+                  <FaKey className="reg-label-icon" />
                   <span>Verification Code</span>
                 </label>
-                <div className="input-wrapper">
+                <div className="reg-input-wrapper">
                   <input
                     type="text"
                     value={verificationCode}
@@ -338,33 +329,33 @@ const RegisterPage = () => {
                     onBlur={() => setFocusedField('')}
                     placeholder="Enter the 6-digit code"
                     required
-                    className="form-input verification-input"
+                    className="reg-form-input reg-verification-input"
                     maxLength="6"
                   />
-                  <div className="input-border"></div>
+                  <div className="reg-input-border"></div>
                 </div>
               </div>
 
-              <button type="submit" className="verify-button" disabled={isloading}>
-                <span className="button-content">
+              <button type="submit" className="reg-verify-button" disabled={isloading}>
+                <span className="reg-button-content">
                   {isloading ? (
                     <>
-                      <div className="button-spinner"></div>
+                      <div className="reg-button-spinner"></div>
                       <span>Verifying...</span>
                     </>
                   ) : (
                     <>
-                      <FaCheckCircle className="button-icon" />
+                      <FaCheckCircle className="reg-button-icon" />
                       <span>Verify Account</span>
                     </>
                   )}
                 </span>
-                <div className="button-glow"></div>
+                <div className="reg-button-glow"></div>
               </button>
 
-              <div className="verification-footer">
-                <p className="resend-text">
-                  Didn't receive the code? <button type="button" className="resend-link">Resend</button>
+              <div className="reg-verification-footer">
+                <p className="reg-resend-text">
+                  Didn't receive the code? <button type="button" className="reg-resend-link">Resend</button>
                 </p>
               </div>
             </form>

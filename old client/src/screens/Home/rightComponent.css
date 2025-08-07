@@ -6,7 +6,7 @@
   padding: 1.5rem; /* Reduced from 2rem */
   display: flex;
   flex-direction: column;
-  height: 70vh; /* Reduced from 95vh */
+  height: 99vh; /* Reduced from 95vh */
   position: relative;
   overflow: hidden;
 }
