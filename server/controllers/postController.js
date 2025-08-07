@@ -55,7 +55,11 @@ export const likePost =AsyncHandler(async (req, res, next) => {
 });
 export const getFeedPosts = AsyncHandler(async (req, res, next) => {
     try {
-        const posts = await Post.find({ user: { $in: req.user.following } })
+console.log("###################################User ID:", req.user.id); // Debug user ID
+        console.log("Following:", req.user.following); // Debug following list
+        const posts = await Post.find({
+            user: { $in: [...req.user.following, req.user.id] },
+        })
             .populate('user', 'username avatar')
             .sort({ createdAt: -1 });
 

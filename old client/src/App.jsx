@@ -113,7 +113,7 @@ function App() {
           <Route path="/" element={<MainHome />} />
           <Route path="/login" element={isAuthorized?<Navigate to="/post" />:<Login/>} />
           <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
-          <Route path="/post" element={<Feed />} />
+          <Route path="/post" element={isAuthorized?<Feed />:<Navigate to="/login" />} />
           <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
           <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" />} />
           <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />

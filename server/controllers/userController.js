@@ -468,11 +468,6 @@ export const getRecommendedUsers = AsyncHandler(async (req, res, next) => {
     }, // Deduplicate
   ]);
 
-  if (!recommendedUsers || recommendedUsers.length === 0) {
-    return res
-      .status(404)
-      .json(new ApiResponse(404, [], "No recommendations found"));
-  }
 
   res
     .status(200)
