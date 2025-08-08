@@ -135,12 +135,14 @@ export const loginUser = async (req, res, next) => {
 
 //LOGOUT
 export const logout = AsyncHandler(async (req, res, next) => {
-res.cookie("token", null, {
-  expires: new Date(Date.now()),
+res.cookie("token", "", {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", 
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  secure: true, // only if you set it like this before
+  sameSite: "none", // match original setting
+  expires: new Date(0),
+  path: "/", // match original setting
 });
+
 
   res.status(200).json(new ApiResponse(200, {}, "user LoggedOut Successfully"));
 });

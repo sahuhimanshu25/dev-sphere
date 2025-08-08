@@ -39,8 +39,13 @@ function Logout() {
         withCredentials: true,
       })
       .then(() => {
-        dispatch(logout());
-        window.location.href = "/login";
+        // Check if cookie is actually gone (optional safeguard)
+        if (!document.cookie.includes("token")) {
+          dispatch(logout());
+          window.location.href = "/login";
+        } else {
+          console.warn("Token cookie still present after logout attempt");
+        }
       })
       .catch((error) => {
         console.error("Logout error:", error);
@@ -48,6 +53,7 @@ function Logout() {
   }, [dispatch]);
   return null;
 }
+
 
 function App() {
   const [count, setCount] = useState(0);
