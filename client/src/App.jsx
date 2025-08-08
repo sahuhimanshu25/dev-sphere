@@ -33,24 +33,26 @@ axios.defaults.withCredentials = true;
 
 function Logout() {
   const dispatch = useDispatch();
+
   useEffect(() => {
+    // Redirect first to avoid extra API calls from protected routes
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 0);
+
+    // Then perform logout request in background
     axios
       .get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/logout`, {
         withCredentials: true,
       })
       .then(() => {
-        // Check if cookie is actually gone (optional safeguard)
-        if (!document.cookie.includes("token")) {
-          dispatch(logout());
-          window.location.href = "/login";
-        } else {
-          console.warn("Token cookie still present after logout attempt");
-        }
+        dispatch(logout());
       })
       .catch((error) => {
         console.error("Logout error:", error);
       });
   }, [dispatch]);
+
   return null;
 }
 
