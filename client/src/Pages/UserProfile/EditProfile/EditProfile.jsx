@@ -45,7 +45,7 @@ const EditProfile = () => {
         }
       );
       const { data } = response;
-      console.log(response.data.data.user.verificationCode);
+      // console.log(response.data.data.user.verificationCode);
       if (email) {
         setIsVerificationRequired(true);
       }

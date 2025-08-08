@@ -20,7 +20,7 @@ const GroupChatConversation = ({ group, onSelect, selectedGroup }) => {
           }
       });
         setGroupData(data);
-        console.log("Group data:", groupData?.data?.name);
+        // console.log("Group data:", groupData?.data?.name);
       } catch (error) {
         console.error("Error fetching group data:", error);
       }

@@ -25,7 +25,7 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
         }
         );
         setUserData(user.data);
-        console.log("Conversation user data:", user.data.userdata);
+        // console.log("Conversation user data:", user.data.userdata);
         setIsOnline(onlineUsers.some((user) => user.userId === userId));
       } catch (error) {
         console.error("Error fetching conversation user data:", error);

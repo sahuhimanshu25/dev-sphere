@@ -80,7 +80,7 @@ const LoginPage = () => {
             secondary: "#7c78eb",
           },
         })
-        console.log(result, "latest update 6.50")
+        // console.log(result, "latest update 6.50")
         navigate("/post")
       }
     } catch (err) {

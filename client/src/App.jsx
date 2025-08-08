@@ -68,7 +68,7 @@ function App() {
     dispatch(checkAuthStatus())
       .unwrap()
       .then(() => {
-        console.log("Auth check completed, userData:", userData);
+        // console.log("Auth check completed, userData:", userData);
         setAuthChecked(true);
       })
       .catch((err) => {

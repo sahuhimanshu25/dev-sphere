@@ -45,7 +45,7 @@ const GroupChatBox = ({ group, isMobileView, handleBackToConversation }) => {
         );
         setMessages(res.data.message);
       } catch (err) {
-        console.log("Error fetching messages:", err);
+        // console.log("Error fetching messages:", err);
       }
     };
     fetchMessages();

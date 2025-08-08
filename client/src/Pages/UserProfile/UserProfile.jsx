@@ -40,7 +40,7 @@ const UserProfile = () => {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
           withCredentials: true,
         });
-        console.log("UserProfile data:", response.data);
+        // console.log("UserProfile data:", response.data);
         const userData = response.data.data;
         setAvatar(userData.avatar || "");
         setUserName(userData.username || "");
@@ -110,7 +110,7 @@ const UserProfile = () => {
           withCredentials: true,
         })
         .then((response) => {
-          console.log("Avatar updated:", response.data);
+          // console.log("Avatar updated:", response.data);
           setAvatar(response.data.updatedAvatarUrl);
           setLoadingAvatar(false);
         })

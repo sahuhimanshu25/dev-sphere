@@ -35,7 +35,7 @@ function Post({ postData, onLike }) {
   useEffect(() => {
     if (showComments) {
       fetchComments()
-      console.log(postData.user.avatar)
+      // console.log(postData.user.avatar)
     }
   }, [showComments, fetchComments])
 
@@ -107,7 +107,7 @@ function Post({ postData, onLike }) {
   }, [postData.content])
 
   const handleDownload = useCallback(async () => {
-    console.log(postData)
+    // console.log(postData)
   }, [postData])
 
   const handleShare = useCallback(async () => {

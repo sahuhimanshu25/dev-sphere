@@ -69,7 +69,7 @@ const Chat = () => {
         const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`, {
           withCredentials: true,
         });
-        console.log("Chats fetched:", data);
+        // console.log("Chats fetched:", data);
         setChats(data);
       } catch (error) {
         console.error("Error fetching chats:", error.response?.data || error);
@@ -105,7 +105,7 @@ const Chat = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`,
         { withCredentials: true }
       );
-      console.log("Search results:", data);
+      // console.log("Search results:", data);
       setSearchResults(data.data);
     } catch (error) {
       console.error("Error searching followed users:", error.response?.data || error);
@@ -124,7 +124,7 @@ const Chat = () => {
         { receiverId: user._id },
         { withCredentials: true }
       );
-      console.log("New chat created:", chat);
+      // console.log("New chat created:", chat);
       setChats((prevChats) => [...prevChats, chat]);
       setCurrentChat(chat);
       setSearchResults([]);

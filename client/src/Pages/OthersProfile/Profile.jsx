@@ -9,7 +9,7 @@ import Loader from "../../components/Loader/Loader"
 
 const Profile = () => {
   const userId = useSelector((state) => state.post.userId)
-  console.log("User ID:", userId)
+  // console.log("User ID:", userId)
   const { token } = useSelector((state) => state.user)
   const [avatar, setAvatar] = useState("")
   const [userName, setUserName] = useState("")

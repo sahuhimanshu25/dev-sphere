@@ -112,7 +112,7 @@ const RegisterPage = () => {
         },
         { withCredentials: true }
       )
-      console.log(result.data)
+      // console.log(result.data)
       if (result.data.success) {
         setIsLoading(false)
         toast.success("Registration successful. Please log in.")
