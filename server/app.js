@@ -16,8 +16,8 @@ import { groupRouter } from './routes/groupRoutes.js';
 import dotnev from 'dotenv'
 dotnev.config();
 
-const isProduction = process.env.NODE_ENV === 'production';
-console.log(process.env.NODE_ENV);
+const isProduction = true;
+// console.log(process.env.NODE_ENV);
 // --- CORS ---
 app.use(cors({
     origin: `${process.env.FRONTEND_URL}`, // allow requests from your frontend

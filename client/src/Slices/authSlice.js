@@ -42,7 +42,7 @@ export const checkAuthStatus = createAsyncThunk(
   "checkAuthStatus",
   async (_, { rejectWithValue }) => {
     try {
-      console.log(`${import.meta.env.VITE_BACKEND_BASEURL}/user/get-login-details`);
+      // console.log(`${import.meta.env.VITE_BACKEND_BASEURL}/user/get-login-details`);
       
       const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/get-login-details`, {
         withCredentials: true,

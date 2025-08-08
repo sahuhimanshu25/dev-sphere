@@ -192,21 +192,36 @@ const ChatBox = ({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="chat-sender">
-        <InputEmoji
-          value={newMessage}
-          onChange={setNewMessage}
-          placeholder="Type a message"
-        />
-        <button
-          className="send-button button"
-          onClick={handleSend}
-          disabled={newMessage.trim().length === 0 || sending}
-          style={{ background: "none", cursor: sending ? "not-allowed" : "pointer" }}
-        >
-          <IoSend style={{ color: sending ? "#ccc" : "#7c78eb8e", fontSize: "20px" }} />
-        </button>
-      </div>
+<div className="chat-sender">
+<InputEmoji
+  value={newMessage}
+  onChange={setNewMessage}
+  placeholder="Type a message"
+  onEnter={() => {
+    if (newMessage.trim()) {
+      handleSend(new Event('send')); // dummy event so your function signature stays happy
+    }
+  }}
+/>
+
+  <button
+    className="send-button button"
+    onClick={handleSend}
+    disabled={newMessage.trim().length === 0 || sending}
+    style={{
+      background: "none",
+      cursor: sending ? "not-allowed" : "pointer"
+    }}
+  >
+    <IoSend
+      style={{
+        color: sending ? "#ccc" : "#7c78eb8e",
+        fontSize: "20px"
+      }}
+    />
+  </button>
+</div>
+
     </div>
   );
 };

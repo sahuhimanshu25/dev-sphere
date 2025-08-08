@@ -18,11 +18,7 @@ function Feed() {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`, {withCredentials:true})
       setPosts(data.posts)
     } catch (error) {
       console.error("Error fetching posts:", error)

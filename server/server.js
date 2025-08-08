@@ -6,6 +6,7 @@ import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
+import cookie from "cookie";
 
 dotenv.config();
 
@@ -32,34 +33,38 @@ const io = new Server(server, {
 
 
 // Token verification middleware
+
+
+// Token verification middleware
 io.use((socket, next) => {
-  console.log("server.js 36",socket.handshake.auth?.token);
+  // Parse cookies from handshake headers
+  const cookies = cookie.parse(socket.request.headers.cookie || "");
   
-  const rawToken = socket.handshake.query?.token; 
-const token = rawToken?.split(" ")[1]; // Remove "Bearer" prefix
+  // Your cookie name might be different — adjust if needed
+  const rawToken = cookies?.token; 
+  const token = rawToken?.startsWith("Bearer ") ? rawToken.split(" ")[1] : rawToken;
+
+  console.log("server.js 36 token from cookie:", token);
 
   if (!token) {
-    console.log('No token provided');
-    return next(new Error('Authentication error: No token'));
+    console.log("No token provided in cookie");
+    return next(new Error("Authentication error: No token"));
   }
 
   // Verify the token
-  console.log("SERVER.JS 45",process.env.JWT_SECRET);
-  
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    console.log(decoded);
-    
     if (err) {
-      console.log('Invalid token:', err);
-      return next(new Error('Authentication error: Invalid token'));
+      console.log("Invalid token:", err);
+      return next(new Error("Authentication error: Invalid token"));
     }
 
-    // Attach decoded user information to the socket
+    // Attach decoded user info to the socket
     socket.user = decoded;
-    console.log('User authenticated:', decoded);
-    next(); // Allow the connection
+    console.log("User authenticated:", decoded);
+    next();
   });
 });
+
 
 
 let activeUsers = [];

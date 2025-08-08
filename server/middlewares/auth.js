@@ -11,7 +11,7 @@ export const isAuthenticated = async (req, res, next) => {
   try {
     console.log("----------- request hit ------------");
     const token = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
-    console.log("AUTH .JS Token:", token);
+    // console.log("AUTH .JS Token:", token);
 
     if (!token) {
       return next(new ErrorHandler("You need to Login to Access this Resource", 401));
@@ -32,7 +32,7 @@ export const isAuthenticated = async (req, res, next) => {
     }
 
     const user = await User.findById(decodedData.id);
-    console.log("User found:", user ? user : "No user found");
+    // console.log("User found:", user ? user : "No user found");
 
     if (!user) {
       res.clearCookie("token", {
