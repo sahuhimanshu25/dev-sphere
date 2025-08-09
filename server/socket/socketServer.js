@@ -80,7 +80,7 @@ import { Server } from "socket.io";
 
 const io = new Server(8800, {
   cors: {
-    origin: "http://localhost:3000", // Allow connections only from this origin (Frontend)
+    origin: `${process.env.FRONTEND_URL}`, // Allow connections only from this origin (Frontend)
   },
 });
 

@@ -3,13 +3,15 @@ dotenv.config();
 
 export const sendToken = (user, statusCode, res) => {
   const token = user.getJWT();
+  const isProduction=true;
 
   const options = {
     expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
+    domain:isProduction?".dev-sphere.onrender.com" : undefined
   };
 
   console.log("Token created:", token); // Debug log

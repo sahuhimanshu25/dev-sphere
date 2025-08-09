@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction =true;
 
 export const isAuthenticated = async (req, res, next) => {
   try {
