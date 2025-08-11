@@ -34,24 +34,23 @@ function Logout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // 1️⃣ First: clear Redux auth state immediately
+    // 1️⃣ Clear auth state first
     dispatch(logout());
 
-    // 2️⃣ Second: redirect instantly (no time for 401 spam)
-    window.location.replace("/login"); // replace avoids adding /logout to history
-
-    // 3️⃣ Third: fire backend logout in background
+    // 2️⃣ Trigger backend logout (non-blocking)
     axios
       .get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/logout`, {
         withCredentials: true,
       })
-      .catch((error) => {
-        console.error("Logout error:", error);
+      .finally(() => {
+        // 3️⃣ Hard redirect — skips React render cycle that causes 401s
+        window.location.replace("/login");
       });
   }, [dispatch]);
 
   return null;
 }
+
 
 
 function App() {
@@ -124,7 +123,12 @@ useEffect(() => {
           <Route path="/" element={<MainHome />} />
           <Route path="/login" element={isAuthorized?<Navigate to="/post" />:<Login/>} />
           <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
-          <Route path="/post" element={isAuthorized?<Feed />:<Navigate to="/login" />} />
+<Route
+  path="/post"
+  element={
+    isAuthorized ? <Feed /> : <Navigate to="/login" replace />
+  }
+/>
           <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
           <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" />} />
           <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />
