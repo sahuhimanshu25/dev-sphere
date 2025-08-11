@@ -11,7 +11,6 @@ export const sendToken = (user, statusCode, res) => {
     secure: isProduction,
     sameSite: isProduction ? "none" : "lax",
     path: "/",
-    domain: isProduction ? new URL(process.env.FRONTEND_URL).hostname : undefined,
   };
 
   console.log("Token created:", token); // Debug log

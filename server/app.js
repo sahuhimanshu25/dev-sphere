@@ -43,6 +43,7 @@ app.use(session({
     maxAge: 2 * 24 * 60 * 60 * 1000 // 2 days
   }
 }));
+app.set("trust proxy", 1);
 
 // --- Basic Route ---
 app.get("/", (req, res) => {
