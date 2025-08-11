@@ -24,7 +24,7 @@ export const isAuthenticated = async (req, res, next) => {
     if (!decodedData.id || !/^[0-9a-fA-F]{24}$/.test(decodedData.id)) {
       res.clearCookie("token", {
         httpOnly: true,
-        secure: isProduction,
+        // secure: isProduction,
         sameSite:"none",
         path: "/",
       });
@@ -37,7 +37,7 @@ export const isAuthenticated = async (req, res, next) => {
     if (!user) {
       res.clearCookie("token", {
         httpOnly: true,
-        secure: isProduction,
+        // secure: isProduction,
         sameSite: "none",
         path: "/",
       });
@@ -58,7 +58,7 @@ export const isAuthenticated = async (req, res, next) => {
     if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError") {
       res.clearCookie("token", {
         httpOnly: true,
-        secure: isProduction,
+        // secure: isProduction,
         sameSite:"none",
         path: "/",
       });
