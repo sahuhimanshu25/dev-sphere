@@ -24,8 +24,8 @@ export const isAuthenticated = async (req, res, next) => {
     if (!decodedData.id || !/^[0-9a-fA-F]{24}$/.test(decodedData.id)) {
       res.clearCookie("token", {
         httpOnly: true,
-        // secure: isProduction,
-        sameSite:"none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         path: "/",
       });
       return next(new ErrorHandler(`Invalid user ID in token: ${decodedData.id || "undefined"}`, 400));
@@ -37,8 +37,8 @@ export const isAuthenticated = async (req, res, next) => {
     if (!user) {
       res.clearCookie("token", {
         httpOnly: true,
-        // secure: isProduction,
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         path: "/",
       });
       return next(new ErrorHandler(`User not found for ID: ${decodedData.id}`, 404));
@@ -58,8 +58,8 @@ export const isAuthenticated = async (req, res, next) => {
     if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError") {
       res.clearCookie("token", {
         httpOnly: true,
-        // secure: isProduction,
-        sameSite:"none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         path: "/",
       });
     }
