@@ -25,7 +25,7 @@ export const isAuthenticated = async (req, res, next) => {
       res.clearCookie("token", {
         httpOnly: true,
         secure: isProduction,
-        sameSite: isProduction ? "none" : "lax",
+        sameSite:"none",
         path: "/",
       });
       return next(new ErrorHandler(`Invalid user ID in token: ${decodedData.id || "undefined"}`, 400));
@@ -38,7 +38,7 @@ export const isAuthenticated = async (req, res, next) => {
       res.clearCookie("token", {
         httpOnly: true,
         secure: isProduction,
-        sameSite: isProduction ? "none" : "lax",
+        sameSite: "none",
         path: "/",
       });
       return next(new ErrorHandler(`User not found for ID: ${decodedData.id}`, 404));
@@ -59,7 +59,7 @@ export const isAuthenticated = async (req, res, next) => {
       res.clearCookie("token", {
         httpOnly: true,
         secure: isProduction,
-        sameSite: isProduction ? "none" : "lax",
+        sameSite:"none",
         path: "/",
       });
     }
