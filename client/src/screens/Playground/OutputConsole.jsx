@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { BiExport } from "react-icons/bi"
 import "./OutputConsole.css"

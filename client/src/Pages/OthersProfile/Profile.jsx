@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import React, { useState, useEffect } from "react"
 import axios from "axios"
@@ -33,9 +33,7 @@ const Profile = () => {
       setError(null)
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+withCredentials:true
         })
         const userData = response.data?.data?.userdata
         if (userData) {

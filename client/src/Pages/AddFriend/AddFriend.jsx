@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { FaPlus, FaSearch, FaUsers, FaUserPlus } from "react-icons/fa"
@@ -25,9 +23,7 @@ const AddFriend = () => {
   const fetchUserFollowers = async () => {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       })
       const followers = data.data.followers
 
@@ -49,9 +45,7 @@ const AddFriend = () => {
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            withCredentials: true,
           },
         )
         setSearchResults(data.data)
@@ -67,9 +61,7 @@ const AddFriend = () => {
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            withCredentials: true,
           },
         )
         setGroupSearchResults(data.data)
@@ -86,9 +78,7 @@ const AddFriend = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         },
       )
       await axios.post(
@@ -97,9 +87,7 @@ const AddFriend = () => {
           receiverId: userId,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         },
       )
       toast.success("User followed successfully!")
@@ -115,9 +103,7 @@ const AddFriend = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/group/join`,
         { groupId },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         },
       )
       toast.success("Successfully joined the group!")
@@ -142,9 +128,7 @@ const AddFriend = () => {
           members: selectedMembers,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         },
       )
       toast.success("Group created successfully!")

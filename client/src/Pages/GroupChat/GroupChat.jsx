@@ -30,9 +30,7 @@ const GroupChat = () => {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/group/getUserGroups`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            withCredentials:true
           }
         );
         setGroups(response.data.data);
@@ -55,9 +53,7 @@ const GroupChat = () => {
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${searchTerm}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+withCredentials:true
           }
         );
         setSearchResults(data);

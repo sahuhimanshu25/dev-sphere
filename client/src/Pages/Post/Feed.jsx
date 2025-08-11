@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useEffect, useState, useCallback, useMemo } from "react"
 import axios from "axios"
@@ -30,9 +30,7 @@ function Feed() {
   const fetchRecommendedUsers = useCallback(async () => {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/recommended-users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+withCredentials:true
       })
       setRecommendedUsers(data.data)
     } catch (error) {
@@ -46,17 +44,20 @@ function Feed() {
     fetchRecommendedUsers()
   }, [fetchPosts, fetchRecommendedUsers])
 
-  const handlePostCreated = useCallback((newPost) => {
-    setPosts((prevPosts) => [newPost.data, ...prevPosts])
-  }, [])
+const handlePostCreated = useCallback((createdPostResponse) => {
+  console.log("new post created ",createdPostResponse);
+  
+  setPosts((prevPosts) => [createdPostResponse.post, ...prevPosts])
+}, [])
 
-  const handleLike = useCallback((postId, newLikeCount) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post._id === postId ? { ...post, likes: Array(newLikeCount).fill({}) } : post
-      )
-    )
-  }, [])
+
+const handleLike = useCallback((postId, updatedLikes) => {
+    setPosts(prevPosts =>
+        prevPosts.map(post =>
+            post._id === postId ? { ...post, likes: updatedLikes } : post
+        )
+    );
+}, []);
 
   const handleFollow = useCallback(
     async (userId) => {
@@ -65,18 +66,14 @@ function Feed() {
           `${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,
           {},
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+withCredentials:true
           }
         )
         await axios.post(
           `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
           { receiverId: userId },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+withCredentials:true
           }
         )
         toast.success("User followed successfully!")
@@ -88,11 +85,13 @@ function Feed() {
     [token]
   )
 
-  const memoizedPosts = useMemo(() => {
-    return posts.map((post) => (
+const memoizedPosts = useMemo(() => {
+  return posts
+    .filter(p => p && p._id) // remove null or incomplete posts
+    .map(post => (
       <Post key={post._id} postData={post} onLike={handleLike} />
     ))
-  }, [posts, handleLike])
+}, [posts, handleLike])
 
   const memoizedRecommendedUsers = useMemo(() => {
     return recommendedUsers.length > 0 ? (

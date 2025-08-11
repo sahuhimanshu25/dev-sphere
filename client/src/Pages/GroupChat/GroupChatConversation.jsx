@@ -15,9 +15,7 @@ const GroupChatConversation = ({ group, onSelect, selectedGroup }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/group/${group._id}`, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
+withCredentials:true
       });
         setGroupData(data);
         // console.log("Group data:", groupData?.data?.name);

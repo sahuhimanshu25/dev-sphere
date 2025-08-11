@@ -38,9 +38,7 @@ const GroupChatBox = ({ group, isMobileView, handleBackToConversation }) => {
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+withCredentials:true
           }
         );
         setMessages(res.data.message);
@@ -75,9 +73,7 @@ const GroupChatBox = ({ group, isMobileView, handleBackToConversation }) => {
             isGroup: true,
           },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+withCredentials:true
           }
         );
 

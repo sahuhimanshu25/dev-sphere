@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useContext } from "react"
 import LeftComponent from "./LeftComponent"

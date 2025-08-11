@@ -10,7 +10,7 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
   const [isOnline, setIsOnline] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
   const [selectedChat, setSelectedChat] = useState(null);
-  const {token}=useSelector((state)=>state.user)
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -18,11 +18,10 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
         setLoading(true); // Set loading to true when fetching starts
         const userId = data.members.find((id) => id !== currentUserId);
         const { data: user } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }
+          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`,
+          {
+            withCredentials: true,
+          }
         );
         setUserData(user.data);
         // console.log("Conversation user data:", user.data.userdata);

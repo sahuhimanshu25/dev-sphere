@@ -39,9 +39,7 @@ const EditProfile = () => {
         `${import.meta.env.VITE_BACKEND_BASEURL}/user/updateAccount`,
         formData,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+withCredentials:true
         }
       );
       const { data } = response;
@@ -75,9 +73,7 @@ const EditProfile = () => {
           `${import.meta.env.VITE_BACKEND_BASEURL}/user/verification`,
           { verificationCode, newEmail },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+withCredentials:true
           }
         );
 

@@ -1,4 +1,4 @@
-"use client"
+ 
 import { FaTimes, FaUsers, FaUserPlus } from "react-icons/fa"
 import "./UserModal.css"
 

@@ -335,7 +335,7 @@
 
 @media (max-width: 768px) {
   .GCB-chat {
-    height: 85vh;
+    height: 100vh;
     margin: 0;
     width: 100vw;
     overflow: hidden;

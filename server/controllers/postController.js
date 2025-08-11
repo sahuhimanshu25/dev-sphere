@@ -31,42 +31,48 @@ export const createPost = AsyncHandler(async (req, res, next) => {
         user: req.user.id,
         content: postContent,
     });
+const populatedPost = await Post.findById(post._id)
+  .populate('user', 'username avatar'); // match your feed's populate
 
-    res.status(201).json(new ApiResponse(201, post, "Posted Successfully"));
+res.status(201).json(new ApiResponse(201, populatedPost, "Posted Successfully"));
 });
-export const likePost =AsyncHandler(async (req, res, next) => {
-        const post = await Post.findById(req.params.id);
+export const likePost = AsyncHandler(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
+    if (!post) return next(new ErrorHandler("Post not found", 404));
 
-        if (!post) {
-            return next(new ErrorHandler("Post not found", 404));
-        }
+    const likedIndex = post.likes.findIndex(like => like.user.toString() === req.user.id);
+    const isLiked = likedIndex === -1;
 
-        const likedIndex = post.likes.findIndex(like => like.user.toString() === req.user.id);
+    if (isLiked) {
+        post.likes.push({ user: req.user.id });
+    } else {
+        post.likes.splice(likedIndex, 1);
+    }
 
-        if (likedIndex === -1) {
-
-            post.likes.push({ user: req.user.id });
-        } else {
-
-            post.likes.splice(likedIndex, 1);
-        }
-        await post.save();
-        res.status(200).json(new ApiResponse(200,{likes:post.likes.length},"likes Fetched Successfully"))
+    await post.save();
+    
+    res.status(200).json(new ApiResponse(200, {
+        liked: isLiked,  // true if liked, false if unliked
+        likes: post.likes,  // Full array of like objects
+    }, "Like action successful"));
 });
 export const getFeedPosts = AsyncHandler(async (req, res, next) => {
     try {
 // console.log("###################################User ID:", req.user.id); // Debug user ID
         // console.log("Following:", req.user.following); // Debug following list
-        const posts = await Post.find({
-            user: { $in: [...req.user.following, req.user.id] },
-        })
-            .populate('user', 'username avatar')
-            .sort({ createdAt: -1 });
+     const posts = await Post.find({
+  user: { $in: [...req.user.following, req.user.id] },
+})
+  .populate('user', 'username avatar')
+  .sort({ createdAt: -1 })
+  .lean();
 
-        res.status(200).json({
-            success: true,
-            posts
-        });
+const validPosts = posts.filter(p => p && p._id);
+
+res.status(200).json({
+  success: true,
+  posts: validPosts
+});
     } catch (error) {
         next(new ErrorHandler(error.message, 500)); 
     }

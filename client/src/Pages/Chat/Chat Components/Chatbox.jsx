@@ -5,7 +5,7 @@ import axios from "axios";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { IoSend } from "react-icons/io5";
-import { FaArrowLeft } from "react-icons/fa"; // Corrected import
+import { FaArrowLeft } from "react-icons/fa";
 import Loader from "../../../components/Loader/Loader";
 import { useSelector } from "react-redux";
 
@@ -38,9 +38,7 @@ const ChatBox = ({
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`,
           {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
+            withCredentials: true,
           }
         );
         setUserData(data.data);
@@ -70,9 +68,7 @@ const ChatBox = ({
           const { data } = await axios.get(
             `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`,
             {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
+              withCredentials: true,
             }
           );
           setMessages(data.message);
@@ -106,9 +102,7 @@ const ChatBox = ({
         `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
         message,
         {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          withCredentials: true,
         }
       );
       setMessages((prevMessages) => {
@@ -153,28 +147,28 @@ const ChatBox = ({
       <div className="chat-header">
         <div className="chat-header-in">
           <div className="chat-header-in-in">
-          <div className="image-container">
-            <img
-              src={userData?.userdata.avatar || userimg}
-              alt="User"
-              className="followerImage"
-            />
-            <div
-              className={`online-dot ${isOnline ? "online" : "offline"}`}
-            ></div>
-          </div>
-          <div className="name">
-            <span>{userData?.userdata.username || "Unknown User"}</span>
-            <span>{isOnline ? "Online" : "Offline"}</span>
-          </div>
+            <div className="image-container">
+              <img
+                src={userData?.userdata.avatar || userimg}
+                alt="User"
+                className="followerImage"
+              />
+              <div
+                className={`online-dot ${isOnline ? "online" : "offline"}`}
+              ></div>
+            </div>
+            <div className="name">
+              <span>{userData?.userdata.username || "Unknown User"}</span>
+              <span>{isOnline ? "Online" : "Offline"}</span>
+            </div>
           </div>
           <div>
-                    {isMobileView && (
-            <FaArrowLeft
-              className="chatbox-back-button"
-              onClick={handleBackToConversation}
-            />
-          )}
+            {isMobileView && (
+              <FaArrowLeft
+                className="chatbox-back-button"
+                onClick={handleBackToConversation}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -192,36 +186,34 @@ const ChatBox = ({
         <div ref={messagesEndRef} />
       </div>
 
-<div className="chat-sender">
-<InputEmoji
-  value={newMessage}
-  onChange={setNewMessage}
-  placeholder="Type a message"
-  onEnter={() => {
-    if (newMessage.trim()) {
-      handleSend(new Event('send')); // dummy event so your function signature stays happy
-    }
-  }}
-/>
-
-  <button
-    className="send-button button"
-    onClick={handleSend}
-    disabled={newMessage.trim().length === 0 || sending}
-    style={{
-      background: "none",
-      cursor: sending ? "not-allowed" : "pointer"
-    }}
-  >
-    <IoSend
-      style={{
-        color: sending ? "#ccc" : "#7c78eb8e",
-        fontSize: "20px"
-      }}
-    />
-  </button>
-</div>
-
+      <div className="chat-sender">
+        <InputEmoji
+          value={newMessage}
+          onChange={setNewMessage}
+          placeholder="Type a message"
+          onEnter={() => {
+            if (newMessage.trim()) {
+              handleSend(new Event("send"));
+            }
+          }}
+        />
+        <button
+          className="send-button button"
+          onClick={handleSend}
+          disabled={newMessage.trim().length === 0 || sending}
+          style={{
+            background: "none",
+            cursor: sending ? "not-allowed" : "pointer",
+          }}
+        >
+          <IoSend
+            style={{
+              color: sending ? "#ccc" : "#7c78eb8e",
+              fontSize: "20px",
+            }}
+          />
+        </button>
+      </div>
     </div>
   );
 };

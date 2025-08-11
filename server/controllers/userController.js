@@ -133,14 +133,16 @@ export const loginUser = async (req, res, next) => {
   }
 };
 
+const isProduction=process.env.NODE_ENV==="production"
 //LOGOUT
 export const logout = AsyncHandler(async (req, res, next) => {
 res.cookie("token", "", {
   httpOnly: true,
-  secure: true, // only if you set it like this before
-  sameSite: "none", // match original setting
+  secure: isProduction, // only if you set it like this before
+  sameSite: isProduction?"none" : "lax", // match original setting
   expires: new Date(0),
   path: "/", // match original setting
+  domain: isProduction ? new URL(process.env.FRONTEND_URL).hostname : undefined,
 });
 
 

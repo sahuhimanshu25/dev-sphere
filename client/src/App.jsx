@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -62,20 +61,19 @@ function App() {
   const { userData, loading, error,isAuthorized } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [authChecked, setAuthChecked] = useState(false);
+  
 
-  useEffect(() => {
+useEffect(() => {
+  if (!isAuthorized) {
     console.log("Running checkAuthStatus");
     dispatch(checkAuthStatus())
       .unwrap()
-      .then(() => {
-        // console.log("Auth check completed, userData:", userData);
-        setAuthChecked(true);
-      })
-      .catch((err) => {
-        console.error("Auth check failed:", err);
-        setAuthChecked(true);
-      });
-  }, [dispatch]); // Removed userData from dependencies
+      .finally(() => setAuthChecked(true));
+  } else {
+    setAuthChecked(true);
+  }
+}, [dispatch, isAuthorized]);
+
 
   if (!authChecked || loading) {
     return <Loader />;

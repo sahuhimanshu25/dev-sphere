@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useState, useEffect } from "react"
 import { FaCode, FaLightbulb } from "react-icons/fa"

@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import axios from "axios"
@@ -22,9 +22,7 @@ function Post({ postData, onLike }) {
   const fetchComments = useCallback(async () => {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comments`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+withCredentials:true
       })
       setComments(data.data)
     } catch (error) {
@@ -49,9 +47,7 @@ function Post({ postData, onLike }) {
         `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/like/${postData._id}`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+withCredentials:true
         }
       )
       // Confirm the server response
@@ -72,9 +68,7 @@ function Post({ postData, onLike }) {
           content: newComment,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+withCredentials:true
         }
       )
       setComments((prev) => [...prev, data.data])
@@ -159,21 +153,7 @@ function Post({ postData, onLike }) {
             <div className="post-timestamp">2 hours ago</div>
           </div>
         </div>
-        <div className="post-options">
-          <button className="options-toggle" onClick={() => setShowOptions((prev) => !prev)}>
-            <BiDotsVerticalRounded />
-          </button>
-          {showOptions && (
-            <div className="options-menu">
-              <button onClick={handleDownload} className="option-btn">
-                <BiDownload /> Download
-              </button>
-              <button onClick={handleShare} className="option-btn">
-                <FaShareAlt /> Share
-              </button>
-            </div>
-          )}
-        </div>
+
       </div>
 
       <div className="post-content">{memoizedPostContent}</div>

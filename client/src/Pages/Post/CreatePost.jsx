@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useCallback } from "react"
 import axios from "axios"
@@ -38,11 +37,11 @@ function CreatePost({ onPostCreated }) {
 
       setIsSubmitting(true)
       try {
-        const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post`, formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        const { data} = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post`, formData, {
+          withCredentials:true
         })
 
-        onPostCreated(data)
+        onPostCreated(data.data)
         setText("")
         setImage(null)
         setVideo(null)

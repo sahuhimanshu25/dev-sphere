@@ -132,6 +132,7 @@
 @media (max-width: 1200px) {
   .modern-home-container {
     width: 85vw;
+    margin: 0;
   }
 }
 
@@ -139,6 +140,7 @@
   .modern-home-container {
     width: 95vw;
     min-height: 90vh;
+    margin: 0;
   }
 
   .home-content-grid {
@@ -157,6 +159,7 @@
   .modern-home-container {
     width: 98vw;
     min-height: 88vh;
+    margin: 0;
   }
 
   .home-content-grid {

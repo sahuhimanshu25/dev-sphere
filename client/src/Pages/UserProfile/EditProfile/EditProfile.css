@@ -271,7 +271,7 @@ textarea:focus {
 }
 
 .edit-inp-p{
-  transition: background 0.3s ease, border-color 0.3s ease;/
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 /* Password text that will appear when 'showPassword' is true */

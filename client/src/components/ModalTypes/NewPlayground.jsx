@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useContext, useState } from "react"
 import { Header, CloseButton } from "../Modal"

@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { BiImport } from "react-icons/bi"
 import "./InputConsole.css"

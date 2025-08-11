@@ -420,7 +420,7 @@
 
 @media (max-width: 768px) {
   .Chat {
-    height: 85vh;
+    height: 100vh;
     margin: 0;
     width: 100vw;
     overflow: hidden;

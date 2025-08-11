@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useContext, useState } from "react"
 import { IoTrashOutline, IoFolderOpen, IoAdd } from "react-icons/io5"

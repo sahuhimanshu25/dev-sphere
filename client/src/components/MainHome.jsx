@@ -1,4 +1,4 @@
-"use client"
+ 
 
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
@@ -151,10 +151,7 @@ const HomePage = () => {
               <span>Explore the Platform</span>
               <div className="button-glow"></div>
             </button>
-            <button className="cta-button secondary">
-              <FaPlay className="play-icon" />
-              <span>Watch Demo</span>
-            </button>
+
           </div>
         </div>
         
