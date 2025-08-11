@@ -34,18 +34,16 @@ function Logout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Redirect first to avoid extra API calls from protected routes
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 0);
+    // 1️⃣ First: clear Redux auth state immediately
+    dispatch(logout());
 
-    // Then perform logout request in background
+    // 2️⃣ Second: redirect instantly (no time for 401 spam)
+    window.location.replace("/login"); // replace avoids adding /logout to history
+
+    // 3️⃣ Third: fire backend logout in background
     axios
       .get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/logout`, {
         withCredentials: true,
-      })
-      .then(() => {
-        dispatch(logout());
       })
       .catch((error) => {
         console.error("Logout error:", error);
@@ -64,6 +62,12 @@ function App() {
   
 
 useEffect(() => {
+  const publicRoutes = ["/login", "/register"];
+  if (publicRoutes.includes(window.location.pathname)) {
+    setAuthChecked(true);
+    return;
+  }
+
   if (!isAuthorized) {
     console.log("Running checkAuthStatus");
     dispatch(checkAuthStatus())
@@ -73,6 +77,7 @@ useEffect(() => {
     setAuthChecked(true);
   }
 }, [dispatch, isAuthorized]);
+
 
 
   if (!authChecked || loading) {
