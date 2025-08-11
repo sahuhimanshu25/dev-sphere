@@ -142,7 +142,6 @@ res.cookie("token", "", {
   sameSite: "none", // match original setting
   expires: new Date(0),
   path: "/", // match original setting
-  domain: isProduction ? new URL(process.env.FRONTEND_URL).hostname : undefined,
 });
 
 
