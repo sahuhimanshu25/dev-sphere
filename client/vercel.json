@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://devsphere-zrv8.onrender.com/$1"
+      "destination": "https://devsphere-us67.onrender.com/$1"
     }
   ]
 }
