@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://devsphere-zrv8.onrender.com/$1"
+    }
+  ]
+}
