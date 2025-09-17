@@ -11,7 +11,8 @@ export const app = express();
 // --- Trust proxy MUST come first ---
 app.set("trust proxy", 1);
 
-// --- CORS ---
+// --- CORS --- 
+
 app.use(cors({
     origin: process.env.FRONTEND_URL, // full URL e.g: "https://myfrontend.com"
     credentials: true
