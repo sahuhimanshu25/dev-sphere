@@ -29,7 +29,7 @@ const DevProfile = React.lazy(() => import("./Pages/DevProfile/DevProfile.jsx"))
 const Sidebar = React.lazy(() => import("./components/Navbar/Sidebar.jsx"));
 
 axios.defaults.withCredentials = true;
-
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL;
 function Logout() {
   const dispatch = useDispatch();
 

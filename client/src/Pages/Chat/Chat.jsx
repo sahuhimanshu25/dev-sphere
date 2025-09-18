@@ -43,6 +43,12 @@ const Chat = () => {
       withCredentials: true,
     });
 
+    socket.current.on("connect", () => {
+    console.log("Socket connected:", socket.current.id);
+  });
+  socket.current.on("connect_error", (err) => {
+    console.log("Socket connection error:", err.message);
+  });
     socket.current.emit("new-user-add", userData._id);
 
     socket.current.on("get-users", (users) => {
