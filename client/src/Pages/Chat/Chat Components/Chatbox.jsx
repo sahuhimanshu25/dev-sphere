@@ -36,7 +36,7 @@ const ChatBox = ({
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`,
+          `/user/${userId}`,
           {
             withCredentials: true,
           }
@@ -66,7 +66,7 @@ const ChatBox = ({
         setLoading(true);
         if (chat?._id) {
           const { data } = await axios.get(
-            `${import.meta.env.VITE_BACKEND_BASEURL}/message/${chat._id}`,
+            `/message/${chat._id}`,
             {
               withCredentials: true,
             }
@@ -99,7 +99,7 @@ const ChatBox = ({
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
+        `/message`,
         message,
         {
           withCredentials: true,

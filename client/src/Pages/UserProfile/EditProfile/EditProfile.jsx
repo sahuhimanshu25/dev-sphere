@@ -36,7 +36,7 @@ const EditProfile = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/user/updateAccount`,
+        `/user/updateAccount`,
         formData,
         {
 withCredentials:true
@@ -70,7 +70,7 @@ withCredentials:true
     if (verificationCode === sCode.toString()) {
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/verification`,
+          `/user/verification`,
           { verificationCode, newEmail },
           {
 withCredentials:true

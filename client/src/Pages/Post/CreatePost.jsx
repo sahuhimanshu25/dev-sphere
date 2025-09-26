@@ -37,7 +37,7 @@ function CreatePost({ onPostCreated }) {
 
       setIsSubmitting(true)
       try {
-        const { data} = await axios.post(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post`, formData, {
+        const { data} = await axios.post(`/post/post`, formData, {
           withCredentials:true
         })
 

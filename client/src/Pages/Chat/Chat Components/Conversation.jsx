@@ -18,7 +18,7 @@ const Conversation = ({ data, currentUserId, onClick, onlineUsers }) => {
         setLoading(true); // Set loading to true when fetching starts
         const userId = data.members.find((id) => id !== currentUserId);
         const { data: user } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`,
+          `/user/${userId}`,
           {
             withCredentials: true,
           }

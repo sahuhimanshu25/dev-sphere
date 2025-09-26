@@ -22,7 +22,7 @@ const AddFriend = () => {
 
   const fetchUserFollowers = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
+      const { data } = await axios.get(`/user/me`, {
         withCredentials: true,
       })
       const followers = data.data.followers
@@ -43,7 +43,7 @@ const AddFriend = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/user/search-user?username=${searchTerm}`,
+          `/user/search-user?username=${searchTerm}`,
           {
             withCredentials: true,
           },
@@ -59,7 +59,7 @@ const AddFriend = () => {
     if (groupSearchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${groupSearchTerm}`,
+          `/group/search?query=${groupSearchTerm}`,
           {
             withCredentials: true,
           },
@@ -75,14 +75,14 @@ const AddFriend = () => {
   const handleFollow = async (userId) => {
     try {
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,
+        `/follow/${userId}`,
         {},
         {
           withCredentials: true,
         },
       )
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
+        `/chat/create`,
         {
           receiverId: userId,
         },
@@ -100,7 +100,7 @@ const AddFriend = () => {
   const handleJoinGroup = async (groupId) => {
     try {
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/group/join`,
+        `/group/join`,
         { groupId },
         {
           withCredentials: true,
@@ -121,7 +121,7 @@ const AddFriend = () => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/group/create`,
+        `/group/create`,
         {
           name: groupName,
           description: groupDescription,

@@ -17,7 +17,7 @@ const GroupChatBox = ({ group, isMobileView, handleBackToConversation }) => {
   const localMessageIds = useRef(new Set());
 
   useEffect(() => {
-    socket.current = io(`${import.meta.env.VITE_BACKEND_BASEURL}`);
+    socket.current = io(``);
 
     socket.current.emit("join-group", group.data._id);
 
@@ -36,7 +36,7 @@ const GroupChatBox = ({ group, isMobileView, handleBackToConversation }) => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/message/${group.data._id}`,
+          `/message/${group.data._id}`,
           {
 withCredentials:true
           }
@@ -66,7 +66,7 @@ withCredentials:true
         localMessageIds.current.add(tempMessageId);
 
         const res = await axios.post(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/message`,
+          `/message`,
           {
             text: newMessage,
             chatId: group.data._id,

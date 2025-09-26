@@ -37,7 +37,7 @@ const UserProfile = () => {
       }
       try {
         setIsLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/me`, {
+        const response = await axios.get(`/user/me`, {
           withCredentials: true,
         });
         // console.log("UserProfile data:", response.data);
@@ -70,7 +70,7 @@ const UserProfile = () => {
   const handleDelete = async (postId) => {
     if (!userData || authLoading) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postId}`, {
+      await axios.delete(`/post/post/${postId}`, {
         withCredentials: true,
       });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
@@ -106,7 +106,7 @@ const UserProfile = () => {
       formData.append("avatar", file);
 
       axios
-        .patch(`${import.meta.env.VITE_BACKEND_BASEURL}/user/updateAvatar`, formData, {
+        .patch(`/user/updateAvatar`, formData, {
           withCredentials: true,
         })
         .then((response) => {

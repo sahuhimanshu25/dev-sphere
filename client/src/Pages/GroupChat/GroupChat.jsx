@@ -28,7 +28,7 @@ const GroupChat = () => {
     const fetchGroups = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/getUserGroups`,
+          `/group/getUserGroups`,
           {
             withCredentials:true
           }
@@ -51,7 +51,7 @@ const GroupChat = () => {
     if (searchTerm) {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/group/search?query=${searchTerm}`,
+          `/group/search?query=${searchTerm}`,
           {
 withCredentials:true
           }

@@ -21,7 +21,7 @@ function Post({ postData, onLike }) {
 
   const fetchComments = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comments`, {
+      const { data } = await axios.get(`/post/post/${postData._id}/comments`, {
 withCredentials:true
       })
       setComments(data.data)
@@ -44,7 +44,7 @@ withCredentials:true
 
     try {
       const { data } = await axios.put(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/like/${postData._id}`,
+        `/post/post/like/${postData._id}`,
         {},
         {
 withCredentials:true
@@ -63,7 +63,7 @@ withCredentials:true
     if (!newComment) return
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/post/post/${postData._id}/comment`,
+        `/post/post/${postData._id}/comment`,
         {
           content: newComment,
         },

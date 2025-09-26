@@ -29,7 +29,7 @@ const DevProfile = React.lazy(() => import("./Pages/DevProfile/DevProfile.jsx"))
 const Sidebar = React.lazy(() => import("./components/Navbar/Sidebar.jsx"));
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL;
+axios.defaults.baseURL = "/api";
 function Logout() {
   const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ function Logout() {
 
     // 2️⃣ Trigger backend logout (non-blocking)
     axios
-      .get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/logout`, {
+      .get(`/user/logout`, {
         withCredentials: true,
       })
       .finally(() => {

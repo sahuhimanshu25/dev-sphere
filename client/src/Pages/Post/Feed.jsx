@@ -18,7 +18,7 @@ function Feed() {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/post/posts/feed`, {withCredentials:true})
+      const { data } = await axios.get(`/post/posts/feed`, {withCredentials:true})
       setPosts(data.posts)
     } catch (error) {
       console.error("Error fetching posts:", error)
@@ -29,7 +29,7 @@ function Feed() {
 
   const fetchRecommendedUsers = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/recommended-users`, {
+      const { data } = await axios.get(`/user/recommended-users`, {
 withCredentials:true
       })
       setRecommendedUsers(data.data)
@@ -63,14 +63,14 @@ const handleLike = useCallback((postId, updatedLikes) => {
     async (userId) => {
       try {
         await axios.put(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/follow/${userId}`,
+          `/follow/${userId}`,
           {},
           {
 withCredentials:true
           }
         )
         await axios.post(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
+          `/chat/create`,
           { receiverId: userId },
           {
 withCredentials:true

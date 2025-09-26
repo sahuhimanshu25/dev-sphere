@@ -77,7 +77,7 @@ const Chat = () => {
       }
       try {
         setLoading(true);
-        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/chat/chats`, {
+        const { data } = await axios.get(`/chat/chats`, {
           withCredentials: true,
         });
         // console.log("Chats fetched:", data);
@@ -113,7 +113,7 @@ const Chat = () => {
     if (!searchTerm || !userData || authLoading) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/following/search?username=${searchTerm}`,
+        `/following/search?username=${searchTerm}`,
         { withCredentials: true }
       );
       // console.log("Search results:", data);
@@ -131,7 +131,7 @@ const Chat = () => {
     if (!userData || authLoading) return;
     try {
       const { data: chat } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/chat/create`,
+        `/chat/create`,
         { receiverId: user._id },
         { withCredentials: true }
       );

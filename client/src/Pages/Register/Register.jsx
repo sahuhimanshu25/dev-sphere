@@ -86,7 +86,7 @@ const RegisterPage = () => {
     try {
       setIsLoading(true)
       const result = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/user/register`,
+        `/user/register`,
         completeData,
         { withCredentials: true }
       )
@@ -106,7 +106,7 @@ const RegisterPage = () => {
     try {
       setIsLoading(true)
       const result = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/user/register/verification`,
+        `/user/register/verification`,
         {
           verificationCode,
         },

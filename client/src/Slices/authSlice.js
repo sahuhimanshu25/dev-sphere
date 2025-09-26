@@ -13,7 +13,7 @@ const initialState = {
 export const signup = createAsyncThunk("signup", async (userCredentials, { rejectWithValue }) => {
   try {
     const { data } = await axios.post(
-      `${import.meta.env.VITE_BACKEND_BASEURL}/auth/register`,
+      `/auth/register`,
       userCredentials,
       { withCredentials: true }
     );
@@ -27,7 +27,7 @@ export const signup = createAsyncThunk("signup", async (userCredentials, { rejec
 export const login = createAsyncThunk("login", async (userCredentials, { rejectWithValue }) => {
   try {
     const { data } = await axios.post(
-      `${import.meta.env.VITE_BACKEND_BASEURL}/auth/login`,
+      `/auth/login`,
       userCredentials,
       { withCredentials: true }
     );
@@ -42,9 +42,9 @@ export const checkAuthStatus = createAsyncThunk(
   "checkAuthStatus",
   async (_, { rejectWithValue }) => {
     try {
-      // console.log(`${import.meta.env.VITE_BACKEND_BASEURL}/user/get-login-details`);
+      // console.log(`/user/get-login-details`);
       
-      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/get-login-details`, {
+      const { data } = await axios.get(`/user/get-login-details`, {
         withCredentials: true,
       });
       return data; // Expecting { success: true, user }

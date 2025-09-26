@@ -32,7 +32,7 @@ const Profile = () => {
       setLoading(true)
       setError(null)
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/user/${userId}`, {
+        const response = await axios.get(`/user/${userId}`, {
 withCredentials:true
         })
         const userData = response.data?.data?.userdata
