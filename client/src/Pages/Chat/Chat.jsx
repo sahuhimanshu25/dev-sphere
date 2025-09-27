@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Chat.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import ChatBox from "./Chat Components/Chatbox";
 import Conversation from "./Chat Components/Conversation";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { HiUserGroup } from "react-icons/hi";
 import Loader from "../../components/Loader/Loader";
 import toast from "react-hot-toast";
+import { logout } from "../../Slices/authSlice.js";
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -24,6 +25,7 @@ const Chat = () => {
   const navigate = useNavigate();
   const socket = useRef();
   const { userData, loading: authLoading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleResize = () => {
@@ -39,17 +41,31 @@ const Chat = () => {
       return;
     }
 
-    socket.current = io('/api', {
+    const token = localStorage.getItem("authToken");
+    socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
+      path: "/socket.io",
       withCredentials: true,
+      transports: ["websocket", "polling"],
+      auth: { token }, // Pass token in auth object
+      extraHeaders: {
+        Authorization: `Bearer ${token}`, // Fallback for polling
+      },
     });
 
     socket.current.on("connect", () => {
-    console.log("Socket connected:", socket.current.id);
-  });
-  socket.current.on("connect_error", (err) => {
-    console.log("Socket connection error:", err.message);
-  });
-    socket.current.emit("new-user-add", userData._id);
+      console.log("Socket connected:", socket.current.id);
+      socket.current.emit("new-user-add", userData._id);
+    });
+
+    socket.current.on("connect_error", (err) => {
+      console.error("Socket connection error:", err.message);
+      toast.error("Failed to connect to chat server.");
+      if (err.message.includes("Authentication error")) {
+        dispatch(logout());
+        localStorage.removeItem("authToken");
+        navigate("/login");
+      }
+    });
 
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
@@ -59,15 +75,12 @@ const Chat = () => {
       setReceiveMessage(data);
     });
 
-    console.log('LATEST UPDATE 2.13 - CHAT.JSX');
-    console.log(socket.current);
-    
-    
+    console.log("Socket instance:", socket.current);
 
     return () => {
       socket.current.disconnect();
     };
-  }, [userData, authLoading]);
+  }, [userData, authLoading, navigate, dispatch]);
 
   useEffect(() => {
     const getChats = async () => {
@@ -79,13 +92,15 @@ const Chat = () => {
         setLoading(true);
         const { data } = await axios.get(`/chat/chats`, {
           withCredentials: true,
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
         });
-        // console.log("Chats fetched:", data);
         setChats(data);
       } catch (error) {
         console.error("Error fetching chats:", error.response?.data || error);
         if (error.response?.status === 401 || error.response?.status === 404) {
           toast.error("Session expired, please log in");
+          dispatch(logout());
+          localStorage.removeItem("authToken");
           navigate("/login");
         }
       } finally {
@@ -93,7 +108,7 @@ const Chat = () => {
       }
     };
     getChats();
-  }, [userData, authLoading, navigate]);
+  }, [userData, authLoading, navigate, dispatch]);
 
   const handleConversationClick = (chat) => {
     setCurrentChat(chat);
@@ -114,14 +129,18 @@ const Chat = () => {
     try {
       const { data } = await axios.get(
         `/following/search?username=${searchTerm}`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
+        }
       );
-      // console.log("Search results:", data);
       setSearchResults(data.data);
     } catch (error) {
       console.error("Error searching followed users:", error.response?.data || error);
       if (error.response?.status === 401 || error.response?.status === 404) {
         toast.error("Session expired, please log in");
+        dispatch(logout());
+        localStorage.removeItem("authToken");
         navigate("/login");
       }
     }
@@ -133,9 +152,11 @@ const Chat = () => {
       const { data: chat } = await axios.post(
         `/chat/create`,
         { receiverId: user._id },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
+        }
       );
-      // console.log("New chat created:", chat);
       setChats((prevChats) => [...prevChats, chat]);
       setCurrentChat(chat);
       setSearchResults([]);
@@ -144,6 +165,8 @@ const Chat = () => {
       console.error("Error creating a new chat:", error.response?.data || error);
       if (error.response?.status === 401 || error.response?.status === 404) {
         toast.error("Session expired, please log in");
+        dispatch(logout());
+        localStorage.removeItem("authToken");
         navigate("/login");
       }
     }

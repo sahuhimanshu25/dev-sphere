@@ -7,59 +7,62 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
+import { User } from './models/userModel.js'; // Import User model
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.log("!!! ERROR !!! ", err);
-  console.log("SHUTTING DOWN THE SERVER!!!");
-  process.exit(1);
-});
+const PORT = process.env.PORT || 10000; // Use Render's default port
+const isProduction = process.env.NODE_ENV === "production";
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL, // Ensure this matches frontend origin exactly
-    methods: ['GET', 'POST', 'PUT'],
+    origin: process.env.FRONTEND_URL, // https://dev-sphere-vrvj.onrender.com
+    methods: ['GET', 'POST'],
     credentials: true,
-    allowedHeaders: ["Authorization"],
+    allowedHeaders: ['Authorization'],
   },
+  path: '/socket.io',
 });
 
-// Global connection error handler (outside connection event)
-io.on('connection_error', (err) => {
-  console.log('Connection error:', err.message);
-});
+// Socket.io authentication middleware
+io.use(async (socket, next) => {
+  try {
+    // Check cookie first
+    const cookies = cookie.parse(socket.request.headers.cookie || '');
+    let token = cookies.token;
 
-// Socket.io JWT authentication middleware
-io.use((socket, next) => {
-  const cookies = cookie.parse(socket.request.headers.cookie || "");
-  const rawToken = cookies.token;
-
-  const token = rawToken?.startsWith("Bearer ") ? rawToken.split(" ")[1] : rawToken;
-
-  console.log("Token from cookie:", token);
-  console.log("Socket cookies:", cookies);
-  
-
-  if (!token) {
-    console.log("No token provided in cookie");
-    return next(new Error("Authentication error: No token"));
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.log("Invalid token:", err);
-      return next(new Error("Authentication error: Invalid token"));
+    // Fallback to Authorization header or auth.token
+    if (!token) {
+      token = socket.handshake.auth.token || socket.handshake.headers.authorization?.split(' ')[1];
     }
-    socket.user = decoded;
-    console.log("User authenticated:", decoded);
+
+    console.log("Socket token:", token);
+    console.log("Socket cookies:", cookies);
+
+    if (!token) {
+      console.log("No token provided in cookie or auth");
+      return next(new Error("Authentication error: No token"));
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded.id || !/^[0-9a-fA-F]{24}$/.test(decoded.id)) {
+      return next(new Error(`Invalid user ID in token: ${decoded.id || "undefined"}`));
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return next(new Error(`User not found for ID: ${decoded.id}`));
+    }
+
+    socket.user = user;
+    console.log("Socket authenticated:", user._id);
     next();
-  });
+  } catch (error) {
+    console.error("Socket auth error:", error.message);
+    return next(new Error("Authentication error: Invalid or expired token"));
+  }
 });
 
 let activeUsers = [];
@@ -105,7 +108,6 @@ io.on('connection', (socket) => {
     io.emit('get-users', activeUsers);
   });
 
-  // Listen for socket errors
   socket.on('error', (err) => {
     console.log(`Socket error from ${socket.id}:`, err);
   });
@@ -121,10 +123,17 @@ connection()
     console.error('Database connection failed:', err);
   });
 
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error("!!! ERROR !!! ", err);
+  console.error("SHUTTING DOWN THE SERVER!!!");
+  process.exit(1);
+});
+
 // Handle unhandled promise rejections
-process.on("unhandledRejection", err => {
-  console.log(err);
-  console.log("SHUTTING DOWN THE SERVER!!!");
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Rejection:', err);
+  console.error("SHUTTING DOWN THE SERVER!!!");
   server.close(() => {
     process.exit(1);
   });
