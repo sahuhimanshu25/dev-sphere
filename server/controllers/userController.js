@@ -136,17 +136,20 @@ export const loginUser = async (req, res, next) => {
 const isProduction=process.env.NODE_ENV==="production"
 //LOGOUT
 export const logout = AsyncHandler(async (req, res, next) => {
-res.cookie("token", "", {
-  httpOnly: true,
-  secure: isProduction, // only if you set it like this before
-  sameSite: isProduction?"none" : "lax", // match original setting
-  expires: new Date(0),
-  path: "/", // match original setting
-  domain: isProduction ? new URL(process.env.FRONTEND_URL).hostname : undefined,
-});
+  const isProduction = process.env.NODE_ENV === "production";
 
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    path: "/",
+    domain: isProduction ? new URL(process.env.FRONTEND_URL).hostname : undefined,
+  });
 
-  res.status(200).json(new ApiResponse(200, {}, "user LoggedOut Successfully"));
+  res.status(200).json({
+    success: true,
+    message: "User Logged Out Successfully",
+  });
 });
 
 export const searchUser = AsyncHandler(async (req, res, next) => {

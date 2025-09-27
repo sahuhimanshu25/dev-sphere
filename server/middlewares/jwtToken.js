@@ -1,28 +1,32 @@
-import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 dotenv.config();
 
-export const sendToken = (user, statusCode, res) => {
-  const token = user.getJWT();
-  const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "production";
 
-  console.log("NODE_ENV:", process.env.NODE_ENV);
+export const sendToken = (user, statusCode, res, token) => {
+  if (!token) {
+    token = user.getJWT();
+  }
 
-const options = {
-  expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-  httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax", // 👈 Change this
-  path: "/", // 👈 Add this for consistency with clearCookie
-};
+  const options = {
+    expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    path: "/",
+    domain: isProduction ? new URL(process.env.FRONTEND_URL).hostname : undefined,
+  };
 
-
-  console.log("Cookie options:", options);
   console.log("Generated token:", token);
+  console.log("Cookie options:", options);
 
-  res.status(statusCode)
+  res
+    .status(statusCode)
     .cookie("token", token, options)
     .json({
       success: true,
       user,
+      token, // Include token in response body
     });
 };

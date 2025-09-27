@@ -34,13 +34,12 @@ function Logout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Clear auth state first
     dispatch(logout());
-
-    // Trigger backend logout (non-blocking)
+    localStorage.removeItem("authToken");
     axios
       .get(`/user/logout`, {
         withCredentials: true,
+        headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
       })
       .finally(() => {
         console.log("Redirecting to /login");
@@ -57,17 +56,24 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    // Add 401 interceptor to handle unauthorized errors
     const interceptor = axios.interceptors.response.use(
       response => response,
       error => {
+        console.error("Axios error:", error.response?.status, error.response?.data);
         if (error.response?.status === 401) {
           dispatch(logout());
+          localStorage.removeItem("authToken");
           window.location.replace('/login');
         }
         return Promise.reject(error);
       }
     );
+
+    // Set Authorization header from localStorage if available
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
 
     const publicRoutes = ["/login", "/register"];
     if (publicRoutes.includes(window.location.pathname)) {
@@ -79,6 +85,18 @@ function App() {
       console.log("Running checkAuthStatus");
       dispatch(checkAuthStatus())
         .unwrap()
+        .then(data => {
+          console.log("checkAuthStatus success:", data);
+          if (data?.token) {
+            localStorage.setItem("authToken", data.token);
+            axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+          }
+        })
+        .catch(err => {
+          console.error("checkAuthStatus failed:", err);
+          localStorage.removeItem("authToken");
+          delete axios.defaults.headers.common["Authorization"];
+        })
         .finally(() => setAuthChecked(true));
     } else {
       setAuthChecked(true);
@@ -89,6 +107,10 @@ function App() {
 
   if (!authChecked || loading) {
     return <Loader />;
+  }
+
+  if (error) {
+    console.error("Auth error in App:", error);
   }
 
   return (
@@ -108,7 +130,7 @@ function App() {
                     </ModalProvider>
                   </PlaygroundProvider>
                 ) : (
-                  <Navigate to="/login" />
+                  <Navigate to="/login" replace />
                 )
               }
             />
@@ -122,21 +144,21 @@ function App() {
                     </ModalProvider>
                   </PlaygroundProvider>
                 ) : (
-                  <Navigate to="/login" />
+                  <Navigate to="/login" replace />
                 )
               }
             />
             <Route path="/" element={<MainHome />} />
-            <Route path="/login" element={isAuthorized ? <Navigate to="/post" /> : <Login />} />
-            <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
+            <Route path="/login" element={isAuthorized ? <Navigate to="/post" replace /> : <Login />} />
+            <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" replace />} />
             <Route
               path="/post"
               element={isAuthorized ? <Feed /> : <Navigate to="/login" replace />}
             />
-            <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
-            <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" />} />
-            <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />
-            <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
+            <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" replace />} />
+            <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" replace />} />
+            <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" replace />} />
+            <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" replace />} />
             <Route path="/user/user-details" element={<Profile />} />
             <Route path="/user/Edit-profile" element={<EditProfile />} />
             <Route path="/register" element={<RegisterPage />} />

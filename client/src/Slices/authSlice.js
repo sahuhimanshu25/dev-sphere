@@ -19,6 +19,10 @@ export const signup = createAsyncThunk("signup", async (userCredentials, { rejec
     const { data } = await axios.post(`/auth/register`, userCredentials, {
       withCredentials: true,
     });
+    if (data.token) {
+      localStorage.setItem("authToken", data.token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+    }
     return data;
   } catch (err) {
     console.error("Signup error:", err.response?.data || err.message);
@@ -37,6 +41,10 @@ export const login = createAsyncThunk("login", async (userCredentials, { rejectW
     const { data } = await axios.post(`/auth/login`, userCredentials, {
       withCredentials: true,
     });
+    if (data.token) {
+      localStorage.setItem("authToken", data.token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+    }
     return data;
   } catch (err) {
     console.error("Login error:", err.response?.data || err.message);
@@ -56,7 +64,12 @@ export const checkAuthStatus = createAsyncThunk(
       });
       const { data } = await axios.get(`/user/get-login-details`, {
         withCredentials: true,
+        headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
       });
+      if (data.token) {
+        localStorage.setItem("authToken", data.token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      }
       return data;
     } catch (err) {
       console.error("CheckAuthStatus error:", err.response?.data || err.message);
@@ -73,6 +86,8 @@ const authSlice = createSlice({
       state.userData = null;
       state.isAuthorized = false;
       state.error = null;
+      localStorage.removeItem("authToken");
+      delete axios.defaults.headers.common["Authorization"];
       console.log("Cleared auth state");
     },
   },

@@ -1,97 +1,95 @@
- 
-
-import { useEffect, useState, useCallback, useMemo } from "react"
-import axios from "axios"
-import CreatePost from "./CreatePost"
-import Post from "./Post"
-import CodingTip from "./CodingTip"
-import "./Feed.css"
-import { useSelector } from "react-redux"
-import { FaPlus, FaUsers } from "react-icons/fa"
-import toast from "react-hot-toast"
+import { useEffect, useState, useCallback, useMemo } from "react";
+import axios from "axios";
+import CreatePost from "./CreatePost";
+import Post from "./Post";
+import CodingTip from "./CodingTip";
+import "./Feed.css";
+import { useSelector, useDispatch } from "react-redux";
+import { FaPlus, FaUsers } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { logout } from "../../Slices/authSlice.js";
 
 function Feed() {
-  const [posts, setPosts] = useState([])
-  const [postsLoading, setPostsLoading] = useState(true)
-  const [recommendedUsers, setRecommendedUsers] = useState([])
-  const { token, userData, loading: userLoading } = useSelector((state) => state.user)
+  const [posts, setPosts] = useState([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+  const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const { userData, loading: userLoading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const fetchPosts = useCallback(async () => {
     try {
-      const { data } = await axios.get(`/post/posts/feed`, {withCredentials:true})
-      setPosts(data.posts)
+      const { data } = await axios.get(`/post/posts/feed`, { withCredentials: true });
+      setPosts(data.posts || []);
     } catch (error) {
-      console.error("Error fetching posts:", error)
+      console.error("Error fetching posts:", error);
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        dispatch(logout());
+        window.location.replace("/login");
+      } else {
+        toast.error(error.response?.data?.error || "Failed to fetch posts.");
+      }
     } finally {
-      setPostsLoading(false)
+      setPostsLoading(false);
     }
-  }, [token])
+  }, []);
 
   const fetchRecommendedUsers = useCallback(async () => {
     try {
-      const { data } = await axios.get(`/user/recommended-users`, {
-withCredentials:true
-      })
-      setRecommendedUsers(data.data)
+      const { data } = await axios.get(`/user/recommended-users`, { withCredentials: true });
+      setRecommendedUsers(data.data || []);
     } catch (error) {
-      console.error("Error fetching recommended users:", error)
-      toast.error("Failed to fetch recommended users.")
+      console.error("Error fetching recommended users:", error);
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        dispatch(logout());
+        window.location.replace("/login");
+      } else {
+        toast.error(error.response?.data?.error || "Failed to fetch recommended users.");
+      }
     }
-  }, [token])
+  }, []);
 
   useEffect(() => {
-    fetchPosts()
-    fetchRecommendedUsers()
-  }, [fetchPosts, fetchRecommendedUsers])
+    fetchPosts();
+    fetchRecommendedUsers();
+  }, [fetchPosts, fetchRecommendedUsers]);
 
-const handlePostCreated = useCallback((createdPostResponse) => {
-  console.log("new post created ",createdPostResponse);
-  
-  setPosts((prevPosts) => [createdPostResponse.post, ...prevPosts])
-}, [])
+  const handlePostCreated = useCallback((createdPostResponse) => {
+    console.log("New post created:", createdPostResponse);
+    setPosts((prevPosts) => [createdPostResponse.post, ...prevPosts]);
+  }, []);
 
-
-const handleLike = useCallback((postId, updatedLikes) => {
-    setPosts(prevPosts =>
-        prevPosts.map(post =>
-            post._id === postId ? { ...post, likes: updatedLikes } : post
-        )
+  const handleLike = useCallback((postId, updatedLikes) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === postId ? { ...post, likes: updatedLikes } : post
+      )
     );
-}, []);
+  }, []);
 
-  const handleFollow = useCallback(
-    async (userId) => {
-      try {
-        await axios.put(
-          `/follow/${userId}`,
-          {},
-          {
-withCredentials:true
-          }
-        )
-        await axios.post(
-          `/chat/create`,
-          { receiverId: userId },
-          {
-withCredentials:true
-          }
-        )
-        toast.success("User followed successfully!")
-      } catch (error) {
-        console.error("Error following user:", error)
-        toast.error(error.response?.data?.error || "Error following user")
+  const handleFollow = useCallback(async (userId) => {
+    try {
+      await axios.put(`/follow/${userId}`, {}, { withCredentials: true });
+      await axios.post(`/chat/create`, { receiverId: userId }, { withCredentials: true });
+      toast.success("User followed successfully!");
+    } catch (error) {
+      console.error("Error following user:", error);
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        dispatch(logout());
+        window.location.replace("/login");
+      } else {
+        toast.error(error.response?.data?.error || "Error following user");
       }
-    },
-    [token]
-  )
+    }
+  }, []);
 
-const memoizedPosts = useMemo(() => {
-  return posts
-    .filter(p => p && p._id) // remove null or incomplete posts
-    .map(post => (
-      <Post key={post._id} postData={post} onLike={handleLike} />
-    ))
-}, [posts, handleLike])
+  const memoizedPosts = useMemo(() => {
+    return posts
+      .filter((p) => p && p._id)
+      .map((post) => <Post key={post._id} postData={post} onLike={handleLike} />);
+  }, [posts, handleLike]);
 
   const memoizedRecommendedUsers = useMemo(() => {
     return recommendedUsers.length > 0 ? (
@@ -112,8 +110,8 @@ const memoizedPosts = useMemo(() => {
       <div className="no-users">
         <p>No recommended users found.</p>
       </div>
-    )
-  }, [recommendedUsers, handleFollow])
+    );
+  }, [recommendedUsers, handleFollow]);
 
   if (userLoading) {
     return (
@@ -121,7 +119,7 @@ const memoizedPosts = useMemo(() => {
         <div className="loading-spinner"></div>
         <p>Loading user data...</p>
       </div>
-    )
+    );
   }
 
   if (!userData) {
@@ -129,7 +127,7 @@ const memoizedPosts = useMemo(() => {
       <div className="error-container">
         <p>Please log in to access this resource.</p>
       </div>
-    )
+    );
   }
 
   if (postsLoading) {
@@ -138,7 +136,7 @@ const memoizedPosts = useMemo(() => {
         <div className="loading-spinner"></div>
         <p>Loading posts...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -161,7 +159,7 @@ const memoizedPosts = useMemo(() => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Feed
+export default Feed;

@@ -13,10 +13,16 @@ export const isAuthenticated = async (req, res, next) => {
     console.log("Request headers:", req.headers);
     console.log("Request cookies:", req.cookies);
 
-    const token = req.cookies?.token;
+    let token = req.cookies?.token;
+
+    // Fallback to Authorization header if cookie is not present
+    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+      console.log("Using token from Authorization header:", token);
+    }
 
     if (!token) {
-      console.error("No token found in cookies");
+      console.error("No token found in cookies or headers");
       return next(new ErrorHandler("You need to Login to Access this Resource", 401));
     }
 
