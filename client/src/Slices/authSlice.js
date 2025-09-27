@@ -31,6 +31,12 @@ export const login = createAsyncThunk("login", async (userCredentials, { rejectW
       userCredentials,
       { withCredentials: true }
     );
+    console.log("Login request config:", {
+      url: `${axios.defaults.baseURL}/auth/login`,
+      headers: axios.defaults.headers.common,
+      withCredentials: axios.defaults.withCredentials,
+      data
+    });
     return data;
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || "Login failed");
@@ -46,6 +52,12 @@ export const checkAuthStatus = createAsyncThunk(
       
       const { data } = await axios.get(`/user/get-login-details`, {
         withCredentials: true,
+      });
+      console.log("CheckAuthStatus request config:", {
+        url: `${axios.defaults.baseURL}/user/get-login-details`,
+        headers: axios.defaults.headers.common,
+        withCredentials: axios.defaults.withCredentials,
+        data
       });
       return data; // Expecting { success: true, user }
     } catch (err) {

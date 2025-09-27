@@ -7,6 +7,7 @@ import { BiDotsVerticalRounded, BiDownload } from "react-icons/bi"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { setUserId } from "../../Slices/postSlice.js"
+import { formatDistanceToNow } from "date-fns";
 import "./Post.css"
 
 function Post({ postData, onLike }) {
@@ -18,6 +19,34 @@ function Post({ postData, onLike }) {
   const [showOptions, setShowOptions] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+    const formatTimestamp = useCallback(() => {
+    const postDate = new Date(postData.createdAt);
+    const now = new Date();
+
+    // Using date-fns (if installed)
+    // return formatDistanceToNow(postDate, { addSuffix: true });
+
+    // Manual implementation without date-fns
+    const diffInMs = now - postDate;
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds} second${diffInSeconds !== 1 ? "s" : ""} ago`;
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minute${diffInMinutes !== 1 ? "s" : ""} ago`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours !== 1 ? "s" : ""} ago`;
+    } else if (diffInDays < 30) {
+      return `${diffInDays} day${diffInDays !== 1 ? "s" : ""} ago`;
+    } else {
+      // For dates older than 30 days, you can show a formatted date
+      return postDate.toLocaleDateString();
+    }
+  }, [postData.createdAt]);
 
   const fetchComments = useCallback(async () => {
     try {
@@ -150,7 +179,7 @@ withCredentials:true
           <img src={`${postData.user.avatar}`} alt="" className="post-avatar" />
           <div className="user-details">
             <div className="post-username">{postData.user.username}</div>
-            <div className="post-timestamp">2 hours ago</div>
+            <div className="post-timestamp">{formatTimestamp()}</div>
           </div>
         </div>
 

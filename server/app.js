@@ -12,7 +12,11 @@ export const app = express();
 app.set("trust proxy", 1);
 
 // --- CORS --- 
-
+app.use((req, res, next) => {
+  console.log("Incoming cookies:", req.cookies);
+  console.log("Incoming headers:", req.headers.authorization);
+  next();
+});
 app.use(cors({
     origin: process.env.FRONTEND_URL, // full URL e.g: "https://myfrontend.com"
     credentials: true

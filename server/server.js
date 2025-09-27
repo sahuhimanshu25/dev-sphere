@@ -43,6 +43,8 @@ io.use((socket, next) => {
   const token = rawToken?.startsWith("Bearer ") ? rawToken.split(" ")[1] : rawToken;
 
   console.log("Token from cookie:", token);
+  console.log("Socket cookies:", cookies);
+  console.log("Socket Authorization header:", authHeader);
 
   if (!token) {
     console.log("No token provided in cookie");
