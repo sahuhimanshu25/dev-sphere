@@ -1,24 +1,24 @@
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import dotnev from 'dotenv';
+import dotenv from 'dotenv';
 
-dotnev.config();
+dotenv.config();
 const isProduction = process.env.NODE_ENV === "production";
 
 export const app = express();
 
-// --- Trust proxy MUST come first ---
+// Trust proxy MUST come first
 app.set("trust proxy", 1);
 
-// --- CORS --- 
+// CORS 
 app.use((req, res, next) => {
   console.log("Incoming cookies:", req.cookies);
   console.log("Incoming headers:", req.headers.authorization);
   next();
 });
 app.use(cors({
-    origin: process.env.FRONTEND_URL, // full URL e.g: "https://myfrontend.com"
+    origin: process.env.FRONTEND_URL,
     credentials: true
 }));
 
@@ -31,12 +31,11 @@ if (isProduction) {
   });
 }
 
-
-// --- JSON & Cookies ---
+// JSON & Cookies
 app.use(express.json());
 app.use(cookieParser());
 
-// --- Routers ---
+// Routers
 import { expressRouter } from './routes/authRoutes.js';
 import { postRouter } from './routes/postRoutes.js';
 import { followRouter } from './routes/followRoute.js';
@@ -58,5 +57,5 @@ app.use(followRouter);
 app.use('/message', messageRoute);
 app.use('/group', groupRouter);
 
-// --- Error Handler ---
+// Error Handler
 app.use(error);

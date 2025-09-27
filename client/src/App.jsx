@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -30,20 +29,21 @@ const Sidebar = React.lazy(() => import("./components/Navbar/Sidebar.jsx"));
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_BASEURL;
+
 function Logout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // 1️⃣ Clear auth state first
+    // Clear auth state first
     dispatch(logout());
 
-    // 2️⃣ Trigger backend logout (non-blocking)
+    // Trigger backend logout (non-blocking)
     axios
       .get(`/user/logout`, {
         withCredentials: true,
       })
       .finally(() => {
-        // 3️⃣ Hard redirect — skips React render cycle that causes 401s
+        console.log("Redirecting to /login");
         window.location.replace("/login");
       });
   }, [dispatch]);
@@ -51,33 +51,41 @@ function Logout() {
   return null;
 }
 
-
-
 function App() {
-  const [count, setCount] = useState(0);
-  const { userData, loading, error,isAuthorized } = useSelector((state) => state.user);
+  const { userData, loading, error, isAuthorized } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [authChecked, setAuthChecked] = useState(false);
-  
 
-useEffect(() => {
-  const publicRoutes = ["/login", "/register"];
-  if (publicRoutes.includes(window.location.pathname)) {
-    setAuthChecked(true);
-    return;
-  }
+  useEffect(() => {
+    // Add 401 interceptor to handle unauthorized errors
+    const interceptor = axios.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response?.status === 401) {
+          dispatch(logout());
+          window.location.replace('/login');
+        }
+        return Promise.reject(error);
+      }
+    );
 
-  if (!isAuthorized) {
-    console.log("Running checkAuthStatus");
-    dispatch(checkAuthStatus())
-      .unwrap()
-      .finally(() => setAuthChecked(true));
-  } else {
-    setAuthChecked(true);
-  }
-}, [dispatch, isAuthorized]);
+    const publicRoutes = ["/login", "/register"];
+    if (publicRoutes.includes(window.location.pathname)) {
+      setAuthChecked(true);
+      return;
+    }
 
+    if (!isAuthorized) {
+      console.log("Running checkAuthStatus");
+      dispatch(checkAuthStatus())
+        .unwrap()
+        .finally(() => setAuthChecked(true));
+    } else {
+      setAuthChecked(true);
+    }
 
+    return () => axios.interceptors.response.eject(interceptor);
+  }, [dispatch, isAuthorized]);
 
   if (!authChecked || loading) {
     return <Loader />;
@@ -85,61 +93,57 @@ useEffect(() => {
 
   return (
     <Router>
-        <Sidebar>
-
-        
-      <Suspense fallback={<Loader />}>
-        <GlobalStyle />
-        <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
-        <Routes>
-          <Route
-            path="/compile"
-            element={
-              userData ? (
-                <PlaygroundProvider>
-                  <ModalProvider>
-                    <Home />
-                  </ModalProvider>
-                </PlaygroundProvider>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/playground/:folderId/:playgroundId"
-            element={
-              userData ? (
-                <PlaygroundProvider>
-                  <ModalProvider>
-                    <Playground />
-                  </ModalProvider>
-                </PlaygroundProvider>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route path="/" element={<MainHome />} />
-          <Route path="/login" element={isAuthorized?<Navigate to="/post" />:<Login/>} />
-          <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
-<Route
-  path="/post"
-  element={
-    isAuthorized ? <Feed /> : <Navigate to="/login" replace />
-  }
-/>
-          <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
-          <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" />} />
-          <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />
-          <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
-          <Route path="/user/user-details" element={<Profile />} />
-          <Route path="/user/Edit-profile" element={<EditProfile />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/devProfile" element={<DevProfile />} />
-          <Route path="*" element={<Error404 />} />
-        </Routes>
-      </Suspense>
+      <Sidebar>
+        <Suspense fallback={<Loader />}>
+          <GlobalStyle />
+          <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
+          <Routes>
+            <Route
+              path="/compile"
+              element={
+                userData ? (
+                  <PlaygroundProvider>
+                    <ModalProvider>
+                      <Home />
+                    </ModalProvider>
+                  </PlaygroundProvider>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/playground/:folderId/:playgroundId"
+              element={
+                userData ? (
+                  <PlaygroundProvider>
+                    <ModalProvider>
+                      <Playground />
+                    </ModalProvider>
+                  </PlaygroundProvider>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route path="/" element={<MainHome />} />
+            <Route path="/login" element={isAuthorized ? <Navigate to="/post" /> : <Login />} />
+            <Route path="/chat" element={userData ? <Chat /> : <Navigate to="/login" />} />
+            <Route
+              path="/post"
+              element={isAuthorized ? <Feed /> : <Navigate to="/login" replace />}
+            />
+            <Route path="/addChat" element={userData ? <AddFriend /> : <Navigate to="/login" />} />
+            <Route path="/myProfile" element={userData ? <UserProfile /> : <Navigate to="/login" />} />
+            <Route path="/logout" element={userData ? <Logout /> : <Navigate to="/login" />} />
+            <Route path="/community" element={userData ? <GroupChat /> : <Navigate to="/login" />} />
+            <Route path="/user/user-details" element={<Profile />} />
+            <Route path="/user/Edit-profile" element={<EditProfile />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/devProfile" element={<DevProfile />} />
+            <Route path="*" element={<Error404 />} />
+          </Routes>
+        </Suspense>
       </Sidebar>
     </Router>
   );

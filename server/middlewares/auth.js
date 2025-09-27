@@ -5,22 +5,24 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const isProduction =process.env.NODE_ENV==="production";
+const isProduction = process.env.NODE_ENV === "production";
 
 export const isAuthenticated = async (req, res, next) => {
   try {
     console.log("----------- request hit ------------");
-    const token = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
-    // console.log("AUTH .JS Token:", token);
+    console.log("Request headers:", req.headers);
+    console.log("Request cookies:", req.cookies);
+
+    const token = req.cookies?.token;
 
     if (!token) {
+      console.error("No token found in cookies");
       return next(new ErrorHandler("You need to Login to Access this Resource", 401));
     }
 
     const decodedData = jwt.verify(token, JWT_SECRET);
     console.log("Decoded JWT:", decodedData);
 
-    // Validate ObjectID format
     if (!decodedData.id || !/^[0-9a-fA-F]{24}$/.test(decodedData.id)) {
       res.clearCookie("token", {
         httpOnly: true,
@@ -32,7 +34,6 @@ export const isAuthenticated = async (req, res, next) => {
     }
 
     const user = await User.findById(decodedData.id);
-    // console.log("User found:", user ? user : "No user found");
 
     if (!user) {
       res.clearCookie("token", {
@@ -45,6 +46,7 @@ export const isAuthenticated = async (req, res, next) => {
     }
 
     req.user = user;
+    console.log("User authenticated:", user._id);
     next();
   } catch (error) {
     console.error("Auth Error:", {
@@ -54,7 +56,6 @@ export const isAuthenticated = async (req, res, next) => {
     });
     const message = isProduction ? "Invalid or Expired Token" : error.message;
 
-    // Clear cookie on token errors
     if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError") {
       res.clearCookie("token", {
         httpOnly: true,
