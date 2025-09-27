@@ -2,15 +2,9 @@ import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 dotenv.config();
 const isProduction = process.env.NODE_ENV === "production";
-
-// Get __dirname equivalent in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const app = express();
 
@@ -44,10 +38,12 @@ if (isProduction) {
 app.use(express.json());
 app.use(cookieParser());
 
-// Serve static frontend files (if frontend and backend are on same service)
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Server is healthy' });
+});
 
-// Routers
+// API routes
 import { expressRouter } from './routes/authRoutes.js';
 import { postRouter } from './routes/postRoutes.js';
 import { followRouter } from './routes/followRoute.js';
@@ -69,9 +65,9 @@ app.use(followRouter);
 app.use('/message', messageRoute);
 app.use('/group', groupRouter);
 
-// Catch-all route for client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+// Handle unmatched routes
+app.use((req, res, next) => {
+  res.status(404).json({ success: false, message: 'Route not found' });
 });
 
 // Error Handler
