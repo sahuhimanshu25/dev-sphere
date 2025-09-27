@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://dev-sphere-server.onrender.com/$1"
-    }
-  ]
-}

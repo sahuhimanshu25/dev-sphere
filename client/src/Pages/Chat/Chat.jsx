@@ -39,7 +39,7 @@ const Chat = () => {
       return;
     }
 
-    socket.current = io(import.meta.env.VITE_BACKEND_BASEURL, {
+    socket.current = io('/api', {
       withCredentials: true,
     });
 
