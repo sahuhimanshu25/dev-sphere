@@ -82,7 +82,7 @@ function App() {
     }
 
     if (!isAuthorized) {
-      console.log("Running checkAuthStatus");
+      // console.log("Running checkAuthStatus");
       dispatch(checkAuthStatus())
         .unwrap()
         .then(data => {

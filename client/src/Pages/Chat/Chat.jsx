@@ -53,7 +53,7 @@ const Chat = () => {
     });
 
     socket.current.on("connect", () => {
-      console.log("Socket connected:", socket.current.id);
+      // console.log("Socket connected:", socket.current.id);
       socket.current.emit("new-user-add", userData._id);
     });
 
@@ -75,7 +75,7 @@ const Chat = () => {
       setReceiveMessage(data);
     });
 
-    console.log("Socket instance:", socket.current);
+    // console.log("Socket instance:", socket.current);
 
     return () => {
       socket.current.disconnect();

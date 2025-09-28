@@ -57,11 +57,11 @@ export const checkAuthStatus = createAsyncThunk(
   "checkAuthStatus",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("CheckAuthStatus request config:", {
-        url: `${axios.defaults.baseURL}/user/get-login-details`,
-        headers: axios.defaults.headers.common,
-        withCredentials: axios.defaults.withCredentials,
-      });
+      // console.log("CheckAuthStatus request config:", {
+      //   url: `${axios.defaults.baseURL}/user/get-login-details`,
+      //   headers: axios.defaults.headers.common,
+      //   withCredentials: axios.defaults.withCredentials,
+      // });
       const { data } = await axios.get(`/user/get-login-details`, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
