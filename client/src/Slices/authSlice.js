@@ -33,11 +33,11 @@ export const signup = createAsyncThunk("signup", async (userCredentials, { rejec
 // Async action for login
 export const login = createAsyncThunk("login", async (userCredentials, { rejectWithValue }) => {
   try {
-    console.log("Login request config:", {
-      url: `${axios.defaults.baseURL}/auth/login`,
-      headers: axios.defaults.headers.common,
-      withCredentials: axios.defaults.withCredentials,
-    });
+    // console.log("Login request config:", {
+    //   url: `${axios.defaults.baseURL}/auth/login`,
+    //   headers: axios.defaults.headers.common,
+    //   withCredentials: axios.defaults.withCredentials,
+    // });
     const { data } = await axios.post(`/auth/login`, userCredentials, {
       withCredentials: true,
     });
@@ -88,7 +88,7 @@ const authSlice = createSlice({
       state.error = null;
       localStorage.removeItem("authToken");
       delete axios.defaults.headers.common["Authorization"];
-      console.log("Cleared auth state");
+      // console.log("Cleared auth state");
     },
   },
   extraReducers: (builder) => {

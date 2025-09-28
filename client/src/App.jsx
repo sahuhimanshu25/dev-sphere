@@ -42,7 +42,7 @@ function Logout() {
         headers: { Authorization: `Bearer ${localStorage.getItem("authToken") || ""}` },
       })
       .finally(() => {
-        console.log("Redirecting to /login");
+        // console.log("Redirecting to /login");
         window.location.replace("/login");
       });
   }, [dispatch]);
@@ -86,14 +86,14 @@ function App() {
       dispatch(checkAuthStatus())
         .unwrap()
         .then(data => {
-          console.log("checkAuthStatus success:", data);
+          // console.log("checkAuthStatus success:", data);
           if (data?.token) {
             localStorage.setItem("authToken", data.token);
             axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
           }
         })
         .catch(err => {
-          console.error("checkAuthStatus failed:", err);
+          // console.error("checkAuthStatus failed:", err);
           localStorage.removeItem("authToken");
           delete axios.defaults.headers.common["Authorization"];
         })
